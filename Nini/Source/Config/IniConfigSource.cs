@@ -20,16 +20,10 @@ namespace Nini.Config
 	{
 		#region Private variables
 		IniDocument iniDocument = null;
-		string filePath = null;
-		bool isReadOnly = true;
+		string savePath = null;
 		#endregion
 		
 		#region Public properties
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		public bool IsReadOnly
-		{
-			get { return isReadOnly; }
-		}
 		#endregion
 
 		#region Constructors
@@ -37,8 +31,7 @@ namespace Nini.Config
 		public IniConfigSource (string filePath)
 			: this (new StreamReader (filePath))
 		{
-			this.filePath = filePath;
-			isReadOnly = false;
+			this.savePath = filePath;
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
@@ -46,7 +39,6 @@ namespace Nini.Config
 		{
 			this.Merge (this); // required for SaveAll
 			iniDocument = new IniDocument (reader);
-			isReadOnly = true;
 			Load ();
 		}
 		
@@ -61,27 +53,25 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
-			if (this.IsReadOnly) {
+			if (!IsSavable ()) {
 				throw new Exception ("Source is read only");
 			}
 
 			MergeConfigsIntoDocument ();
 			
-			iniDocument.Save (this.filePath);
+			iniDocument.Save (this.savePath);
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
 		public void Save (string path)
 		{
-			isReadOnly = false;
-			this.filePath = path;
+			this.savePath = path;
 			this.Save ();
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
-			isReadOnly = false;
 			MergeConfigsIntoDocument ();
 			iniDocument.Save (writer);
 		}
@@ -135,6 +125,15 @@ namespace Nini.Config
 				
 				this.Configs.Add (config);
 			}
+			base.ReplaceTextAll ();
+		}
+		
+		/// <summary>
+		/// Returns true if this instance is savable.
+		/// </summary>
+		private bool IsSavable ()
+		{
+			return (this.savePath != null);
 		}
 		#endregion
 	}

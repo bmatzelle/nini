@@ -19,7 +19,6 @@ namespace Nini.Config
 	public class XmlConfigSource : ConfigSourceBase, IConfigSource
 	{
 		#region Private variables
-		bool isReadOnly = false;
 		XmlDocument configDoc = null;
 		string savePath = null;
 		#endregion
@@ -32,30 +31,23 @@ namespace Nini.Config
 			XmlDocument document = new XmlDocument ();
 			document.Load (path);
 			PerformLoad (document);
-			isReadOnly = false;
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlDoc"]/docs/*' />
 		public XmlConfigSource (XmlDocument document)
 		{
-			isReadOnly = true;
 			PerformLoad (document);
 		}
 		#endregion
 		
 		#region Public properties
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		public bool IsReadOnly
-		{
-			get { return isReadOnly; }
-		}
 		#endregion
 		
 		#region Public methods
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
-			if (this.IsReadOnly) {
+			if (!IsSavable ()) {
 				throw new Exception ("Source is read only");
 			}
 
@@ -67,7 +59,6 @@ namespace Nini.Config
 		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
 		public void Save (string path)
 		{
-			isReadOnly = false;
 			this.savePath = path;
 			this.Save ();
 		}
@@ -75,7 +66,6 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
-			isReadOnly = false;
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 		}
@@ -114,6 +104,7 @@ namespace Nini.Config
 			}
 			
 			LoadSections (rootNode);
+			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
@@ -200,6 +191,14 @@ namespace Nini.Config
 			result.Attributes.Append (nameAttr);
 			
 			return result;
+		}
+		
+		/// <summary>
+		/// Returns true if this instance is savable.
+		/// </summary>
+		private bool IsSavable ()
+		{
+			return (this.savePath != null);
 		}
 		#endregion
 	}
