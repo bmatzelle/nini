@@ -175,7 +175,6 @@ namespace Nini.Config
 				
 				this.Configs.Add (config);
 			}
-			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>

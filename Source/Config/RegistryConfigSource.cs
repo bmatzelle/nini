@@ -122,7 +122,6 @@ namespace Nini.Config
 				config.Add (value, key.GetValue (value).ToString ());
 			}
 			this.Configs.Add (config);
-			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>

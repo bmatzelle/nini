@@ -148,7 +148,6 @@ namespace Nini.Config
 				LoadCollection (sections[i], (NameValueCollection)ConfigurationSettings
 								.GetConfig (sections[i]));
 			}
-			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
@@ -165,7 +164,6 @@ namespace Nini.Config
 			}
 			
 			LoadSections (navigator);
-			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>

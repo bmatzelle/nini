@@ -172,7 +172,6 @@ namespace Nini.Config
 			}
 			
 			LoadSections (navigator);
-			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
