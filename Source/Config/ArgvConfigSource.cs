@@ -55,7 +55,8 @@ namespace Nini.Config
 		{
 			IConfig config = GetConfig (configName);
 			
-			if (shortName.Length < 1 || shortName.Length > 2) {
+			if (shortName != null && 
+				(shortName.Length < 1 || shortName.Length > 2)) {
 				throw new ArgumentException ("Short name may only be 1 or 2 characters");
 			}
 
