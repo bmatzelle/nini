@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Interface name="IConfigSource">
+	<docs>
+		<summary>
+			Container for IConfig objects.
+		</summary>
+		<remarks>
+			TODO.
+		</remarks>
+	</docs>
+	
+	<Property name="Configs">
+		<docs>
+			<summary>Returns the collection of IConfig objects.</summary>
+		</docs>
+	</Property>
+	
+	<Property name="IsReadOnly">
+		<docs>
+			<summary>Returns true if the source is read only.</summary>
+		</docs>
+	</Property>
+
+	<Method name="Save">
+		<docs>
+			<summary>
+				Saves the value of all configurations to the parent IConfigSource.  
+			</summary>
+			<remarks>
+				This can only can be done if the source IsReadOnly is false.  This
+				value depends on the method in which the file was loaded.  
+				For instance, if it is an INI file loaded from disk then 
+				this value is false, but if it is loaded by a TextReader then
+				the value is true.
+			</remarks>
+			<exception cref="Exception">
+				The object IsReadOnly is true.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="SaveAll">
+		<docs>
+			<summary>
+				Saves all the IConfigSources in the current IConfigSource 
+				including those that were merged.
+			</summary>
+			<remarks>
+				TODO.
+			</remarks>
+		</docs>
+	</Method>
+	
+	<Method name="Merge">
+		<docs>
+			<summary>
+				Merges all IConfigs from another IConfigSource into the 
+				Configs collection.
+			</summary>
+			<param name="source">
+				The IConfigSource to merge.
+			</param>
+			<remarks>
+				TODO.
+			</remarks>
+			<exception cref="Exception">
+				If the IConfigSource has already been merged. 
+				If the IConfigSource is <b>this</b>.
+				If an IConfig of the same name already exists.
+			</exception>
+		</docs>
+	</Method>
+</Interface>
+
+</NiniDocs>

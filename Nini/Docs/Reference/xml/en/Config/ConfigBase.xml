@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="ConfigBase">
+	<docs>
+		<summary>The base class for all IConfig objects.</summary>
+	</docs>
+
+	<Constructor name="ConfigBase">
+		<docs>
+			<summary>Constructor.</summary>
+			<param name="name">Config name.</param>
+			<param name="source">Config parent IConfigSource.</param>
+		</docs>
+	</Constructor>
+
+	<Method name="Add">
+		<docs>
+			<summary>Adds a new IConfig.</summary>
+		</docs>
+		<param name="key">The IConfig key.</param>
+		<param name="value">The IConfig value.</param>
+	</Method>
+</Class>
+
+</NiniDocs>

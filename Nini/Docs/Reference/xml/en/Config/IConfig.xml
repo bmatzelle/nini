@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Interface name="IConfig">
+	<docs>
+		<summary>Configuration data access interface.</summary>
+	</docs>
+
+	<Property name="Name">
+		<docs>
+			<summary>Returns the name of the IConfig instance.</summary>
+		</docs>
+	</Property>
+	
+	<Property name="ConfigSource">
+		<docs>
+			<summary>Returns the parent IConfigSource. </summary>
+		</docs>
+	</Property>
+
+	<Property name="Alias">
+		<docs>
+			<summary>Gets or sets the AliasText for this instance.</summary>
+		</docs>
+	</Property>
+	
+	<Method name="Get">
+		<docs>
+			<summary>
+				Returns a string configuration.  Returns null if the 
+				configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+		</docs>
+	</Method>
+
+	<Method name="GetDefault">
+		<docs>
+			<summary>
+				Returns a string configuration.  If the configuration
+				does not exist then it returns the default value specified.
+			</summary>
+			<param name="key">Config key.</param>
+			<param name="defaultValue">
+				Default value if the config is not found.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="GetInt">
+		<docs>
+			<summary>
+				Returns an integer configuration.  Throws an exception if 
+				the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<exception cref="System.Exception">
+				No configuration was found.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="GetIntDefault">
+		<docs>
+			<summary>
+				Returns an integer configuration.  Returns the default value
+				if the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="defaultValue">
+				Default value if the config is not found.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="GetIntAlias">
+		<docs>
+			<summary>
+				Returns an integer configuration.  Can return the alias 
+				value of the item.  
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="fromAlias">
+				If set to true then this returns the alias configuration
+				option.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="GetIntDefaultAlias">
+		<docs>
+			<summary>
+				Returns an integer configuration.  Can return the alias 
+				value of the item.  
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="fromAlias">
+				If set to true then this returns the alias configuration
+				option.
+			</param>
+			<param name="defaultValue">
+				Default value if the config is not found.
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="GetLong">
+		<docs>
+			<summary>
+				Returns an long configuration.  Throws an exception if 
+				the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<exception cref="System.Exception">
+				No configuration was found.
+			</exception>
+		</docs>
+	</Method>
+
+	<Method name="GetLongDefault">
+		<docs>
+			<summary>
+				Returns an integer configuration.  Returns the default value
+				if the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="defaultValue">
+				Default value if the configuration is not found.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="GetBoolean">
+		<docs>
+			<summary>
+				Returns a boolean configuration. Throws an exception if 
+				the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<exception cref="System.Exception">
+				No configuration was found.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="GetBooleanDefault">
+		<docs>
+			<summary>
+				Returns a string configuration.  Returns the default value
+				if the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="defaultValue">
+				Default value if the configuration is not found.
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="GetFloat">
+		<docs>
+			<summary>
+				Returns a float configuration.  Throws an exception if 
+				the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<exception cref="System.Exception">
+				No configuration was found.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="GetFloatDefault">
+		<docs>
+			<summary>
+				Returns a float configuration.  Returns the default value
+				if the configuration does not exist.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="defaultValue">
+				Default value if the config is not found.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="Set">
+		<docs>
+			<summary>
+				Sets a key value.
+			</summary>
+			<param name="key">Configuration key.</param>
+			<param name="value">
+				Value to set for the key.  The set value will be the result
+				of the object's ToString value.
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="GetKeys">
+		<docs>
+			<summary>Returns an Array of the key strings.</summary>
+		</docs>
+	</Method>
+</Interface>
+
+</NiniDocs>

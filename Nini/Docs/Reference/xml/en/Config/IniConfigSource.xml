@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="IniConfigSource">
+	<docs>
+		<summary>Class for loading an INI file IConfigSource.</summary>
+	</docs>
+
+	<Constructor name="ConstructorPath">
+		<docs>
+			<summary>Gets the name of the current INI line.</summary>
+			<remarks>
+				For sections this is the name of the section. <br/>
+				For keys this is the name of the key.<br/>
+				For emtpy lines this is an empty string.
+			</remarks>
+			<param name="filePath">File path</param>
+		</docs>
+	</Constructor>
+	
+	<Constructor name="ConstructorTextReader">
+		<docs>
+			<summary>Returns a list of keys.</summary>
+			<remarks>
+				Does not return the keys necessarily in the order 
+				that they were loaded.
+			</remarks>
+			<param name="reader">TextReader</param>
+		</docs>
+	</Constructor>
+
+	<Constructor name="ConstructorStream">
+		<docs>
+			<summary>Returns true if the IniConfigSource is read only.</summary>
+			<remarks>
+				Does not return the keys necessarily in the order 
+				that they were loaded.
+			</remarks>
+			<param name="stream">Stream</param>
+		</docs>
+	</Constructor>
+
+</Class>
+
+</NiniDocs>
