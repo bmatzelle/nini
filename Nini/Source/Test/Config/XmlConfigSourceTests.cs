@@ -252,10 +252,9 @@ namespace Nini.Test.Config
 		[Test]
 		public void SaveToWriter ()
 		{
-			string filePath = "Test.xml";
 			string newPath = "TestNew.xml";
 
-			StreamWriter writer = new StreamWriter (filePath);
+			StringWriter writer = new StringWriter ();
 			XmlTextWriter xmlWriter = NiniWriter (writer);
 			WriteSection (xmlWriter, "Pets");
 			WriteKey (xmlWriter, "cat", "Muffy");
@@ -263,7 +262,9 @@ namespace Nini.Test.Config
 			xmlWriter.WriteEndDocument ();
 			xmlWriter.Close ();
 
-			XmlConfigSource source = new XmlConfigSource (filePath);			
+			XmlDocument doc = new XmlDocument ();
+			doc.Load (new StringReader (writer.ToString ()));
+			XmlConfigSource source = new XmlConfigSource (doc);
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
@@ -374,12 +375,67 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void ToStringTest ()
+		{
+			StringWriter writer = new StringWriter ();
+			XmlTextWriter xmlWriter = NiniWriter (writer);
+			WriteSection (xmlWriter, "Pets");
+			WriteKey (xmlWriter, "cat", "Muffy");
+			WriteKey (xmlWriter, "dog", "Rover");
+			xmlWriter.WriteEndDocument ();
+			xmlWriter.Close ();
+
+			XmlDocument doc = new XmlDocument ();
+			doc.Load (new StringReader (writer.ToString ()));
+			XmlConfigSource source = new XmlConfigSource (doc);
+			string eol = Environment.NewLine;
+
+			string compare = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + eol
+							 + "<Nini>" + eol
+							 + "  <Section Name=\"Pets\">" + eol
+							 + "    <Key Name=\"cat\" Value=\"Muffy\" />" + eol
+							 + "    <Key Name=\"dog\" Value=\"Rover\" />" + eol
+							 + "  </Section>" + eol
+							 + "</Nini>";
+			Assert.AreEqual (compare, source.ToString ());
+		}
+
+		[Test]
+		public void EmptyConstructor ()
+		{
+			string filePath = "EmptyConstructor.xml";
+			XmlConfigSource source = new XmlConfigSource ();
+
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("cat", "Muffy");
+			config.Set ("dog", "Rover");
+			config.Set ("bird", "Tweety");
+			source.Save (filePath);
+
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
+			source = new XmlConfigSource (filePath);
+			config = source.Configs["Pets"];
+			
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods
 		private XmlTextWriter NiniWriter (TextWriter writer)
 		{
 			XmlTextWriter result = new XmlTextWriter (writer);
+			result.Indentation = 0;
 			result.WriteStartDocument ();
 			result.WriteStartElement ("Nini");
 			

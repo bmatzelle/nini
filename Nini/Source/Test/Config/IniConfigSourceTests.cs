@@ -43,7 +43,8 @@ namespace Nini.Test.Config
 			writer.WriteLine (" cat = muffy");
 			writer.WriteLine (" dog = rover");
 			writer.WriteLine (" bird = tweety");
-			IniConfigSource source = new IniConfigSource (new StringReader (writer.ToString ()));
+			IniConfigSource source = 
+				new IniConfigSource (new StringReader (writer.ToString ()));
 			IConfig config = source.Configs["Test"];
 			
 			Assert.AreEqual ("muffy", config.Get ("cat"));
@@ -466,6 +467,54 @@ namespace Nini.Test.Config
 			Assert.IsNull (source.Configs["test 1"]);
 			Assert.IsNotNull (source.Configs["test 2"]);
 			Assert.IsNull (source.Configs["test 2"].Get ("cat"));
+
+			File.Delete (filePath);
+		}
+
+		[Test]
+		public void ToStringTest ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" cat = muffy");
+			writer.WriteLine (" dog = rover");
+			writer.WriteLine (" bird = tweety");
+			IniConfigSource source = 
+				new IniConfigSource (new StringReader (writer.ToString ()));
+
+			string eol = Environment.NewLine;
+
+			string compare = "[Test]" + eol
+							 + "cat = muffy" + eol
+							 + "dog = rover" + eol
+							 + "bird = tweety" + eol;
+			Assert.AreEqual (compare, source.ToString ());
+		}
+
+		[Test]
+		public void EmptyConstructor ()
+		{
+			string filePath = "EmptyConstructor.ini";
+			IniConfigSource source = new IniConfigSource ();
+
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("cat", "Muffy");
+			config.Set ("dog", "Rover");
+			config.Set ("bird", "Tweety");
+			source.Save (filePath);
+
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
+			source = new IniConfigSource (filePath);
+			config = source.Configs["Pets"];
+			
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
 
 			File.Delete (filePath);
 		}

@@ -23,7 +23,6 @@ namespace Nini.Test.Config
 		[Test]
 		public void GetConfig ()
 		{
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "Pets");
 			AddKey (doc, "Pets", "cat", "muffy");
@@ -41,7 +40,6 @@ namespace Nini.Test.Config
 		[Test]
 		public void GetString ()
 		{
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "Pets");
 			AddKey (doc, "Pets", "cat", "muffy");
@@ -62,7 +60,6 @@ namespace Nini.Test.Config
 		[Test]
 		public void GetInt ()
 		{
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "Pets");
 			AddKey (doc, "Pets", "value 1", "49588");
@@ -89,7 +86,6 @@ namespace Nini.Test.Config
 		{
 			string filePath = "Test.xml";
 
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "NewSection");
 			AddKey (doc, "NewSection", "dog", "Rover");
@@ -209,16 +205,14 @@ namespace Nini.Test.Config
 		[Test]
 		public void SaveToWriter ()
 		{
-			string filePath = "Test.xml";
 			string newPath = "TestNew.xml";
 
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "Pets");
 			AddKey (doc, "Pets", "cat", "Muffy");
 			AddKey (doc,  "Pets","dog", "Rover");
-			doc.Save (filePath);
 
-			DotNetConfigSource source = new DotNetConfigSource (filePath);			
+			DotNetConfigSource source = new DotNetConfigSource (doc);
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
@@ -238,7 +232,6 @@ namespace Nini.Test.Config
 		[Test]
 		public void ReplaceText ()
 		{		
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "Test");
 			AddKey (doc, "Test", "author", "Brent");
@@ -268,7 +261,6 @@ namespace Nini.Test.Config
 		{
 			string filePath = "Test.xml";
 
-			StringWriter textWriter = new StringWriter ();
 			XmlDocument doc = NiniDoc ();
 			AddSection (doc, "NewSection");
 			AddKey (doc, "NewSection", "dog", "Rover");
@@ -286,6 +278,59 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			Assert.IsNotNull (source.Configs["test"]);
 			
+			File.Delete (filePath);
+		}
+
+		[Test]
+		public void ToStringTest ()
+		{
+			XmlDocument doc = NiniDoc ();
+			AddSection (doc, "Pets");
+			AddKey (doc, "Pets", "cat", "Muffy");
+			AddKey (doc, "Pets", "dog", "Rover");
+
+			DotNetConfigSource source = new DotNetConfigSource (doc);
+			string eol = Environment.NewLine;
+
+			string compare = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + eol
+							 + "<configuration>" + eol
+							 + "  <configSections>" + eol
+							 + "    <section name=\"Pets\" "
+							 + "type=\"System.Configuration.NameValueSectionHandler\" />" + eol
+							 + "  </configSections>" + eol
+							 + "  <Pets>" + eol
+							 + "    <add key=\"cat\" value=\"Muffy\" />" + eol
+							 + "    <add key=\"dog\" value=\"Rover\" />" + eol
+							 + "  </Pets>" + eol
+							 + "</configuration>";
+			Assert.AreEqual (compare, source.ToString ());
+		}
+
+		[Test]
+		public void EmptyConstructor ()
+		{
+			string filePath = "EmptyConstructor.xml";
+			DotNetConfigSource source = new DotNetConfigSource ();
+
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("cat", "Muffy");
+			config.Set ("dog", "Rover");
+			config.Set ("bird", "Tweety");
+			source.Save (filePath);
+
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
+			source = new DotNetConfigSource (filePath);
+			config = source.Configs["Pets"];
+			
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
 			File.Delete (filePath);
 		}
 		#endregion
