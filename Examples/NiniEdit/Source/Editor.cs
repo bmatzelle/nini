@@ -59,17 +59,17 @@ namespace NiniEdit
 				ThrowError ("Config file does not exist");
 			}
 
-			if (IsArg ("list-configs")) {
+			if (IsArg ("list")) {
 				ListConfigs ();
+			}
+			if (IsArg ("add")) {
+				AddConfig ();
+			}
+			if (IsArg ("remove")) {
+				RemoveConfig ();
 			}
 			if (IsArg ("list-keys")) {
 				ListKeys ();
-			}
-			if (IsArg ("add-config")) {
-				AddConfig ();
-			}
-			if (IsArg ("remove-config")) {
-				RemoveConfig ();
 			}
 			if (IsArg ("set-key")) {
 				SetKey ();
@@ -192,7 +192,7 @@ namespace NiniEdit
 		/// </summary>
 		private void RemoveConfig ()
 		{
-			string configName = GetArg ("remove-config");
+			string configName = GetArg ("remove");
 			if (configName == null) {
 				ThrowError ("You must supply a config switch");
 			}
@@ -210,7 +210,7 @@ namespace NiniEdit
 		private void AddConfig ()
 		{
 			IConfigSource source = LoadSource (configPath);
-			source.AddConfig (GetArg ("add-config"));
+			source.AddConfig (GetArg ("add"));
 			
 			source.Save ();
 		}
@@ -309,9 +309,9 @@ namespace NiniEdit
 			argvSource.AddSwitch (configName, "version", "v");
 								  
 			// Config switches
-			argvSource.AddSwitch (configName, "list-configs", "l");
-			argvSource.AddSwitch (configName, "remove-config", "r");
-			argvSource.AddSwitch (configName, "add-config", "a");
+			argvSource.AddSwitch (configName, "list", "l");
+			argvSource.AddSwitch (configName, "remove", "r");
+			argvSource.AddSwitch (configName, "add", "a");
 			argvSource.AddSwitch (configName, "set-type", "s");
 
 			// Key switches
