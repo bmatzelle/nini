@@ -17,14 +17,16 @@ namespace Nini.Config
 	public class AliasText
 	{
 		#region Private variables
-		Hashtable intAlias = new Hashtable ();
-		Hashtable booleanAlias = new Hashtable ();
+		Hashtable intAlias = null;
+		Hashtable booleanAlias = null;
 		#endregion
 
 		#region Constructors
 		/// <include file='AliasText.xml' path='//Constructor[@name="AliasText"]/docs/*' />
 		public AliasText ()
 		{
+			intAlias = InsensitiveHashtable ();
+			booleanAlias = InsensitiveHashtable ();
 		}
 		#endregion
 		
@@ -32,17 +34,15 @@ namespace Nini.Config
 		/// <include file='AliasText.xml' path='//Method[@name="AddAliasInt"]/docs/*' />
 		public void AddAlias (string key, string alias, int value)
 		{
-			string lowerAlias = alias.ToLower ();
-
 			if (intAlias.Contains (key)) {
 				Hashtable keys = (Hashtable)intAlias[key];
-				if (keys.Contains (lowerAlias))
-					throw new Exception ("Alias text already exists");
+				if (keys.Contains (alias))
+					throw new ArgumentException ("Alias text already exists");
 				
-				keys[lowerAlias] = value;
+				keys[alias] = value;
 			} else {
-				Hashtable keys = new Hashtable ();
-				keys[lowerAlias] = value;
+				Hashtable keys = InsensitiveHashtable ();
+				keys[alias] = value;
 				intAlias.Add (key, keys);
 			}
 		}
@@ -50,7 +50,7 @@ namespace Nini.Config
 		/// <include file='AliasText.xml' path='//Method[@name="AddAliasBoolean"]/docs/*' />
 		public void AddAlias (string alias, bool value)
 		{
-			booleanAlias.Add (alias.ToLower (), value);
+			booleanAlias.Add (alias, value);
 		}
 		
 		/// <include file='AliasText.xml' path='//Method[@name="AddAliasEnum"]/docs/*' />
@@ -62,7 +62,7 @@ namespace Nini.Config
 		/// <include file='AliasText.xml' path='//Method[@name="ContainsBoolean"]/docs/*' />
 		public bool ContainsBoolean (string key)
 		{
-			return booleanAlias.Contains (key.ToLower ());
+			return booleanAlias.Contains (key);
 		}
 		
 		/// <include file='AliasText.xml' path='//Method[@name="ContainsInt"]/docs/*' />
@@ -72,7 +72,7 @@ namespace Nini.Config
 
 			if (intAlias.Contains (key)) {
 				Hashtable keys = (Hashtable)intAlias[key];
-				result = (keys.Contains (alias.ToLower ()));
+				result = (keys.Contains (alias));
 			}
 			
 			return result;
@@ -81,30 +81,28 @@ namespace Nini.Config
 		/// <include file='AliasText.xml' path='//Method[@name="GetBoolean"]/docs/*' />
 		public bool GetBoolean (string key)
 		{
-			string lowerAlias = key.ToLower ();
-			if (!booleanAlias.Contains (lowerAlias)) {
-				throw new Exception ("Alias does not exist for text");
+			if (!booleanAlias.Contains (key)) {
+				throw new ArgumentException ("Alias does not exist for text");
 			}
 			
-			return (bool)booleanAlias[lowerAlias];
+			return (bool)booleanAlias[key];
 		}
 		
 		/// <include file='AliasText.xml' path='//Method[@name="GetInt"]/docs/*' />
 		public int GetInt (string key, string alias)
 		{
 			if (!intAlias.Contains (key)) {
-				throw new Exception ("Alias does not exist for key");
+				throw new ArgumentException ("Alias does not exist for key");
 			}
 
-			string lowerAlias = alias.ToLower ();			
 			Hashtable keys = (Hashtable)intAlias[key];
 
-			if (!keys.Contains (lowerAlias)) {
-				throw new Exception ("Config value does not match a " +
-									 "supplied alias");
+			if (!keys.Contains (alias)) {
+				throw new ArgumentException ("Config value does not match a " +
+											 "supplied alias");
 			}
 			
-			return (int)keys[lowerAlias];
+			return (int)keys[alias];
 		}
 		#endregion
 		
@@ -121,6 +119,15 @@ namespace Nini.Config
 			{
 				AddAlias (key, names[i], values[i]);
 			}
+		}
+		
+		/// <summary>
+		/// Returns a case insensitive hashtable.
+		/// </summary>
+		private Hashtable InsensitiveHashtable ()
+		{
+			return new Hashtable (CaseInsensitiveHashCodeProvider.Default, 
+								  CaseInsensitiveComparer.Default);
 		}
 		#endregion
 	}
