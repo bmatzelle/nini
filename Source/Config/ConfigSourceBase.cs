@@ -15,13 +15,13 @@ using System.Collections;
 namespace Nini.Config
 {
 	/// <include file='IConfigSource.xml' path='//Interface[@name="IConfigSource"]/docs/*' />
-	public abstract class ConfigSourceBase
+	public abstract class ConfigSourceBase : IConfigSource
 	{
 		#region Private variables
 		ArrayList sourceList = new ArrayList ();
 		ConfigCollection configList = new ConfigCollection ();
 		bool autoSave = false;
-		AliasText globalAlias = new AliasText ();
+		AliasText alias = new AliasText ();
 		#endregion
 
 		#region Constructors
@@ -41,10 +41,10 @@ namespace Nini.Config
 			set { autoSave = value; }
 		}
 		
-		/// <include file='IConfigSource.xml' path='//Property[@name="GlobalAlias"]/docs/*' />
-		public AliasText GlobalAlias
+		/// <include file='IConfigSource.xml' path='//Property[@name="Alias"]/docs/*' />
+		public AliasText Alias
 		{
-			get { return globalAlias; }
+			get { return alias; }
 		}
 		#endregion
 		
@@ -68,14 +68,17 @@ namespace Nini.Config
 			ConfigBase result = null;
 
 			if (configList[name] == null) {
-				result = new ConfigBase (name, (IConfigSource)this);
+				result = new ConfigBase (name, this);
 				configList.Add (result);
 			} else {
-				throw new Exception ("An IConfig of that name already exists");
+				throw new ArgumentException ("An IConfig of that name already exists");
 			}
 			
 			return result;
 		}
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
+		public abstract void Save ();
 		#endregion
 
 		#region Protected methods
@@ -105,7 +108,7 @@ namespace Nini.Config
 		{
 			string text = config.Get (key);
 			if (text == null) {
-				throw new Exception (String.Format ("[{0}] not found in [{1}]",
+				throw new ArgumentException (String.Format ("[{0}] not found in [{1}]",
 										key, config.Name));
 			}
 			int startIndex = text.IndexOf ("${", 0);
@@ -148,11 +151,11 @@ namespace Nini.Config
 			if (replaces.Length > 1) {
 				IConfig newConfig = this.Configs[replaces[0]];
 				if (newConfig == null) {
-					throw new Exception ("IConfig not found: " + replaces[0]);
+					throw new ArgumentException ("IConfig not found: " + replaces[0]);
 				}
 				result = newConfig.Get (replaces[1]);
 				if (result == null) {
-					throw new Exception ("Key not found: " + result);
+					throw new ArgumentException ("Key not found: " + result);
 				}
 			} else {
 				result = config.Get (search);
