@@ -21,6 +21,7 @@ namespace Nini.Config
 		ArrayList sourceList = new ArrayList ();
 		ConfigCollection configList = new ConfigCollection ();
 		bool autoSave = false;
+		AliasText globalAlias = new AliasText ();
 		#endregion
 
 		#region Constructors
@@ -38,6 +39,12 @@ namespace Nini.Config
 		{
 			get { return autoSave; }
 			set { autoSave = value; }
+		}
+		
+		/// <include file='IConfigSource.xml' path='//Property[@name="GlobalAlias"]/docs/*' />
+		public AliasText GlobalAlias
+		{
+			get { return globalAlias; }
 		}
 		#endregion
 		
@@ -62,15 +69,6 @@ namespace Nini.Config
 			configList.Add (result);
 			
 			return result;
-		}
-		
-		/// <include file='IConfigSource.xml' path='//Method[@name="SetGlobalAlias"]/docs/*' />
-		public void SetGlobalAlias (AliasText alias)
-		{
-			foreach (IConfig config in Configs)
-			{
-				config.Alias = alias;
-			}
 		}
 		#endregion
 
