@@ -308,6 +308,35 @@ namespace Nini.Test.Ini
 			reader.Read ();
 			Assert.IsTrue (true);
 		}
+		
+		[Test]
+		public void EndCommentUnix ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine ("; Test");
+			writer.WriteLine (" float1 = 1.0 ;"); // no space after comment
+			writer.WriteLine (" float2 = 2.0");
+			
+			IniReader reader = new IniReader 
+							(new StringReader (ConvertToUnix (writer.ToString ())));
+			
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("float1", reader.Name, "float1 not found");
+			Assert.AreEqual ("1.0", reader.Value, "float1 value not found");
+			Assert.IsTrue (reader.Read (), "Could not find last float");
+			Assert.AreEqual ("float2", reader.Name);
+			Assert.AreEqual ("2.0", reader.Value);
+		}
+		#endregion
+		
+		#region Private methods
+		private string ConvertToUnix (string text)
+		{
+			return text.Replace ("\r\n", "\n");
+		}
 		#endregion
 	}
 }
