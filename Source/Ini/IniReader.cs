@@ -58,8 +58,6 @@ namespace Nini.Ini
 		StringBuilder value = new StringBuilder ();
 		StringBuilder comment = new StringBuilder ();
 		IniReadState readState = IniReadState.Initial;
-		Hashtable keyList = new Hashtable ();
-		Hashtable sectionList = new Hashtable ();
 		bool hasComment = false;
 		bool disposed = false;
 		bool lineContinuation = false;
@@ -226,8 +224,8 @@ namespace Nini.Ini
 		/// <include file='IniReader.xml' path='//Method[@name="GetCommentDelimiters"]/docs/*' />
 		public char[] GetCommentDelimiters ()
 		{
-			char[] result = null;
-			Array.Copy (commentDelimiters, result, commentDelimiters.Length);
+			char[] result = new char[commentDelimiters.Length];
+			Array.Copy (commentDelimiters, 0, result, 0, commentDelimiters.Length);
 
 			return result;
 		}
@@ -245,8 +243,8 @@ namespace Nini.Ini
 		/// <include file='IniReader.xml' path='//Method[@name="GetAssignDelimiters"]/docs/*' />
 		public char[] GetAssignDelimiters ()
 		{
-			char[] result = null;
-			Array.Copy (assignDelimiters, result, assignDelimiters.Length);
+			char[] result = new char[assignDelimiters.Length];
+			Array.Copy (assignDelimiters, 0, result, 0, assignDelimiters.Length);
 
 			return result;
 		}
@@ -388,25 +386,17 @@ namespace Nini.Ini
 				}
 				
 				if (EndOfLine (ch)) {
-					throw new IniException (this, "Expected assign character");
+					throw new IniException (this, 
+						String.Format ("Expected assignment operator ({0})", 
+										assignDelimiters[0]));
 				}
 
 				this.name.Append ((char)ReadChar ());
 			}
 			
 			ReadKeyValue ();
-			
 			SearchForComment ();
-			
 			RemoveTrailingWhitespace (this.name);
-
-			if (keyList.Contains (this.name.ToString ())) {
-				throw new IniException (this, "Key found [" + this.name.ToString () +
-										"] with identical name in same section");
-			} else {
-				keyList.Add (this.name.ToString (), null);
-			}
-			
 		}
 		
 		/// <summary>
@@ -439,7 +429,7 @@ namespace Nini.Ini
 				}
 				
 				if (foundQuote && EndOfLine (ch)) {
-					throw new IniException (this, "Expected '\"'");
+					throw new IniException (this, "Expected closing quote (\")");
 				}
 				
 				// Handle line continuation
@@ -488,7 +478,6 @@ namespace Nini.Ini
 			int ch = -1;
 			iniType = IniType.Section;
 			ch = ReadChar (); // consume "["
-			keyList.Clear ();
 
 			while (true)
 			{
@@ -497,7 +486,7 @@ namespace Nini.Ini
 					break;
 				}
 				if (EndOfLine (ch)) {
-					throw new IniException (this, "Expected ']'");
+					throw new IniException (this, "Expected section end (])");
 				}
 
 				this.name.Append ((char)ReadChar ());
@@ -505,12 +494,6 @@ namespace Nini.Ini
 
 			ConsumeToEnd (); // all after '[' is garbage			
 			RemoveTrailingWhitespace (this.name);
-			
-			if (sectionList.Contains (this.name.ToString ())) {
-				throw new IniException (this, "Section found with identical name");
-			} else {
-				sectionList.Add (this.name.ToString (), null);
-			}
 		}
 		
 		/// <summary>
