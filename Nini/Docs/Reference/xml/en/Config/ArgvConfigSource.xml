@@ -132,7 +132,7 @@ public static int Main (string[] args)
 	<Method name="GetArguments">
 		<docs>
 			<summary>
-				Returns the arguments input list.
+				Returns a copy of the arguments input list.
 			</summary>
 		</docs>
 	</Method>
