@@ -11,6 +11,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Xml.XPath;
 using System.Collections;
 
 namespace Nini.Config
@@ -28,15 +29,21 @@ namespace Nini.Config
 		public XmlConfigSource (string path)
 		{
 			savePath = path;
-			XmlDocument document = new XmlDocument ();
-			document.Load (path);
-			PerformLoad (document);
+			configDoc = new XmlDocument ();
+			configDoc.Load (path);
+			PerformLoad (configDoc.CreateNavigator ());
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlDoc"]/docs/*' />
-		public XmlConfigSource (XmlDocument document)
+		public XmlConfigSource (IXPathNavigable document)
 		{
-			PerformLoad (document);
+			if (document is XmlNode) {
+				XmlNode node = (XmlNode)document;
+				configDoc = (node.OwnerDocument == null)
+							? (XmlDocument)node
+							: (XmlDocument)node.OwnerDocument;  
+			}
+			PerformLoad (document.CreateNavigator ());
 		}
 		#endregion
 		
@@ -57,7 +64,6 @@ namespace Nini.Config
 			}
 
 			MergeConfigsIntoDocument ();
-			
 			configDoc.Save (savePath);
 		}
 		
@@ -71,6 +77,10 @@ namespace Nini.Config
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
+			if (!IsSavable ()) {
+				throw new ArgumentException ("Source cannot be saved in this state");
+			}
+
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 			savePath = null;
@@ -151,49 +161,49 @@ namespace Nini.Config
 		/// <summary>
 		/// Loads all sections and keys.
 		/// </summary>
-		private void PerformLoad (XmlDocument doc)
+		private void PerformLoad (XPathNavigator navigator)
 		{
 			this.Merge (this); // required for SaveAll
-			configDoc = doc;
 			
-			XmlNode rootNode = configDoc.SelectSingleNode ("/Nini");
-			
-			if (rootNode == null) {
-				throw new ArgumentException ("Did not find NiniXml root node");
+			navigator.MoveToRoot (); // start at root node
+			XPathNodeIterator iterator = navigator.Select ("/Nini");
+			if (iterator.Count < 1) {
+				throw new ArgumentException ("Did not find Nini XML root node");
 			}
 			
-			LoadSections (rootNode);
+			LoadSections (navigator);
 			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
 		/// Loads all configuration sections.
 		/// </summary>
-		private void LoadSections (XmlNode rootNode)
+		private void LoadSections (XPathNavigator navigator)
 		{
-			XmlNodeList nodeList = rootNode.SelectNodes ("Section");
+			XPathNodeIterator iterator = navigator.Select ("/Nini/Section");
 			ConfigBase config = null;
 			
-			for (int i = 0; i < nodeList.Count; i++)
+			while (iterator.MoveNext ())
 			{
-				config = new ConfigBase (nodeList[i].Attributes["Name"].Value, this);
+				config = new ConfigBase (
+							iterator.Current.GetAttribute ("Name", ""), this);
 				
 				this.Configs.Add (config);
-				LoadKeys (nodeList[i], config);
+				LoadKeys (iterator.Current, config);
 			}
 		}
 		
 		/// <summary>
 		/// Loads all keys for a config.
 		/// </summary>
-		private void LoadKeys (XmlNode node, ConfigBase config)
+		private void LoadKeys (XPathNavigator navigator, ConfigBase config)
 		{
-			XmlNodeList nodeList = node.SelectNodes ("Key");
+			XPathNodeIterator iterator = navigator.Select ("Key");
 
-			for (int i = 0; i < nodeList.Count; i++)
+			while (iterator.MoveNext ())
 			{
-				config.Add (nodeList[i].Attributes["Name"].Value,
-							nodeList[i].Attributes["Value"].Value);
+				config.Add (iterator.Current.GetAttribute ("Name", ""),
+							iterator.Current.GetAttribute ("Value", ""));
 			}
 		}
 		
@@ -247,7 +257,8 @@ namespace Nini.Config
 		/// </summary>
 		private bool IsSavable ()
 		{
-			return (this.savePath != null);
+			return (this.savePath != null
+					&& configDoc != null);
 		}
 		#endregion
 	}
