@@ -67,7 +67,7 @@ namespace Nini.Config
 			}
 		}
 		
-		/// <include file='ArgvConfigSource.xml' path='//Property[@name="GetArguments"]/docs/*' />
+		/// <include file='ArgvConfigSource.xml' path='//Method[@name="GetArguments"]/docs/*' />
 		public string[] GetArguments ()
 		{
 			return this.arguments;
