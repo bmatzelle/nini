@@ -286,6 +286,36 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("author of Nini: Brent !", config.Get ("developer"));
 			Assert.AreEqual ("Brent likes http", config.Get ("combination"));
 		}
+		
+		[Test]
+		public void SaveNewSection ()
+		{
+			string filePath = "Test.xml";
+
+			StringWriter textWriter = new StringWriter ();
+			XmlTextWriter writer = NiniWriter (textWriter);
+			WriteSection (writer, "new section");
+			WriteKey (writer, "dog", "Rover");
+			WriteKey (writer, "cat", "Muffy");
+			writer.WriteEndDocument ();
+			
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (textWriter.ToString ());
+			doc.Save (filePath);
+
+			XmlConfigSource source = new XmlConfigSource (filePath);
+			IConfig config = source.AddConfig ("test");
+			Assert.IsNotNull (source.Configs["test"]);
+			source.Save ();
+			
+			source = new XmlConfigSource (filePath);
+			config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.IsNotNull (source.Configs["test"]);
+			
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods

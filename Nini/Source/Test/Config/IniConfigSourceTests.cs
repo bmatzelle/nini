@@ -412,5 +412,31 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+		
+		[Test]
+		public void SaveNewSection ()
+		{
+			string filePath = "Test.xml";
+
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("# some comment");
+			writer.WriteLine ("[new section]");
+			writer.WriteLine (" dog = Rover");
+			writer.WriteLine (" cat = Muffy");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			
+			IConfig config = source.AddConfig ("test");
+			Assert.IsNotNull (source.Configs["test"]);
+			source.Save (filePath);
+			
+			source = new IniConfigSource (filePath);
+			config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.IsNotNull (source.Configs["test"]);
+			
+			File.Delete (filePath);
+		}
 	}
 }
