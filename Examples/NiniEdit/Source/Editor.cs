@@ -57,7 +57,16 @@ namespace NiniEdit
 				return;
 			}
 			
-			configPath = ConfigPath ();
+			configPath = ConfigFilePath ();
+			if (IsArg ("new")) {
+				try {
+					CreateNewFile ();
+				}
+				catch (Exception ex) {
+					ThrowError ("Could not create file: " + ex.Message);
+				}
+			}
+
 			if (!File.Exists (configPath)) {
 				ThrowError ("Config file does not exist");
 			}
@@ -88,7 +97,7 @@ namespace NiniEdit
 		/// <summary>
 		/// Returns the config file (input) path.
 		/// </summary>
-		private string ConfigPath ()
+		private string ConfigFilePath ()
 		{
 			int length = argvSource.GetArguments ().Length;
 			return argvSource.GetArguments ()[length - 1];
@@ -107,7 +116,7 @@ namespace NiniEdit
 		/// </summary>
 		private void ThrowError (string message)
 		{
-			throw new Exception (message);
+			throw new ApplicationException (message);
 		}
 		
 		/// <summary>
@@ -150,7 +159,7 @@ namespace NiniEdit
 			string extension = null;
 
 			if (IsArg ("set-type")) {
-				extension = "." + GetArg ("set-type");
+				extension = "." + GetArg ("set-type").ToLower ();
 			} else {
 				FileInfo info = new FileInfo (path);
 				extension = info.Extension;
@@ -172,7 +181,7 @@ namespace NiniEdit
 					break;
 			}
 			if (verbose) {
-				PrintLine ("Loaded file of type: " + result.GetType ().Name);
+				PrintLine ("Loaded config: " + result.GetType ().Name);
 			}
 			
 			return result;
@@ -188,6 +197,9 @@ namespace NiniEdit
 			IConfigSource source = LoadSource (configPath);
 			int configCount = 0;
 			
+			if (verbose) {
+				PrintLine ("Listing configs:");
+			}
 			foreach (IConfig config in source.Configs)
 			{
 				PrintLine (config.Name);
@@ -251,6 +263,9 @@ namespace NiniEdit
 			IConfigSource source = LoadSource (configPath);
 			string[] keys = GetConfig (source, configName).GetKeys ();
 			
+			if (verbose) {
+				PrintLine ("Listing keys:");
+			}
 			foreach (string key in keys)
 			{
 				PrintLine (key);
@@ -330,6 +345,38 @@ namespace NiniEdit
 			}
 		}
 		
+		/// <summary>
+		/// Creates a new config file.
+		/// </summary>
+		private void CreateNewFile ()
+		{
+			string type = null;;
+
+			if (IsArg ("set-type")) {
+				type = GetArg ("set-type").ToLower ();
+			} else {
+				ThrowError ("You must supply a type (--set-type)");
+			}
+
+			switch (type)
+			{
+			case "ini":
+				IniConfigSource iniSource = new IniConfigSource ();
+				iniSource.Save (configPath);
+				break;
+			case "xml":
+				XmlConfigSource xmlSource = new XmlConfigSource ();
+				xmlSource.Save (configPath);
+				break;
+			case "config":
+				DotNetConfigSource dotnetSource = new DotNetConfigSource ();
+				dotnetSource.Save (configPath);
+				break;
+			default:
+				ThrowError ("Unknown type");
+				break;
+			}
+		}
 		#endregion
 		
 		#region Application switch methods
@@ -342,12 +389,13 @@ namespace NiniEdit
 			argvSource.AddSwitch (configName, "help", "h");
 			argvSource.AddSwitch (configName, "version", "V");
 			argvSource.AddSwitch (configName, "verbose", "v");
+			argvSource.AddSwitch (configName, "set-type", "s");
+			argvSource.AddSwitch (configName, "new", "n");
 								  
 			// Config switches
 			argvSource.AddSwitch (configName, "list", "l");
 			argvSource.AddSwitch (configName, "remove", "r");
 			argvSource.AddSwitch (configName, "add", "a");
-			argvSource.AddSwitch (configName, "set-type", "s");
 
 			// Key switches
 			argvSource.AddSwitch (configName, "config", "c");
@@ -373,6 +421,7 @@ namespace NiniEdit
 			writer.WriteLine ("  -V,  --version                Displays the application version");
 			writer.WriteLine ("  -s,  --set-type=TYPE          Specifies file type (ini, xml, or config)");
 			writer.WriteLine ("  -v,  --verbose                Be verbose with messages");
+			writer.WriteLine ("  -n,  --new                    Create a new config file (use --set-type)");
 			writer.WriteLine ("");
 			writer.WriteLine ("Config Options:");
 			writer.WriteLine ("  -l,  --list                   Lists all configs");
