@@ -159,5 +159,42 @@ namespace Nini.Test.Ini
 			
 			writer.Close ();
 		}
+
+		[Test]
+		public void SambaStyleDocument ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("; some comment");
+			writer.WriteLine ("# another comment"); // empty line
+			writer.WriteLine ("[test]");
+			writer.WriteLine (" cat = cats are not tall\\ ");
+			writer.WriteLine (" animals ");
+			writer.WriteLine (" dog = dogs \\ ");
+			writer.WriteLine ("        do not eat cats ");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()),
+												IniFileType.SambaStyle);
+
+			Assert.AreEqual ("cats are not tall animals",
+							doc.Sections["test"].GetValue ("cat"));
+			Assert.AreEqual ("dogs         do not eat cats",
+							doc.Sections["test"].GetValue ("dog"));
+		}
+
+		[Test]
+		public void PythonStyleDocument ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("; some comment");
+			writer.WriteLine ("# another comment"); // empty line
+			writer.WriteLine ("[test]");
+			writer.WriteLine (" cat: cats are not tall animals ");
+			writer.WriteLine (" dog : dogs bark");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()),
+												IniFileType.PythonStyle);
+
+			Assert.AreEqual ("cats are not tall animals",
+							doc.Sections["test"].GetValue ("cat"));
+			Assert.AreEqual ("dogs bark", doc.Sections["test"].GetValue ("dog"));
+		}
 	}
 }
