@@ -251,6 +251,7 @@ namespace Nini.Test.Config
 			AddKey (doc, "Test", "protocol", "http");
 
 			DotNetConfigSource source = new DotNetConfigSource (doc);
+			source.ReplaceKeyValues ();
 			
 			IConfig config = source.Configs["Test"];
 			Assert.AreEqual ("http", config.Get ("protocol"));

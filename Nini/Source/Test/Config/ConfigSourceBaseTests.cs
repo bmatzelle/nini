@@ -161,6 +161,7 @@ namespace Nini.Test.Config
 			writer.WriteLine (" protocol = http");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
+			source.ReplaceKeyValues ();
 
 			IConfig config = source.Configs["Test"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -183,12 +184,42 @@ namespace Nini.Test.Config
 			writer.WriteLine (" domain = ${web|protocol}://nini.sf.net/");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
+			source.ReplaceKeyValues ();
 
 			IConfig config = source.Configs["web"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
 			Assert.AreEqual ("Apache implements http", config.Get ("apache"));
 			config = source.Configs["server"];
 			Assert.AreEqual ("http://nini.sf.net/", config.Get ("domain"));
+		}
+		
+		[Test]
+		public void ReplaceKeyValuesMerge ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine (" protocol = http");
+			writer.WriteLine ("[server]");
+			writer.WriteLine (" domain1 = ${web|protocol}://nini.sf.net/");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+									
+			StringWriter newWriter = new StringWriter ();
+			newWriter.WriteLine ("[web]");
+			newWriter.WriteLine (" apache = Apache implements ${protocol}");
+			newWriter.WriteLine ("[server]");
+			newWriter.WriteLine (" domain2 = ${web|protocol}://nini.sf.net/");
+			IniConfigSource newSource = new IniConfigSource 
+									(new StringReader (newWriter.ToString ()));
+			source.Merge (newSource);
+			source.ReplaceKeyValues ();
+
+			IConfig config = source.Configs["web"];
+			Assert.AreEqual ("http", config.Get ("protocol"));
+			Assert.AreEqual ("Apache implements http", config.Get ("apache"));
+			config = source.Configs["server"];
+			Assert.AreEqual ("http://nini.sf.net/", config.Get ("domain1"));
+			Assert.AreEqual ("http://nini.sf.net/", config.Get ("domain2"));
 		}
 		
 		[Test]
