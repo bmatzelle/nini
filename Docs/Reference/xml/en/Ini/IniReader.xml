@@ -148,6 +148,42 @@ reader.Close ();
 		</docs>
 	</Property>
 	
+	<Property name="LineContinuation">
+		<docs>
+			<summary>Gets or sets whether to accept line continuations.</summary>
+			<remarks>
+				Line continuations are triggered by a slash ('\') character
+				at the end of a key value line.
+			</remarks>
+		</docs>
+	</Property>
+	
+	<Property name="AcceptCommentAfterKey">
+		<docs>
+			<summary>Gets or sets whether accept comments after keys.</summary>
+			<remarks>
+			</remarks>
+		</docs>
+	</Property>
+	
+	<Property name="CommentDelimiter">
+		<docs>
+			<summary>Comment delimiter to search for when parsing.</summary>
+			<remarks>
+				The default value is a semicolon (';').
+			</remarks>
+		</docs>
+	</Property>
+	
+	<Property name="AssignDelimiter">
+		<docs>
+			<summary>Assign delimiter to search for when parsing.</summary>
+			<remarks>
+				The default value is an equals sign ('=').
+			</remarks>
+		</docs>
+	</Property>
+	
 	<Method name="Read">
 		<docs>
 			<summary>Moves the reader to the next line.</summary>

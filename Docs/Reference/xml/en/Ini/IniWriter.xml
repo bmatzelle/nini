@@ -112,14 +112,23 @@ writer.Close ();
 		<docs>
 			<summary>What type of comment type is used.</summary>
 			<remarks>
-				The only valid values are a hash mark (#) or a semi-colon (;). 
-				The default value is a semi-colon.</remarks>
+				The default value is a semicolon (';').  
+			</remarks>
 		</docs>
 	</Property>
 	
 	<Property name="BaseStream">
 		<docs>
 			<summary>Returns the writer base stream.</summary>
+		</docs>
+	</Property>
+	
+	<Property name="AssignDelimiter">
+		<docs>
+			<summary>Assign delimiter to search for when parsing.</summary>
+			<remarks>
+				The default value is an equals sign ('=').
+			</remarks>
 		</docs>
 	</Property>
 	
@@ -198,6 +207,26 @@ writer.Close ();
 	<Method name="Flush">
 		<docs>
 			<summary>Flushes the current writer and frees the resources.</summary>
+		</docs>
+	</Method>
+	
+	<Method name="Dispose">
+		<docs>
+			<summary>
+				Cleans up all managed and unmanaged resources for the instance.
+			</summary>
+		</docs>
+	</Method>
+	
+	<Method name="DisposeBoolean">
+		<docs>
+			<summary>
+				Cleans up all unmanaged resources for the instance and 
+				optionally the managed resouces as well.
+			</summary>
+			<param name="disposing">
+				If true then this will clean up managed resources as well.
+			</param>
 		</docs>
 	</Method>
 </Class>
