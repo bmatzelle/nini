@@ -11,7 +11,6 @@
 using System;
 using System.IO;
 using System.Xml;
-using System.Xml.XPath;
 using System.Collections;
 
 namespace Nini.Config
@@ -30,7 +29,7 @@ namespace Nini.Config
 		{
 			configDoc = new XmlDocument ();
 			configDoc.LoadXml ("<Nini/>");
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
@@ -39,19 +38,15 @@ namespace Nini.Config
 			savePath = path;
 			configDoc = new XmlDocument ();
 			configDoc.Load (path);
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 
-		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlDoc"]/docs/*' />
-		public XmlConfigSource (IXPathNavigable document)
+		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlReader"]/docs/*' />
+		public XmlConfigSource (XmlReader reader)
 		{
-			if (document is XmlNode) {
-				XmlNode node = (XmlNode)document;
-				configDoc = (node.OwnerDocument == null)
-							? (XmlDocument)node
-							: (XmlDocument)node.OwnerDocument;  
-			}
-			PerformLoad (document.CreateNavigator ());
+			configDoc = new XmlDocument ();
+			configDoc.Load (reader);
+			PerformLoad (configDoc);
 		}
 		#endregion
 		
@@ -101,7 +96,7 @@ namespace Nini.Config
 			this.Configs.Clear ();
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
@@ -126,9 +121,8 @@ namespace Nini.Config
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
-				
-				string search = "Nini/Section[@Name='" + config.Name + "']";
-				XmlNode node = configDoc.SelectSingleNode (search);
+
+				XmlNode node = GetSectionByName (config.Name);
 				if (node == null) {
 					node = SectionNode (config.Name);
 					configDoc.DocumentElement.AppendChild (node);
@@ -148,16 +142,20 @@ namespace Nini.Config
 		private void RemoveConfigs ()
 		{
 			XmlAttribute attr = null;
-			XmlNodeList list = configDoc.SelectNodes ("Nini/Section");
-			foreach (XmlNode node in list)
+
+			foreach (XmlNode node in configDoc.DocumentElement.ChildNodes)
 			{
-				attr = node.Attributes["Name"];
-				if (attr != null) {
-					if (this.Configs[attr.Value] == null) {
-						configDoc.DocumentElement.RemoveChild (node);
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "Section") {
+
+					attr = node.Attributes["Name"];
+					if (attr != null) {
+						if (this.Configs[attr.Value] == null) {
+							configDoc.DocumentElement.RemoveChild (node);
+						}
+					} else {
+						throw new ArgumentException ("Section name attribute not found");
 					}
-				} else {
-					throw new ArgumentException ("Section name attribute not found");
 				}
 			}
 		}
@@ -167,20 +165,23 @@ namespace Nini.Config
 		/// </summary>
 		private void RemoveKeys (string sectionName)
 		{
-			string search = "Nini/Section[@Name='" + sectionName + "']";
-			XmlNode node = configDoc.SelectSingleNode (search);
+			XmlNode sectionNode = GetSectionByName (sectionName);
 			XmlAttribute keyName = null;
 			
-			if (node != null) {
-				foreach (XmlNode key in node.SelectNodes ("Key"))
+			if (sectionNode != null) {
+				foreach (XmlNode node in sectionNode.ChildNodes)
 				{
-					keyName = node.Attributes["Name"];
-					if (keyName != null) {
-						if (this.Configs[sectionName].Get (keyName.Value) == null) {
-							node.RemoveChild (key);
+					if (node.NodeType == XmlNodeType.Element
+						&& node.Name == "Key") {
+
+						keyName = node.Attributes["Name"];
+						if (keyName != null) {
+							if (this.Configs[sectionName].Get (keyName.Value) == null) {
+								sectionNode.RemoveChild (node);
+							}
+						} else {
+							throw new ArgumentException ("Name attribute not found in key");
 						}
-					} else {
-						throw new ArgumentException ("Name attribute not found in key");
 					}
 				}
 			}
@@ -189,48 +190,47 @@ namespace Nini.Config
 		/// <summary>
 		/// Loads all sections and keys.
 		/// </summary>
-		private void PerformLoad (XPathNavigator navigator)
+		private void PerformLoad (XmlDocument document)
 		{
 			this.Merge (this); // required for SaveAll
 			
-			navigator.MoveToRoot (); // start at root node
-			XPathNodeIterator iterator = navigator.Select ("/Nini");
-			if (iterator.Count < 1) {
+			if (document.DocumentElement.Name != "Nini") {
 				throw new ArgumentException ("Did not find Nini XML root node");
 			}
 			
-			LoadSections (navigator);
+			LoadSections (document.DocumentElement);
 		}
 		
 		/// <summary>
 		/// Loads all configuration sections.
 		/// </summary>
-		private void LoadSections (XPathNavigator navigator)
+		private void LoadSections (XmlNode rootNode)
 		{
-			XPathNodeIterator iterator = navigator.Select ("/Nini/Section");
 			ConfigBase config = null;
-			
-			while (iterator.MoveNext ())
+
+			foreach (XmlNode child in rootNode.ChildNodes)
 			{
-				config = new ConfigBase (
-							iterator.Current.GetAttribute ("Name", ""), this);
-				
-				this.Configs.Add (config);
-				LoadKeys (iterator.Current, config);
+				if (child.NodeType == XmlNodeType.Element
+					&& child.Name == "Section") {
+					config = new ConfigBase (child.Attributes["Name"].Value, this);
+					this.Configs.Add (config);
+					LoadKeys (child, config);
+				}
 			}
 		}
 		
 		/// <summary>
 		/// Loads all keys for a config.
 		/// </summary>
-		private void LoadKeys (XPathNavigator navigator, ConfigBase config)
+		private void LoadKeys (XmlNode node, ConfigBase config)
 		{
-			XPathNodeIterator iterator = navigator.Select ("Key");
-
-			while (iterator.MoveNext ())
+			foreach (XmlNode child in node.ChildNodes)
 			{
-				config.Add (iterator.Current.GetAttribute ("Name", ""),
-							iterator.Current.GetAttribute ("Value", ""));
+				if (child.NodeType == XmlNodeType.Element
+					&& child.Name == "Key") {
+					config.Add (child.Attributes["Name"].Value,
+								child.Attributes["Value"].Value);
+				}
 			}
 		}
 		
@@ -239,8 +239,7 @@ namespace Nini.Config
 		/// </summary>
 		private void SetKey (XmlNode sectionNode, string key, string value)
 		{
-			string search = "Key[@Name='" + key + "']";
-			XmlNode node = sectionNode.SelectSingleNode (search);
+			XmlNode node = GetKeyByName (sectionNode, key);
 			
 			if (node == null) {
 				CreateKey (sectionNode, key, value);
@@ -276,6 +275,46 @@ namespace Nini.Config
 			nameAttr.Value = name;
 			result.Attributes.Append (nameAttr);
 			
+			return result;
+		}
+
+		/// <summary>
+		/// Returns a section node by name.
+		/// </summary>
+		private XmlNode GetSectionByName (string name)
+		{
+			XmlNode result = null;
+
+			foreach (XmlNode node in configDoc.DocumentElement.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "Section"
+					&& node.Attributes["Name"].Value == name) {
+					result = node;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Returns a key node by name.
+		/// </summary>
+		private XmlNode GetKeyByName (XmlNode sectionNode, string name)
+		{
+			XmlNode result = null;
+
+			foreach (XmlNode node in sectionNode.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "Key"
+					&& node.Attributes["Name"].Value == name) {
+					result = node;
+					break;
+				}
+			}
+
 			return result;
 		}
 		
