@@ -71,7 +71,10 @@ namespace Nini.Config
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="GetArguments"]/docs/*' />
 		public string[] GetArguments ()
 		{
-			return this.arguments;
+			string[] result = new string[this.arguments.Length];
+			Array.Copy (this.arguments, result, this.arguments.Length);
+
+			return result;
 		}
 		#endregion
 
