@@ -22,10 +22,41 @@
 			<summary>Returns the exception message.</summary>
 		</docs>
 	</Property>
+	
+	<Constructor name="Constructor">
+		<docs>
+			<summary>Initializes an INI exception instance </summary>
+		</docs>
+	</Constructor>
+	
+	<Constructor name="ConstructorException">
+		<docs>
+			<summary>Initializes an INI exception instance </summary>
+			<param name="message">
+				The exception message.
+			</param>
+			<param name="exception">
+				The Exception that threw this exception
+			</param>
+		</docs>
+	</Constructor>
+	
+	<Constructor name="ConstructorSerialize">
+		<docs>
+			<summary>Initializes an INI exception instance </summary>
+			<param name="info">
+				The serialization information for this exception.
+			</param>
+			<param name="context">
+				The object containing the context information for this
+				exception.
+			</param>
+		</docs>
+	</Constructor>
 
 	<Constructor name="ConstructorMessage">
 		<docs>
-			<summary>Initializes an exception instance </summary>
+			<summary>Initializes an INI exception instance </summary>
 			<param name="message">The exception message.</param>
 		</docs>
 	</Constructor>

@@ -12,6 +12,14 @@
 		</docs>
 	</Property>
 	
+	<Property name="CurrentStrong">
+		<docs>
+			<summary>
+				Returns the strongly-typed current object in the enumeration.
+			</summary>
+		</docs>
+	</Property>
+	
 	<Property name="Entry">
 		<docs>
 			<summary>Returns the current DictionaryEntry.</summary>

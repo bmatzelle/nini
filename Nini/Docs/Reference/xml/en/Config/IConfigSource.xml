@@ -17,7 +17,7 @@
 		</docs>
 	</Property>
 	
-	<Property name="GlobalAlias">
+	<Property name="Alias">
 		<docs>
 			<summary>
 				Gets the global <see cref="AliasText"/> for all IConfigs

@@ -179,6 +179,26 @@ reader.Close ();
 			<summary>Closes the current reader and frees the resources.</summary>
 		</docs>
 	</Method>
+	
+	<Method name="Dispose">
+		<docs>
+			<summary>
+				Cleans up all managed and unmanaged resources for the instance.
+			</summary>
+		</docs>
+	</Method>
+	
+	<Method name="DisposeBoolean">
+		<docs>
+			<summary>
+				Cleans up all unmanaged resources for the instance and 
+				optionally the managed resouces as well.
+			</summary>
+			<param name="disposing">
+				If true then this will clean up managed resources as well.
+			</param>
+		</docs>
+	</Method>
 </Class>
 
 </NiniDocs>

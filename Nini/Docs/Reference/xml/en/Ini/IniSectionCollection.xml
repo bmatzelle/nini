@@ -66,6 +66,16 @@
 			<param name="index">Index of the array to start copying.</param>
 		</docs>
 	</Method>
+	
+	<Method name="CopyToStrong">
+		<docs>
+			<summary>Copies the collection to a strongly-typed array.</summary>
+			<param name="array">
+				The IniSection array to copy the results.
+			</param>
+			<param name="index">Index of the array to start copying.</param>
+		</docs>
+	</Method>
 </Class>
 
 </NiniDocs>

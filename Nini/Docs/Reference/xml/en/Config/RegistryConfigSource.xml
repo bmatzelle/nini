@@ -4,7 +4,7 @@
 <Class name="RegistryConfigSource">
 	<docs>
 		<summary>
-			Class for loading Windows Registry data into an IConfigSource.
+			Class for loading Windows Registry data.
 		</summary>
 		<remarks>
 			This class allows users to read and write Windows Registry 

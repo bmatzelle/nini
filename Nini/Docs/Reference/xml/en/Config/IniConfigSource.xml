@@ -3,7 +3,7 @@
 
 <Class name="IniConfigSource">
 	<docs>
-		<summary>Class for loading an INI file IConfigSource.</summary>
+		<summary>Class for loading an INI file.</summary>
 	</docs>
 
 	<Constructor name="ConstructorPath">

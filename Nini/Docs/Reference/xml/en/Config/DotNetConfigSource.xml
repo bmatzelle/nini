@@ -4,8 +4,7 @@
 <Class name="DotNetConfigSource">
 	<docs>
 		<summary>
-			Class for loading a Microsoft .NET XML configuration file 
-			IConfigSource.
+			Represents a Microsoft XML .NET configuration file.
 		</summary>
 		<remarks>
 			.NET configuration section names are 
