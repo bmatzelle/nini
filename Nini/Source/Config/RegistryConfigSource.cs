@@ -87,7 +87,7 @@ namespace Nini.Config
 			}
 		}
 		
-		/// <include file='RegistryConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
+		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public override void Save ()
 		{
 			for (int i = 0; i < this.Configs.Count; i++)
@@ -108,7 +108,7 @@ namespace Nini.Config
 		
 		#region Private methods
 		/// <summary>
-		/// Loads all values in a Registry keyS
+		/// Loads all values from the registry key.
 		/// </summary>
 		private void LoadKeyValues (RegistryKey key, string keyName)
 		{
