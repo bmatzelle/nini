@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="XmlConfigSource">
+	<docs>
+		<summary>
+			Class for loading a specialized
+		</summary>
+		<remarks>
+			Provides users with the ability to load more than one XML 
+			configuration file.  Unlike DotNetConfigSource which forces
+			users to use on file and have the name the same as the 
+			application.
+		</remarks>
+		<example>
+			The following is an example of an XML document for this type:
+			<code>
+&lt;Nini&gt;
+	&lt;Section Name=&quot;MySection&quot;&gt;
+		&lt;Key Name=&quot;SomeName&quot; Value=&quot;Some Value&quot; /&gt;
+		&lt;Key Name=&quot;SomeInteger&quot; Value=&quot;5652&quot; /&gt;
+	&lt;/Section&gt;
+
+	&lt;Section Name=&quot;AnotherSection&quot;&gt;
+		&lt;Key Name=&quot;Another Name&quot; Value=&quot;Another Value&quot; /&gt;
+	&lt;/Section&gt;
+&lt;/Nini&gt;
+			</code>
+		</example>
+	</docs>
+	
+	<Constructor name="ConstructorPath">
+		<docs>
+			<summary>
+				Creates a new object from the specified XML file.
+			</summary>
+			<remarks>
+				This instance type is not read only.  
+			</remarks>
+			<param name="path">
+				Path to the XML file.
+			</param>
+		</docs>
+	</Constructor>
+
+	<Constructor name="ConstructorXmlDoc">
+		<docs>
+			<summary>
+				Creates a new instance of the XML configuration source.
+			</summary>
+			<remarks>
+				This instance type is read only.
+			</remarks>
+			<param name="document">
+				An XmlDocument instance.
+			</param>
+		</docs>
+	</Constructor>
+	
+</Class>
+
+</NiniDocs>

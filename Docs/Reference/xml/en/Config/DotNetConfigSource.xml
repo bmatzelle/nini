@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="DotNetConfigSource">
+	<docs>
+		<summary>
+			Class for loading a Microsoft .NET XML configuration file 
+			IConfigSource.
+		</summary>
+	</docs>
+	
+	<Constructor name="ConstructorFile">
+		<docs>
+			<summary>
+				Creates a new instance of the XML configuration source.
+			</summary>
+			<remarks>
+				This instance type is not read only.  It changes the value of 
+				the configuration file for the executable.  For instance, if the 
+				name of the executable is "MyApp.exe" then it will load the 
+				data from the "MyApp.exe.config" file.
+			</remarks>
+		</docs>
+	</Constructor>
+
+	<Constructor name="ConstructorWeb">
+		<docs>
+			<summary>
+				Creates a new instance of the XML configuration source.
+			</summary>
+			<remarks>
+				Instantiating this way will make the IsReadOnly property to 
+				be set to true because the class cannot save to the 
+				configuration file.  Use this for configuration ASP.NET 
+				web sites that use the Web.config file.
+			</remarks>
+			<param name="sections">
+				Array of sections contained in the XML file.  These cannout 
+				be determined programmatically so you will have to supply 
+				them at load time.
+			</param>
+		</docs>
+	</Constructor>
+	
+</Class>
+
+</NiniDocs>

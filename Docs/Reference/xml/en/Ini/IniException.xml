@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="IniException">
+	<docs>
+		<summary>Returns information about the last INI exception.</summary>
+	</docs>
+	<Property name="LinePosition">
+		<docs>
+			<summary>Returns the line position where the exception occurred.</summary>
+		</docs>
+	</Property>
+	
+	<Property name="LineNumber">
+		<docs>
+			<summary>Returns the line number where the exception occurred.</summary>
+		</docs>
+	</Property>
+	
+	<Property name="Message">
+		<docs>
+			<summary>Returns the exception message.</summary>
+		</docs>
+	</Property>
+
+	<Constructor name="ConstructorMessage">
+		<docs>
+			<summary>Initializes an exception instance </summary>
+			<param name="message">The exception message.</param>
+		</docs>
+	</Constructor>
+
+	<Constructor name="ConstructorTextReader">
+		<docs>
+			<summary>Initializes a new instance of the class with the IniReader.</summary>
+			<param name="reader">The IniReader.</param>
+			<param name="message">The exception message.</param>
+		</docs>
+	</Constructor>
+</Class>
+
+</NiniDocs>

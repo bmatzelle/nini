@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<NiniDocs>
+
+<Class name="IniDocument">
+	<docs>
+		<summary>High level INI document access class.</summary>
+		<example>
+			Here's an example of accessing the following document, 
+			<c>test.ini</c>.
+			<code>
+; This is a comment
+[My Section]
+  key 1 = value 1 ; Comment 1
+  key 2 = value 2
+[Pets]
+  dog = rover
+  cat = muffy
+			</code>
+			Here is code for accessing it.
+			<code>
+IniDocument doc = new IniDocument ("test.ini");
+Console.WriteLine ("Key: " + doc.Get ("My Section", "key 1"));
+Console.WriteLine ("Key: " + doc.Get ("Pets", "dog"));
+doc.SetSection ("Movies");
+doc.SetKey ("Movies", "horror", "Scream");
+doc.SetKey ("Movies", "comedy", "Dumb and Dumber");
+doc.RemoveSection ("My Section");
+doc.RemoveKey ("Pets", "dog");
+
+StringWriter writer = new StringWriter ();
+doc.Save (writer);
+Console.WriteLine ("New INI document:");
+Console.WriteLine (writer.ToString ());
+			</code>
+			This prints out the following response:
+			<code>
+Key: value 1
+Key: rover
+New INI document:
+[Pets]
+cat = muffy
+[Movies]
+horror = Scream
+comedy = Dumb and Dumber
+		</code>
+		</example>
+	</docs>
+
+	<Constructor name="Constructor">
+		<docs>
+			<summary>Initializes an empty INI class instance.</summary>
+		</docs>
+	</Constructor>
+
+	<Constructor name="ConstructorPath">
+		<docs>
+			<summary>Initializes a new instance of the class with the supplied file.</summary>
+			<param name="filePath">The path to the INI file.</param>
+		</docs>
+	</Constructor>
+	
+	<Constructor name="ConstructorTextReader">
+		<docs>
+			<summary>
+				Initializes a new instance of the class using a TextReader.
+			</summary>
+			<param name="reader">The TextReader.</param>
+		</docs>
+	</Constructor>
+	
+	<Constructor name="ConstructorStream">
+		<docs>
+			<summary>
+				Initializes a new instance of the class using a Stream.
+			</summary>
+			<param name="stream">The Stream.</param>
+		</docs>
+	</Constructor>
+	
+	<Method name="Get">
+		<docs>
+			<summary>Returns the string version of the section key.</summary>
+			<remarks>Returns null if the key does not exist</remarks>
+			<param name="section">Section name.</param>
+			<param name="key">Section key.</param>
+		</docs>
+	</Method>
+
+	<Method name="GetSections">
+		<docs>
+			<summary>Returns a list of sections.</summary>
+			<remarks>
+				Does not return the sections necessarily in the order 
+				that they were loaded.
+			</remarks>
+		</docs>
+	</Method>
+
+	<Method name="GetKeys">
+		<docs>
+			<summary>Returns a list of keys.</summary>
+			<remarks>
+				Does not return the keys necessarily in the order 
+				that they were loaded.
+			</remarks>
+			<param name="section">Section name.</param>
+		</docs>
+	</Method>
+	
+	<Method name="ContainsSection">
+		<docs>
+			<summary>
+				Returns <b>true</b> if the section exists; <b>false</b> if  
+				it does not.
+			</summary>
+			<param name="section">Section name.</param>
+		</docs>
+	</Method>
+	
+	<Method name="ContainsKey">
+		<docs>
+			<summary>
+				Returns <b>true</b> if the key exists; <b>false</b> if  
+				it does not.
+			</summary>
+			<param name="section">Section name.</param>
+			<param name="key">Key value.</param>
+		</docs>
+	</Method>
+
+	<Method name="SetSection">
+		<docs>
+			<summary>
+				Sets a section if that section does not already exist.
+			</summary>
+			<param name="section">Section name.</param>
+		</docs>
+	</Method>
+
+	<Method name="SetKey">
+		<docs>
+			<summary>
+				Adds a new key if the key does not exist.  Sets a new value 
+				to an existing key if the key does exist.
+			</summary>
+			<param name="section">Section name.</param>
+			<param name="key">Key value.</param>
+			<param name="value">Key value.</param>
+			<exception cref="ArgumentException">
+				The section does not exist.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="RemoveSection">
+		<docs>
+			<summary>Removes a given section.</summary>
+			<param name="section">Section name.</param>
+			<exception cref="ArgumentException">
+				The section does not exist.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="RemoveKey">
+		<docs>
+			<summary>Flushes the current writer and frees the resources.</summary>
+			<param name="section">Section name.</param>
+			<param name="key">Key name.</param>
+			<exception cref="ArgumentException">
+				The section or key does not exist.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="SavePath">
+		<docs>
+			<summary>Writes the INI data to a file.</summary>
+			<param name="filePath">File path.</param>
+		</docs>
+	</Method>
+	
+	<Method name="SaveTextWriter">
+		<docs>
+			<summary>Writes the INI data to a writer.</summary>
+			<param name="textWriter">TextWriter instance.</param>
+		</docs>
+	</Method>
+</Class>
+
+</NiniDocs>
