@@ -25,6 +25,14 @@ namespace Nini.Config
 		#endregion
 
 		#region Constructors
+		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public XmlConfigSource ()
+		{
+			configDoc = new XmlDocument ();
+			configDoc.LoadXml ("<Nini/>");
+			PerformLoad (configDoc.CreateNavigator ());
+		}
+
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public XmlConfigSource (string path)
 		{
@@ -77,13 +85,19 @@ namespace Nini.Config
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
-			if (!IsSavable ()) {
-				throw new ArgumentException ("Source cannot be saved in this state");
-			}
-
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 			savePath = null;
+		}
+
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
+		public override string ToString ()
+		{
+			MergeConfigsIntoDocument ();
+			StringWriter writer = new StringWriter ();
+			configDoc.Save (writer);
+
+			return writer.ToString ();
 		}
 		#endregion
 
