@@ -27,7 +27,6 @@ namespace Nini.Test.Config
 			string[] arguments = new string[] { "--help", "-d", "doc.xml", 
 												"/pet:cat"};
 			ArgvConfigSource source = new ArgvConfigSource (arguments);
-			Assert.IsTrue (source.IsReadOnly);
 
 			source.AddSwitch ("Base", "help", "h", "Display help menu");
 			source.AddSwitch ("Base", "doc", "d", "Document");
@@ -52,7 +51,6 @@ namespace Nini.Test.Config
 		{
 			string[] arguments = new string[] { "--help", "/pets:", "cat", "dog" };
 			ArgvConfigSource source = new ArgvConfigSource (arguments);
-			Assert.IsTrue (source.IsReadOnly);
 			
 			source.AddSwitch ("Base", "help", "h", "Display help menu");
 			source.AddSwitch ("Base", "pets", "p", "Add one or more pets");

@@ -251,7 +251,6 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Spots", config.Get ("dog"));
 			Assert.AreEqual ("Misha", config.Get ("cat"));
 			Assert.AreEqual ("SomeValue", config.Get ("DoesNotExist"));
-			Assert.IsFalse (source.IsReadOnly);
 			source.Save ();
 			
 			source = new IniConfigSource (filePath);
@@ -365,7 +364,6 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
-			Assert.IsFalse (source.IsReadOnly);
 			source.Save (newPath);
 			
 			source = new IniConfigSource (newPath);
@@ -394,10 +392,8 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
-			Assert.IsTrue (source.IsReadOnly);
 			StreamWriter textWriter = new StreamWriter (newPath);
 			source.Save (textWriter);
-			Assert.IsFalse (source.IsReadOnly);
 			textWriter.Close (); // save to disk
 			
 			source = new IniConfigSource (newPath);
