@@ -16,7 +16,7 @@ using System.Collections;
 namespace Nini.Config
 {
 	/// <include file='XmlConfigSource.xml' path='//Class[@name="XmlConfigSource"]/docs/*' />
-	public class XmlConfigSource : ConfigSourceBase, IConfigSource
+	public class XmlConfigSource : ConfigSourceBase
 	{
 		#region Private variables
 		XmlDocument configDoc = null;
@@ -50,10 +50,10 @@ namespace Nini.Config
 		
 		#region Public methods
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public void Save ()
+		public override void Save ()
 		{
 			if (!IsSavable ()) {
-				throw new Exception ("Source cannot be saved in this state");
+				throw new ArgumentException ("Source cannot be saved in this state");
 			}
 
 			MergeConfigsIntoDocument ();
@@ -119,7 +119,7 @@ namespace Nini.Config
 						configDoc.DocumentElement.RemoveChild (node);
 					}
 				} else {
-					throw new Exception ("Section name attribute not found");
+					throw new ArgumentException ("Section name attribute not found");
 				}
 			}
 		}
@@ -142,7 +142,7 @@ namespace Nini.Config
 							node.RemoveChild (key);
 						}
 					} else {
-						throw new Exception ("Name attribute not found in key");
+						throw new ArgumentException ("Name attribute not found in key");
 					}
 				}
 			}
@@ -159,7 +159,7 @@ namespace Nini.Config
 			XmlNode rootNode = configDoc.SelectSingleNode ("/Nini");
 			
 			if (rootNode == null) {
-				throw new Exception ("Did not find NiniXml root node");
+				throw new ArgumentException ("Did not find NiniXml root node");
 			}
 			
 			LoadSections (rootNode);

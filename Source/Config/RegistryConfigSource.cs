@@ -28,7 +28,7 @@ namespace Nini.Config
 	}
 
 	/// <include file='RegistryConfigSource.xml' path='//Class[@name="RegistryConfigSource"]/docs/*' />
-	public class RegistryConfigSource : ConfigSourceBase, IConfigSource
+	public class RegistryConfigSource : ConfigSourceBase
 	{
 		#region Private variables
 		#endregion
@@ -88,7 +88,7 @@ namespace Nini.Config
 		}
 		
 		/// <include file='RegistryConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public void Save ()
+		public override void Save ()
 		{
 			for (int i = 0; i < this.Configs.Count; i++)
 			{

@@ -17,7 +17,7 @@ using Nini.Util;
 namespace Nini.Config
 {
 	/// <include file='ArgvConfigSource.xml' path='//Class[@name="ArgvConfigSource"]/docs/*' />
-	public class ArgvConfigSource : ConfigSourceBase, IConfigSource
+	public class ArgvConfigSource : ConfigSourceBase
 	{
 		#region Private variables
 		ArgvParser parser = null;
@@ -34,18 +34,13 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public properties
-		/// <include file='ArgvConfigSource.xml' path='//Property[@name="Arguments"]/docs/*' />
-		public string[] Arguments
-		{
-			get { return this.arguments; }
-		}
 		#endregion
 		
 		#region Public methods
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public void Save ()
+		public override void Save ()
 		{
-			throw new Exception ("Source is read only");
+			throw new ArgumentException ("Source is read only");
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />
@@ -61,7 +56,7 @@ namespace Nini.Config
 			IConfig config = GetConfig (configName);
 			
 			if (shortName.Length < 1 || shortName.Length > 2) {
-				throw new Exception ("Short name may only be 1 or 2 characters");
+				throw new ArgumentException ("Short name may only be 1 or 2 characters");
 			}
 
 			// Look for the long name first
@@ -70,6 +65,12 @@ namespace Nini.Config
 			} else if (shortName != null && parser[shortName] != null) {
 				config.Set (longName, parser[shortName]);
 			}
+		}
+		
+		/// <include file='ArgvConfigSource.xml' path='//Property[@name="GetArguments"]/docs/*' />
+		public string[] GetArguments ()
+		{
+			return this.arguments;
 		}
 		#endregion
 
