@@ -4,6 +4,19 @@ Nini Project ChangeLog
 
 This contains a listing of all changes between versions of Nini.
 
+Version 0.9.1 (Sun, Jan 09 2005)
+--------------------------------
+* Added ToString override to Xml, Ini, and DotNet sources
+* Added Reload method to all IConfigSource classes
+* Added GetValues method to IConfig
+* ConfigCollection class now implements IList (RemoveAt, Contains, etc)
+* Added Tips/Tricks section to the manual
+* Added empty constructor for creating configs in memory to all sources
+* Added verbose switch (-v) to Nini Editor
+* Added create new file switch (-n) to Nini Editor
+* Added "Using Nini Effectively" section to the manual
+* Fixed several Save method bugs among others
+
 Version 0.9.0 (Sun, Nov 14 2004)
 --------------------------------
 * Made engine faster and more CLS compliant (FxCop).
