@@ -20,8 +20,8 @@ namespace Nini.Config
 	public class ArgvConfigSource : ConfigSourceBase, IConfigSource
 	{
 		#region Private variables
-		StringBuilder usage = new StringBuilder ();
 		ArgvParser parser = null;
+		string[] arguments = null;
 		#endregion
 
 		#region Constructors
@@ -29,10 +29,16 @@ namespace Nini.Config
 		public ArgvConfigSource (string[] arguments)
 		{
 			parser = new ArgvParser (arguments);
+			this.arguments = arguments;
 		}
 		#endregion
 		
 		#region Public properties
+		/// <include file='ArgvConfigSource.xml' path='//Property[@name="Arguments"]/docs/*' />
+		public string[] Arguments
+		{
+			get { return this.arguments; }
+		}
 		#endregion
 		
 		#region Public methods
@@ -43,46 +49,31 @@ namespace Nini.Config
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />
-		public void AddSwitch (string configName, string longName, 
-								string description)
+		public void AddSwitch (string configName, string longName)
 		{
-			AddSwitch (configName, longName, null, description);
+			AddSwitch (configName, longName, null);
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitchShort"]/docs/*' />
 		public void AddSwitch (string configName, string longName, 
-								string shortName, string description)
+								string shortName)
 		{
 			IConfig config = GetConfig (configName);
+			
+			if (shortName.Length < 1 || shortName.Length > 2) {
+				throw new Exception ("Short name may only be 1 or 2 characters");
+			}
 
+			// Look for the long name first
 			if (parser[longName] != null) {
 				config.Set (longName, parser[longName]);
 			} else if (shortName != null && parser[shortName] != null) {
 				config.Set (longName, parser[shortName]);
 			}
-			
-			AddUsageItem (longName, shortName, description);
-		}
-		
-		/// <include file='ArgvConfigSource.xml' path='//Method[@name="GetUsage"]/docs/*' />
-		public string GetUsage ()
-		{
-			return usage.ToString ();
 		}
 		#endregion
 
 		#region Private methods
-		private void AddUsageItem (string longName, string shortName, string description)
-		{
-			if (shortName == null) {
-				usage.Append (String.Format ("       --{0}         {1}",
-							longName, description));
-			} else {
-				usage.Append (String.Format ("  -{0},  --{1}           {2}",
-							shortName, longName, description));
-			}
-		}
-
 		/// <summary>
 		/// Returns an IConfig.  If it does not exist then it is added.
 		/// </summary>
