@@ -44,6 +44,19 @@
 		</docs>
 	</Constructor>
 	
+	<Constructor name="ConstructorIniDocument">
+		<docs>
+			<summary>Constructor.  Loads an INI file source.</summary>
+			<remarks>
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
+			</remarks>
+			<param name="document">
+				The IniDocument.
+			</param>
+		</docs>
+	</Constructor>
+	
 	<Property name="SavePath">
 		<docs>
 			<summary>
