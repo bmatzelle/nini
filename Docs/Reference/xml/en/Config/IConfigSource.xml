@@ -57,6 +57,24 @@
 		</docs>
 	</Method>
 	
+	<Method name="Reload">
+		<docs>
+			<summary>
+				Reloads all configuration values.  
+			</summary>
+			<remarks>
+				This can only be called if the document can be reloaded 
+				from it's source, such as if it was loaded from a file
+				or from the Windows Registry.
+				If other documents were merged (with Merge) then they 
+				will be lost.
+			</remarks>
+			<exception cref="Exception">
+				An error occurred.
+			</exception>
+		</docs>
+	</Method>
+	
 	<Method name="Merge">
 		<docs>
 			<summary>

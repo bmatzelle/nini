@@ -146,7 +146,22 @@ public static int Main (string[] args)
 				This method will always throw an exception because you 
 				will never be able to save it.
 			</remarks>
-			<exception cref="Exception">
+			<exception cref="ArgumentException">
+				This will always throw an exception.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="Reload">
+		<docs>
+			<summary>
+				Reloads all configuration values.  
+			</summary>
+			<remarks>
+				This class cannot be reloaded so it will always
+				throw an exception.
+			</remarks>
+			<exception cref="ArgumentException">
 				This will always throw an exception.
 			</exception>
 		</docs>
