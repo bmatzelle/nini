@@ -1,19 +1,15 @@
----------------------------------------------------
-Nini - Configuration Library for the .NET Framework
----------------------------------------------------
+--------------------------------------------------------
+Nini - An uncommonly powerful .NET configuration library
+--------------------------------------------------------
 
 Homepage: http://nini.sourceforge.net/
 Author:   Brent R. Matzelle - bmatzelle [at] yahoo [dot] com
 
 ABOUT
 -----
-Nini is a software configuration library written in 100% C# for the .NET 
-Framework. This software contains a powerful API for abstracting the access 
-of multiple configuration types: INI, .NET config files, Windows(tm) Registry, 
-XML files, and command-line options. Nini also includes an INI parser library. 
-It compiles with Mono (http://www.go-mono.org/) as well.  Nini is absolutely 
-free to use in any projects, including commericial ones.  To learn more about 
-the license read the LICENSE.txt file.
+Nini is an uncommonly powerful .NET configuration library. The goal of this 
+project is to provide developers with a tool that makes it easy to write 
+highly configurable applications in a short amount of time.
 
 INSTALL
 -------
