@@ -14,48 +14,22 @@ using System.Collections;
 
 namespace Nini.Config
 {
-	#region ConfigSourceEventHandler class
-	/// <include file='ConfigSourceEventArgs.xml' path='//Delegate[@name="ConfigSourceEventHandler"]/docs/*' />
-	public delegate void ConfigSourceEventHandler (object sender, ConfigSourceEventArgs e);
-
-	/// <include file='ConfigSourceEventArgs.xml' path='//Class[@name="ConfigSourceEventArgs"]/docs/*' />
-	public class ConfigSourceEventArgs : EventArgs
-	{
-		IConfig config = null;
-
-		/// <include file='ConfigSourceEventArgs.xml' path='//Constructor[@name="ConstructorIConfig"]/docs/*' />
-		public ConfigSourceEventArgs (IConfig config)
-		{
-			this.config = config;
-		}
-
-		/// <include file='ConfigSourceEventArgs.xml' path='//Constructor[@name="Constructor"]/docs/*' />
-		public ConfigSourceEventArgs ()
-		{
-		}
-
-		/// <include file='ConfigSourceEventArgs.xml' path='//Property[@name="Config"]/docs/*' />
-		public IConfig Config
-		{
-			get { return config; }
-		}
-	}
-	#endregion
-
 	/// <include file='IConfigSource.xml' path='//Interface[@name="IConfigSource"]/docs/*' />
 	public abstract class ConfigSourceBase : IConfigSource
 	{
 		#region Private variables
 		ArrayList sourceList = new ArrayList ();
-		ConfigCollection configList = new ConfigCollection ();
+		ConfigCollection configList = null;
 		bool autoSave = false;
 		AliasText alias = new AliasText ();
-		event ConfigSourceEventHandler configAddedEvent;
-		event ConfigSourceEventHandler reloadedEvent;
-		event ConfigSourceEventHandler savedEvent;
 		#endregion
 
 		#region Constructors
+		/// <include file='ConfigSourceBase.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public ConfigSourceBase ()
+		{
+			configList = new ConfigCollection (this);
+		}
 		#endregion
 		
 		#region Public properties
@@ -96,36 +70,19 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
 		public IConfig AddConfig (string name)
 		{
-			ConfigBase result = null;
-
-			if (configList[name] == null) {
-				result = new ConfigBase (name, this);
-				configList.Add (result);
-			} else {
-				throw new ArgumentException ("An IConfig of that name already exists");
-			}
-
-			if (configAddedEvent != null) {
-				configAddedEvent (this, new ConfigSourceEventArgs (result));
-			}
-			
-			return result;
+			return configList.Add (name);
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public virtual void Save ()
 		{
-			if (savedEvent != null) {
-				savedEvent (this, new ConfigSourceEventArgs ());
-			}
+			OnSaved (new EventArgs ());
 		}
 
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
 		public virtual void Reload ()
 		{
-			if (reloadedEvent != null) {
-				reloadedEvent (this, new ConfigSourceEventArgs ());
-			}
+			OnReloaded (new EventArgs ());
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
@@ -145,25 +102,28 @@ namespace Nini.Config
 		#endregion
 
 		#region Public events
-		/// <include file='IConfigSource.xml' path='//Event[@name="ConfigAdded"]/docs/*' />
-		public event ConfigSourceEventHandler ConfigAdded
-		{
-			add { configAddedEvent += value; }
-			remove { configAddedEvent -= value; }
-		}
-
 		/// <include file='IConfigSource.xml' path='//Event[@name="Reloaded"]/docs/*' />
-		public event ConfigSourceEventHandler Reloaded
-		{
-			add { reloadedEvent += value; }
-			remove { reloadedEvent -= value; }
-		}
+		public event EventHandler Reloaded;
 
 		/// <include file='IConfigSource.xml' path='//Event[@name="Saved"]/docs/*' />
-		public event ConfigSourceEventHandler Saved
+		public event EventHandler Saved;
+		#endregion
+
+		#region Protected methods
+		/// <include file='ConfigSourceBase.xml' path='//Method[@name="OnReloaded"]/docs/*' />
+		protected void OnReloaded (EventArgs e)
 		{
-			add { savedEvent += value; }
-			remove { savedEvent -= value; }
+			if (Reloaded != null) {
+				Reloaded (this, e);
+			}
+		}
+
+		/// <include file='ConfigSourceBase.xml' path='//Method[@name="OnSaved"]/docs/*' />
+		protected void OnSaved (EventArgs e)
+		{
+			if (Saved != null) {
+				Saved (this, e);
+			}
 		}
 		#endregion
 
