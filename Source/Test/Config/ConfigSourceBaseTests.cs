@@ -250,6 +250,41 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("February 8th", config.Get ("Birthday"));
 			Assert.AreEqual ("Brent", config.Get ("Author"));
 		}
+
+		[Test]
+		public void GetBooleanSpace ()
+		{
+			StringWriter textWriter = new StringWriter ();
+			XmlTextWriter xmlWriter = NiniWriter (textWriter);
+			WriteSection (xmlWriter, "Pets");
+			WriteKey (xmlWriter, "cat", "muffy");
+			WriteKey (xmlWriter, "dog", "rover");
+			WriteKey (xmlWriter, "Is Mammal", "False");
+			xmlWriter.WriteEndDocument ();
+			
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (textWriter.ToString ());
+
+			XmlConfigSource source = new XmlConfigSource (doc);
+			source.Alias.AddAlias ("true", true);
+			source.Alias.AddAlias ("false", false);
+			
+			Assert.IsFalse (source.Configs["Pets"].GetBoolean ("Is Mammal", false));
+		}
+
+		[Test]
+		public void RemoveNonExistingKey ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine (" cat = muffy");
+			writer.WriteLine (" dog = rover");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			
+			// This should not throw an exception
+			source.Configs["Pets"].Remove ("Not here");
+		}
 		#endregion
 
 		#region Private methods
