@@ -166,23 +166,47 @@ reader.Close ();
 		</docs>
 	</Property>
 	
-	<Property name="CommentDelimiter">
+	<Method name="GetCommentDelimiters">
 		<docs>
-			<summary>Comment delimiter to search for when parsing.</summary>
+			<summary>Returns the comment delimiters.</summary>
 			<remarks>
 				The default value is a semicolon (';').
 			</remarks>
 		</docs>
-	</Property>
-	
-	<Property name="AssignDelimiter">
+	</Method>
+
+	<Method name="SetCommentDelimiters">
 		<docs>
-			<summary>Assign delimiter to search for when parsing.</summary>
+			<summary>Sets the comment delimiters.</summary>
+			<param name="delimiters">
+				The array of comment delimiters.
+			</param>
 			<remarks>
-				The default value is an equals sign ('=').
+				The default value is a semicolon (';').
 			</remarks>
 		</docs>
-	</Property>
+	</Method>
+	
+	<Method name="GetAssignDelimiters">
+		<docs>
+			<summary>Returns the assign delimiters.</summary>
+			<remarks>
+				The default value is an equals operator ('=').
+			</remarks>
+		</docs>
+	</Method>
+
+	<Method name="SetAssignDelimiters">
+		<docs>
+			<summary>Sets the assign delimiters.</summary>
+			<param name="delimiters">
+				The array of assign delimiters.
+			</param>
+			<remarks>
+				The default value is an equals operator ('=').
+			</remarks>
+		</docs>
+	</Method>
 	
 	<Method name="Read">
 		<docs>
