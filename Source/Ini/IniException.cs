@@ -15,10 +15,12 @@ using System.Security.Permissions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace Nini.Ini
 {
 	/// <include file='IniException.xml' path='//Class[@name="IniException"]/docs/*' />
 	[Serializable]
+
 	public class IniException : SystemException, ISerializable
 	{
 		#region Private variables
@@ -55,6 +57,7 @@ namespace Nini.Ini
 				}
 
 				return String.Format (CultureInfo.InvariantCulture, "{0} Line {1}, position {2}.",
+
 										base.Message, this.LineNumber, this.LinePosition);
 			}
 		}
@@ -97,9 +100,7 @@ namespace Nini.Ini
 		#endregion
 		
 		#region Public methods
-		/// <summary>
-		/// ISerializable GetObjectData method.
-		/// </summary>
+		/// <include file='IniException.xml' path='//Constructor[@name="GetObjectData"]/docs/*' />
 		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
 		public override void GetObjectData (SerializationInfo info, 
 											StreamingContext context)
@@ -107,6 +108,7 @@ namespace Nini.Ini
 			base.GetObjectData (info, context);
 			if (iniReader != null) {
 				info.AddValue ("lineNumber", iniReader.LineNumber);
+
 				info.AddValue ("linePosition", iniReader.LinePosition);
 			}
 		}
