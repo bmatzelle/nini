@@ -299,6 +299,7 @@ namespace Nini.Test.Config
 			XmlDocument doc = new XmlDocument ();
 			doc.LoadXml (textWriter.ToString ());
 			XmlConfigSource source = new XmlConfigSource (doc);
+			source.ReplaceKeyValues ();
 			
 			IConfig config = source.Configs["Test"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
