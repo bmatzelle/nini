@@ -230,6 +230,7 @@ namespace Nini.Ini
 				case '#':
 				case ';':
 					iniType = IniType.Empty;
+					ReadChar (); // consume comment character
 					ReadComment ();
 					break;
 				case ' ':
@@ -257,12 +258,11 @@ namespace Nini.Ini
 		}
 		
 		/// <summary>
-		/// Reads a comment.
+		/// Reads a comment. Must start after the comment delimiter.
 		/// </summary>
 		private void ReadComment  ()
 		{
 			int ch = -1;
-			ReadChar ();
 			SkipWhitespace ();
 			hasComment = true;
 
@@ -376,7 +376,7 @@ namespace Nini.Ini
 		{
 			int ch = -1;
 			iniType = IniType.Section;
-			ch = ReadChar ();
+			ch = ReadChar (); // consume "["
 			keyList.Clear ();
 
 			while (true)
