@@ -15,11 +15,13 @@ INSTALL
 -------
 * Take the DLL for your .NET Framework version out of the Bin directory 
 
-  * Bin\DotNet\1.0 - Library built with the MS .NET Framework 1.0
+  * Bin\DotNet\1.0 - DLL built with the MS .NET Framework 1.0
 
-  * Bin\DotNet\1.1 - Library built with the MS .NET Framework 1.0
+  * Bin\DotNet\1.1 - DLL built with the MS .NET Framework 1.0
+  
+  * Bin\DotNetCompact\1.0 - DLL built for the MS .NET Compact Framework 1.0
 
-  * Bin\Mono\1.0 - Library built with Mono 1.0
+  * Bin\Mono\1.0 - DLL built with Mono 1.0
   
 * Add the DLL as a reference in your project.  In Visual Studio right-click on 
   the References item in the project menu, click on the Browse button and 
@@ -27,7 +29,7 @@ INSTALL
   
 * You can also add Nini to all projects on your machine by adding it to the
   global assembly cache.  To do this run the following command:
-  $ gacutil.exe /i Nini.dll
+  $> gacutil.exe /i Nini.dll
 
 * To check if your install was successful add the following to a .NET project 
   file (this assumes C#, use the appropriate version for C++/VB.NET, etc):
@@ -46,19 +48,27 @@ same directory structure as found in the INSTALL section above.
   file are supplied.  They are located in the Source directory (Nini.sln).
   To load this file simply double click the solutions and click 
   Build -> Build Solution.
+  
+  * Building for the .NET Compact Framework
+    This requires that you have Visual Studio .NET 2003 installed.  Open
+    the compact project file (NiniCompact.csdproj).  Build the solution
+    in the same way as documented above.
 
 * NAnt (http://nant.sourceforge.net)
   In the Source directory there is a Cyrus.build NAnt file.  Here is how to 
-  build for each runtime:
+  build for each runtime from the command line:
   
   To build MS .NET Framework 1.0
-  > nant build-dotnet-1.0
+  $> nant build-dotnet-1.0
   
   To build MS .NET Framework 1.1
-  > nant build-dotnet-1.1
+  $> nant build-dotnet-1.1
+  
+  To build MS .NET Compact Framework 1.0
+  *** There is no way to do this with NAnt at this time ***
   
   To build Mono 1.0
-  > nant build-mono
+  $> nant build-mono
 
 * Note: If you would like to run the unit test then download and install 
   NUnit (http://nunit.org/).
@@ -82,10 +92,12 @@ DOCUMENTATION
 EXAMPLES
 --------
 The Nini project contains some example applications to help you get started.  
-These files are located in the Examples directory.  Pay special attention to 
-the NiniEdit project.  This is a fully-functional command line application 
-that edits INI, XML, and .NET configuration file types.  Reference the 
-README file for more information about it.
+These files are located in the Examples directory.  
+
+* NiniEdit
+  This program is a fully-functional command line application 
+  that edits INI, XML, and .NET configuration file types.  Reference the 
+  README.txt file for more information about it.
 
 QUESTIONS, HELP, & SUGGESTIONS
 ------------------------------
