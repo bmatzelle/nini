@@ -19,7 +19,7 @@ using System.Collections.Specialized;
 namespace Nini.Config
 {
 	/// <include file='DotNetConfigSource.xml' path='//Class[@name="DotNetConfigSource"]/docs/*' />
-	public class DotNetConfigSource : ConfigSourceBase, IConfigSource
+	public class DotNetConfigSource : ConfigSourceBase
 	{
 		#region Private variables
 		string[] sections = null;
@@ -69,10 +69,10 @@ namespace Nini.Config
 		
 		#region Public methods
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public void Save ()
+		public override void Save ()
 		{
 			if (!IsSavable ()) {
-				throw new Exception ("Source cannot be saved in this state");
+				throw new ArgumentException ("Source cannot be saved in this state");
 			}
 			MergeConfigsIntoDocument ();
 		
@@ -83,7 +83,7 @@ namespace Nini.Config
 		public void Save (string path)
 		{
 			if (!IsSavable ()) {
-				throw new Exception ("Source cannot be saved in this state");
+				throw new ArgumentException ("Source cannot be saved in this state");
 			}
 
 			savePath = path;
@@ -150,7 +150,7 @@ namespace Nini.Config
 			XmlNode rootNode = configDoc.SelectSingleNode ("/configuration");
 			
 			if (rootNode == null) {
-				throw new Exception ("Could not find root node");
+				throw new ArgumentException ("Could not find root node");
 			}
 			
 			LoadSections (rootNode);
@@ -224,7 +224,7 @@ namespace Nini.Config
 						node.ParentNode.RemoveChild (node);
 					}
 				} else {
-					throw new Exception ("Section name attribute not found");
+					throw new ArgumentException ("Section name attribute not found");
 				}
 			}
 		}
@@ -247,7 +247,7 @@ namespace Nini.Config
 							node.RemoveChild (key);
 						}
 					} else {
-						throw new Exception ("Key attribute not found in node");
+						throw new ArgumentException ("Key attribute not found in node");
 					}
 				}
 			}
@@ -293,7 +293,7 @@ namespace Nini.Config
 			ConfigBase config = new ConfigBase (name, this);
 
 			if (collection == null) {
-				throw new Exception ("Section was not found");
+				throw new ArgumentException ("Section was not found");
 			}
 
 			if (collection != null) {
@@ -304,35 +304,6 @@ namespace Nini.Config
 				
 				this.Configs.Add (config);
 			}
-		}
-		
-		/// <summary>
-		/// Loads all of the sections from an XML node.
-		/// </summary>
-		private string[] SectionList (XmlNode docNode)
-		{
-			ArrayList list = new ArrayList ();
-			XmlDocument doc = new XmlDocument ();
-			
-			XmlNode node = docNode.SelectSingleNode ("/configuration/appSettings");
-			if (node != null) {
-				list.Add ("appSettings");
-			}
-			
-			XmlNodeList nodeList = docNode.SelectNodes ("/configuration/configSections/section");
-			
-			for (int i = 0; i < nodeList.Count; i++)
-			{
-				XmlNode attr = nodeList[i].Attributes["name"];
-				if (attr != null) {
-					list.Add (attr.Value);
-				}
-			}
-			
-			string[] result = new string[list.Count];
-			list.CopyTo (result, 0);
-			
-			return result;
 		}
 		
 		/// <summary>

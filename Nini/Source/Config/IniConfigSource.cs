@@ -16,7 +16,7 @@ using Nini.Ini;
 namespace Nini.Config
 {
 	/// <include file='IniConfigSource.xml' path='//Class[@name="IniConfigSource"]/docs/*' />
-	public class IniConfigSource : ConfigSourceBase, IConfigSource
+	public class IniConfigSource : ConfigSourceBase
 	{
 		#region Private variables
 		IniDocument iniDocument = null;
@@ -59,10 +59,10 @@ namespace Nini.Config
 		
 		#region Public methods
 		/// <include file='IniConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public void Save ()
+		public override void Save ()
 		{
 			if (!IsSavable ()) {
-				throw new Exception ("Source cannot be saved in this state");
+				throw new ArgumentException ("Source cannot be saved in this state");
 			}
 
 			MergeConfigsIntoDocument ();
