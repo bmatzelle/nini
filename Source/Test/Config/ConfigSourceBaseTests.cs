@@ -283,6 +283,23 @@ namespace Nini.Test.Config
 			// This should not throw an exception
 			source.Configs["Pets"].Remove ("Not here");
 		}
+
+		[Test]
+		public void SavingWithNonStrings ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine (" cat = muffy");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			
+			StringWriter newWriter = new StringWriter ();
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Pets", config.Name);
+			config.Set ("count", 1);
+
+			source.Save (newWriter);
+		}
 		#endregion
 
 		#region Private methods
