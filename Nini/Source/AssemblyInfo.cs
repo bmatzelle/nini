@@ -20,6 +20,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Nini for .NET Framework 1.1")]
 #elif (MONO_1_0)
 [assembly: AssemblyTitle("Nini for Mono 1.0")]
+#elif (NET_COMPACT_1_0)
+[assembly: AssemblyTitle("Nini for .NET Compact Framework 1.0")]
 #else
 [assembly: AssemblyTitle("Nini")]
 #endif
@@ -49,7 +51,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: System.Reflection.AssemblyVersion("0.9.1.0")]
+[assembly: System.Reflection.AssemblyVersion("0.9.2.0")]
 
 [assembly:CLSCompliant(true)] // Required for CLS compliance
 
@@ -57,6 +59,9 @@ using System.Runtime.CompilerServices;
 [assembly:ComVisible(false)]
 
 // Permview attributes
+#if (NET_COMPACT_1_0)
+#else
 [assembly:IsolatedStorageFilePermission(SecurityAction.RequestMinimum)]
 [assembly:SecurityPermission(SecurityAction.RequestRefuse)]
 [assembly:FileIOPermission(SecurityAction.RequestMinimum)]
+#endif
