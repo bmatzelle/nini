@@ -16,14 +16,14 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Nini Editor, command-line configuration file editor")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCompany("Brent R. Matzelle")]
+[assembly: AssemblyProduct("Nini Editor")]
+[assembly: AssemblyCopyright("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyTrademark("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyDefaultAlias("Nini Editor")]
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:
@@ -36,7 +36,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.2.0.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
