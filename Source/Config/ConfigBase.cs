@@ -15,6 +15,37 @@ using Nini.Util;
 
 namespace Nini.Config
 {
+	#region ConfigEventHandler class
+	/// <include file='ConfigSourceEventArgs.xml' path='//Delegate[@name="ConfigSourceEventHandler"]/docs/*' />
+	public delegate void ConfigEventHandler (object sender, ConfigEventArgs e);
+
+	/// <include file='ConfigEventArgs.xml' path='//Class[@name="ConfigEventArgs"]/docs/*' />
+	public class ConfigEventArgs : EventArgs
+	{
+		string keyName = null;
+		string keyValue = null;
+
+		/// <include file='ConfigEventArgs.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public ConfigEventArgs (string keyName, string keyValue)
+		{
+			this.keyName = keyName;
+			this.keyValue = keyValue;
+		}
+
+		/// <include file='ConfigEventArgs.xml' path='//Property[@name="KeyName"]/docs/*' />
+		public string KeyName
+		{
+			get { return keyName; }
+		}
+
+		/// <include file='ConfigEventArgs.xml' path='//Property[@name="KeyValue"]/docs/*' />
+		public string KeyValue
+		{
+			get { return keyValue; }
+		}
+	}
+	#endregion
+
 	/// <include file='IConfig.xml' path='//Interface[@name="IConfig"]/docs/*' />
 	public class ConfigBase : IConfig
 	{
@@ -24,6 +55,8 @@ namespace Nini.Config
 		IConfigSource configSource = null;
 		AliasText aliasText = null;
 		IFormatProvider format = NumberFormatInfo.CurrentInfo;
+		event ConfigEventHandler keySetEvent;
+		event ConfigEventHandler keyRemovedEvent;
 		#endregion
 		
 		#region Constructors
@@ -253,6 +286,10 @@ namespace Nini.Config
 			if (ConfigSource.AutoSave) {
 				ConfigSource.Save ();
 			}
+
+			if (keySetEvent != null) {
+				keySetEvent (this, new ConfigEventArgs (key, value.ToString ()));
+			}
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Remove"]/docs/*' />
@@ -263,8 +300,32 @@ namespace Nini.Config
 			}
 			
 			if (keys.Contains (key)) {
+				string keyValue = null;
+				if (keySetEvent != null) {
+					keyValue = Get (key);
+				}
 				keys.Remove (key);
+
+				if (keySetEvent != null) {
+					keyRemovedEvent (this, new ConfigEventArgs (key, keyValue));
+				}
 			}
+		}
+		#endregion
+
+		#region Public events
+		/// <include file='IConfig.xml' path='//Event[@name="KeySet"]/docs/*' />
+		public event ConfigEventHandler KeySet
+		{
+			add { keySetEvent += value; }
+			remove { keySetEvent -= value; }
+		}
+
+		/// <include file='IConfig.xml' path='//Event[@name="KeyRemoved"]/docs/*' />
+		public event ConfigEventHandler KeyRemoved
+		{
+			add { keyRemovedEvent += value; }
+			remove { keyRemovedEvent -= value; }
 		}
 		#endregion
 		
