@@ -21,8 +21,6 @@ namespace Nini.Config
 		ArrayList sourceList = new ArrayList ();
 		ConfigCollection configList = new ConfigCollection ();
 		bool autoSave = false;
-		bool replaceText = false;
-		bool textReplaced = false;
 		#endregion
 
 		#region Constructors
@@ -32,13 +30,7 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Property[@name="Configs"]/docs/*' />
 		public ConfigCollection Configs
 		{
-			get
-			{
-				if (this.ReplaceText && !textReplaced) {
-					ReplaceTextAll ();
-				}
-				return configList;
-			}
+			get { return configList; }
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Property[@name="AutoSave"]/docs/*' />
@@ -46,13 +38,6 @@ namespace Nini.Config
 		{
 			get { return autoSave; }
 			set { autoSave = value; }
-		}
-		
-		/// <include file='IConfigSource.xml' path='//Property[@name="ReplaceText"]/docs/*' />
-		public bool ReplaceText
-		{
-			get { return replaceText; }
-			set { replaceText = value; }
 		}
 		#endregion
 		
@@ -89,14 +74,13 @@ namespace Nini.Config
 		}
 		#endregion
 
-		#region Private methods
+		#region Protected methods
 		/// <summary>
 		/// This performs a total lazy replace of all text.
 		/// </summary>
-		private void ReplaceTextAll ()
+		protected void ReplaceTextAll ()
 		{
 			string[] keys = null;
-			textReplaced = true;
 
 			foreach (IConfig config in configList)
 			{
@@ -107,7 +91,9 @@ namespace Nini.Config
 				}
 			}
 		}
-		
+		#endregion
+
+		#region Private methods		
 		/// <summary>
 		/// Recursively replaces text.
 		/// </summary>
