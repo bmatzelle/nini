@@ -41,14 +41,19 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public properties
+		/// <include file='XmlConfigSource.xml' path='//Property[@name="SavePath"]/docs/*' />
+		public string SavePath
+		{
+			get { return savePath; }
+		}
 		#endregion
 		
 		#region Public methods
-		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
 			if (!IsSavable ()) {
-				throw new Exception ("Source is read only");
+				throw new Exception ("Source cannot be saved in this state");
 			}
 
 			MergeConfigsIntoDocument ();
@@ -56,18 +61,19 @@ namespace Nini.Config
 			configDoc.Save (savePath);
 		}
 		
-		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
 		public void Save (string path)
 		{
 			this.savePath = path;
 			this.Save ();
 		}
 		
-		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
+			savePath = null;
 		}
 		#endregion
 
