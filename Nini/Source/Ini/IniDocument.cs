@@ -162,8 +162,13 @@ namespace Nini.Ini
 					break;
 				case IniType.Section:
 					sectionFound = true;
+					// If section already exists then overwrite it
+					if (sections[reader.Name] != null) {
+						sections.Remove (reader.Name);
+					}
 					section = new IniSection (reader.Name, reader.Comment);
 					sections.Add (section);
+
 					break;
 				case IniType.Key:
 					section.Set (reader.Name, reader.Value, reader.Comment);
