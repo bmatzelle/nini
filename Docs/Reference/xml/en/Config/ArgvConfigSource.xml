@@ -66,28 +66,21 @@ MyApp.exe -D --file log.txt --debug=yes
 			<param name="longName">
 				The long switch name (without the "-", "--", or "/").
 			</param>
-			<param name="description">
-				The description to show in <see cref="GetUsage"/>
-			</param>
 			<example>
 				<code>
 public static int Main (string[] args)
 {
    ArgvConfigSource source = new ArgvConfigSource (args);
 
-   source.AddSwitch ("Logging", "file-name", "f", "Logging file name");
-   source.AddSwitch ("Logging", "columns", "c", "Columns of debugging information to display");
-   source.AddSwitch ("Logging", "max-file-size", "m", "Maximum allowed log size");
+   source.AddSwitch ("Logging", "file-name", "f");
+   source.AddSwitch ("Logging", "columns", "c");
+   source.AddSwitch ("Logging", "max-file-size", "m");
 
    if (args.Length > 0)
    {
 	  string fileName = config.Configs["Logging"].Get ("file-name");
 	  int columns = config.Configs["Logging"].GetInt ("columns");
 	  long fileSize = config.Configs["Logging"].GetLong ("max-file-size");
-   }
-   else
-   {
-	  Console.WriteLine (source.GetUsage ());
    }
 }
 				</code>
@@ -114,28 +107,21 @@ public static int Main (string[] args)
 			<param name="longName">
 				The long switch name (without the "-", "--", or "/").
 			</param>
-			<param name="description">
-				The description to show in <see cref="GetUsage"/>
-			</param>
 			<example>
 				<code>
 public static int Main (string[] args)
 {
    ArgvConfigSource source = new ArgvConfigSource (args);
 
-   source.AddSwitch ("Logging", "file-name", "f", "Logging file name");
-   source.AddSwitch ("Logging", "columns", "c", "Columns of debugging information to display");
-   source.AddSwitch ("Logging", "max-file-size", "m", "Maximum allowed log size");
+   source.AddSwitch ("Logging", "file-name", "f");
+   source.AddSwitch ("Logging", "columns", "c");
+   source.AddSwitch ("Logging", "max-file-size", "m");
 
    if (args.Length > 0)
    {
 	  string fileName = config.Configs["Logging"].Get ("file-name");
 	  int columns = config.Configs["Logging"].GetInt ("columns");
 	  long fileSize = config.Configs["Logging"].GetLong ("max-file-size");
-   }
-   else
-   {
-	  Console.WriteLine (source.GetUsage ());
    }
 }
 				</code>
