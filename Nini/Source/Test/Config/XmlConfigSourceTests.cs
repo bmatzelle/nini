@@ -196,6 +196,70 @@ namespace Nini.Test.Config
 			
 			File.Delete  (xmlFileName);
 		}
+		
+		[Test]
+		public void SaveToNewPath ()
+		{
+			string filePath = "Test.xml";
+			string newPath = "TestNew.xml";
+			
+			StreamWriter textWriter = new StreamWriter (filePath);
+			XmlTextWriter xmlWriter = NiniWriter (textWriter);
+			WriteSection (xmlWriter, "Pets");
+			WriteKey (xmlWriter, "cat", "Muffy");
+			WriteKey (xmlWriter, "dog", "Rover");
+			xmlWriter.WriteEndDocument ();
+			xmlWriter.Close ();
+
+			XmlConfigSource source = new XmlConfigSource (filePath);
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			Assert.IsFalse (source.IsReadOnly);
+			source.Save (newPath);
+			
+			source = new XmlConfigSource (newPath);
+			config = source.Configs["Pets"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			File.Delete (filePath);
+			File.Delete (newPath);
+		}
+		
+		[Test]
+		public void SaveToWriter ()
+		{
+			string filePath = "Test.xml";
+			string newPath = "TestNew.xml";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			XmlTextWriter xmlWriter = NiniWriter (writer);
+			WriteSection (xmlWriter, "Pets");
+			WriteKey (xmlWriter, "cat", "Muffy");
+			WriteKey (xmlWriter, "dog", "Rover");
+			xmlWriter.WriteEndDocument ();
+			xmlWriter.Close ();
+
+			XmlConfigSource source = new XmlConfigSource (filePath);			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			Assert.IsFalse (source.IsReadOnly);
+			StreamWriter textWriter = new StreamWriter (newPath);
+			source.Save (textWriter);
+			Assert.IsFalse (source.IsReadOnly);
+			textWriter.Close (); // save to disk
+			
+			source = new XmlConfigSource (newPath);
+			config = source.Configs["Pets"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			File.Delete (newPath);
+		}
 		#endregion
 
 		#region Private methods

@@ -346,5 +346,66 @@ namespace Nini.Test.Config
 			Assert.IsNull (config.Get ("dog"));
 			Assert.IsNotNull (config.Get ("snake"));
 		}
+		
+		[Test]
+		public void SaveToNewPath ()
+		{
+			string filePath = "Test.ini";
+			string newPath = "TestNew.ini";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			writer.WriteLine ("# some comment");
+			writer.WriteLine ("[new section]");
+			writer.WriteLine (" dog = Rover");
+			writer.WriteLine (" cat = Muffy");
+			writer.Close ();
+			
+			IniConfigSource source = new IniConfigSource (filePath);
+			IConfig config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			Assert.IsFalse (source.IsReadOnly);
+			source.Save (newPath);
+			
+			source = new IniConfigSource (newPath);
+			config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			File.Delete (filePath);
+			File.Delete (newPath);
+		}
+		
+		[Test]
+		public void SaveToWriter ()
+		{
+			string newPath = "TestNew.ini";
+
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("# some comment");
+			writer.WriteLine ("[new section]");
+			writer.WriteLine (" dog = Rover");
+			writer.WriteLine (" cat = Muffy");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			
+			IConfig config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			Assert.IsTrue (source.IsReadOnly);
+			StreamWriter textWriter = new StreamWriter (newPath);
+			source.Save (textWriter);
+			Assert.IsFalse (source.IsReadOnly);
+			textWriter.Close (); // save to disk
+			
+			source = new IniConfigSource (newPath);
+			config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			File.Delete (newPath);
+		}
 	}
 }
