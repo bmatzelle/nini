@@ -219,11 +219,11 @@ namespace Nini.Test.Config
 			string filePath = "Test.ini";
 
 			StreamWriter writer = new StreamWriter (filePath);
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = Rover");
 			writer.WriteLine (""); // empty line
-			writer.WriteLine ("# a comment");
+			writer.WriteLine ("; a comment");
 			writer.WriteLine (" cat = Muffy");
 			writer.Close ();
 			
@@ -341,7 +341,7 @@ namespace Nini.Test.Config
 			string newPath = "TestNew.ini";
 
 			StreamWriter writer = new StreamWriter (filePath);
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = Rover");
 			writer.WriteLine (" cat = Muffy");
@@ -369,7 +369,7 @@ namespace Nini.Test.Config
 			string newPath = "TestNew.ini";
 
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = Rover");
 			writer.WriteLine (" cat = Muffy");
@@ -419,7 +419,7 @@ namespace Nini.Test.Config
 			string filePath = "Test.xml";
 
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = Rover");
 			writer.WriteLine (" cat = Muffy");

@@ -27,7 +27,7 @@ namespace Nini.Test.Ini
 			Assert.AreEqual (IniWriteState.Start, iniWriter.WriteState);
 			
 			iniWriter.WriteEmpty ("First INI file");
-			Assert.AreEqual ("# First INI file", ReadLine (writer, 1));
+			Assert.AreEqual ("; First INI file", ReadLine (writer, 1));
 			Assert.AreEqual (IniWriteState.BeforeFirstSection, iniWriter.WriteState);
 		}
 		
@@ -53,7 +53,7 @@ namespace Nini.Test.Ini
 			Assert.AreEqual (IniWriteState.Start, iniWriter.WriteState);
 			
 			iniWriter.WriteSection ("Test Section", "My comment");
-			Assert.AreEqual ("[Test Section] # My comment", ReadLine (writer, 1));
+			Assert.AreEqual ("[Test Section] ; My comment", ReadLine (writer, 1));
 			Assert.AreEqual (IniWriteState.Section, iniWriter.WriteState);
 		}
 		
@@ -93,7 +93,7 @@ namespace Nini.Test.Ini
 			iniWriter.WriteSection ("Required");
 			iniWriter.WriteKey ("thanksgiving", "November 25th", "Football!");
 			iniWriter.UseValueQuotes = false;
-			Assert.AreEqual ("thanksgiving = \"November 25th\" # Football!", 
+			Assert.AreEqual ("thanksgiving = \"November 25th\" ; Football!", 
 							 ReadLine (writer, 2));
 		}
 		

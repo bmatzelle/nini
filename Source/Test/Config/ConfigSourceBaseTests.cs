@@ -99,11 +99,11 @@ namespace Nini.Test.Config
 			string filePath = "AutoSaveTest.ini";
 
 			StreamWriter writer = new StreamWriter (filePath);
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = Rover");
 			writer.WriteLine (""); // empty line
-			writer.WriteLine ("# a comment");
+			writer.WriteLine ("; a comment");
 			writer.WriteLine (" cat = Muffy");
 			writer.Close ();
 			
