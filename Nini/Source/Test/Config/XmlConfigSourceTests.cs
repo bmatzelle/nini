@@ -31,10 +31,9 @@ namespace Nini.Test.Config
 			WriteKey (writer, "bird", "tweety");
 			writer.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-
-			XmlConfigSource source = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 			
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Pets", config.Name);
@@ -53,11 +52,9 @@ namespace Nini.Test.Config
 			WriteKey (writer, "bird", "tweety");
 			writer.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-
-			XmlNode node = doc.SelectSingleNode ("/Nini/Section[@Name='Pets']");
-			XmlConfigSource source = new XmlConfigSource (node);
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 			
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Pets", config.Name);
@@ -76,10 +73,10 @@ namespace Nini.Test.Config
 			WriteKey (writer, "bird", "tweety");
 			writer.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 
-			XmlConfigSource source = new XmlConfigSource (doc);
 			IConfig config = source.Configs["Pets"];
 			
 			Assert.AreEqual ("muffy", config.Get ("cat"));
@@ -99,10 +96,9 @@ namespace Nini.Test.Config
 			WriteKey (writer, "value 1", "49588");
 			writer.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-
-			XmlConfigSource source = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 
 			IConfig config = source.Configs["Pets"];
 			
@@ -124,16 +120,13 @@ namespace Nini.Test.Config
 		{
 			string filePath = "Test.xml";
 
-			StringWriter textWriter = new StringWriter ();
+			StreamWriter textWriter = File.CreateText (filePath);
 			XmlTextWriter writer = NiniWriter (textWriter);
 			WriteSection (writer, "new section");
 			WriteKey (writer, "dog", "Rover");
 			WriteKey (writer, "cat", "Muffy");
 			writer.WriteEndDocument ();
-			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-			doc.Save (filePath);
+			textWriter.Close ();
 
 			XmlConfigSource source = new XmlConfigSource (filePath);
 			
@@ -262,9 +255,10 @@ namespace Nini.Test.Config
 			xmlWriter.WriteEndDocument ();
 			xmlWriter.Close ();
 
-			XmlDocument doc = new XmlDocument ();
-			doc.Load (new StringReader (writer.ToString ()));
-			XmlConfigSource source = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (writer.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
+
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
@@ -297,9 +291,9 @@ namespace Nini.Test.Config
 			WriteKey (xmlWriter, "protocol", "http");
 			xmlWriter.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-			XmlConfigSource source = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 			source.ReplaceKeyValues ();
 			
 			IConfig config = source.Configs["Test"];
@@ -387,9 +381,10 @@ namespace Nini.Test.Config
 			xmlWriter.WriteEndDocument ();
 			xmlWriter.Close ();
 
-			XmlDocument doc = new XmlDocument ();
-			doc.Load (new StringReader (writer.ToString ()));
-			XmlConfigSource source = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (writer.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
+
 			string eol = Environment.NewLine;
 
 			string compare = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + eol
