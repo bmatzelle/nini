@@ -28,10 +28,8 @@ namespace Nini.Test.Config
 												"/pet:cat"};
 			ArgvConfigSource source = new ArgvConfigSource (arguments);
 
-			source.AddSwitch ("Base", "help", "h", "Display help menu");
-			source.AddSwitch ("Base", "doc", "d", "Document");
-
-			Assert.IsTrue (source.GetUsage ().Length > 0);
+			source.AddSwitch ("Base", "help", "h");
+			source.AddSwitch ("Base", "doc", "d");
 
 			IConfig config = source.Configs["Base"];
 			Assert.IsNotNull (config.Get ("help"));
@@ -40,30 +38,25 @@ namespace Nini.Test.Config
 			Assert.IsNull (config.Get ("pets"));
 			Assert.AreEqual ("doc.xml", config.Get ("doc"));
 			
-			source.AddSwitch ("Pets", "pet", "p", "Add a pet");
+			source.AddSwitch ("Pets", "pet", "p");
 			config = source.Configs["Pets"];
 			Assert.IsNotNull (config.Get ("pet"));
 			Assert.AreEqual ("cat", config.Get ("pet"));
 		}
 		
 		[Test]
-		public void GetUsage ()
+		public void AddSwitchCase ()
 		{
-			string[] arguments = new string[] { "--help", "/pets:", "cat", "dog" };
+			string[] arguments = new string[] { "-H" };
 			ArgvConfigSource source = new ArgvConfigSource (arguments);
-			
-			source.AddSwitch ("Base", "help", "h", "Display help menu");
-			source.AddSwitch ("Base", "pets", "p", "Add one or more pets");
-			source.AddSwitch ("Base", "person", "Add a person");
 
-			Assert.IsTrue (source.GetUsage ().Length > 0);
+			source.AddSwitch ("Base", "help", "h");
+			source.AddSwitch ("Base", "heat", "H");
 
-			StringBuilder usage = new StringBuilder ();
-			usage.Append ("  -h,  --help           Display help menu");
-			usage.Append ("  -p,  --pets           Add one or more pets");
-			usage.Append ("       --person         Add a person");
-			
-			Assert.AreEqual (usage.ToString (), source.GetUsage ());
+			IConfig config = source.Configs["Base"];
+			Assert.IsNull (config.Get ("nothere"));
+			Assert.IsNull (config.Get ("help"));
+			Assert.IsNotNull (config.Get ("heat"));
 		}
 		#endregion
 
