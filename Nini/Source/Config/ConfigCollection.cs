@@ -14,7 +14,7 @@ using System.Collections;
 namespace Nini.Config
 {
 	/// <include file='ConfigCollection.xml' path='//Class[@name="ConfigCollection"]/docs/*' />
-	public class ConfigCollection : ICollection, IEnumerable
+	public class ConfigCollection : ICollection, IEnumerable, IList
 	{
 		#region Private variables
 		ArrayList configList = new ArrayList ();
@@ -44,6 +44,13 @@ namespace Nini.Config
 		{
 			get { return (IConfig)configList[index]; }
 		}
+
+		/// <include file='ConfigCollection.xml' path='//Property[@name="ItemIndex"]/docs/*' />
+		object IList.this[int index]
+		{
+			get { return configList[index]; }
+			set {  }
+		}
 		
 		/// <include file='ConfigCollection.xml' path='//Property[@name="ItemName"]/docs/*' />
 		public IConfig this[string configName]
@@ -64,6 +71,17 @@ namespace Nini.Config
 			}
 		}
 
+		/// <include file='ConfigCollection.xml' path='//Property[@name="IsFixedSize"]/docs/*' />
+		public bool IsFixedSize
+		{
+			get { return false; }
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
+		public bool IsReadOnly
+		{
+			get { return false; }
+		}
 		#endregion
 		
 		#region Public methods
@@ -86,11 +104,42 @@ namespace Nini.Config
 				configList.Add (config);
 			}
 		}
-		
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Add"]/docs/*' />
+		int IList.Add (object config)
+		{
+			IConfig newConfig = config as IConfig;
+
+			if (newConfig == null) {
+				throw new Exception ("Must be an IConfig");
+			} else {
+				this.Add (newConfig);
+				return IndexOf (newConfig);
+			}
+		}
+
 		/// <include file='ConfigCollection.xml' path='//Method[@name="Remove"]/docs/*' />
 		public void Remove (IConfig config)
 		{
 			configList.Remove (config);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Remove"]/docs/*' />
+		public void Remove (object config)
+		{
+			configList.Remove (config);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="RemoveAt"]/docs/*' />
+		public void RemoveAt (int index)
+		{
+			configList.RemoveAt (index);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Clear"]/docs/*' />
+		public void Clear ()
+		{
+			configList.Clear ();
 		}
 		
 		/// <include file='ConfigCollection.xml' path='//Method[@name="GetEnumerator"]/docs/*' />
@@ -109,6 +158,24 @@ namespace Nini.Config
 		public void CopyTo (IConfig[] array, int index)
 		{
 			((ICollection)configList).CopyTo (array, index);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Contains"]/docs/*' />
+		public bool Contains (object config)
+		{
+			return configList.Contains (config);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="IndexOf"]/docs/*' />
+		public int IndexOf (object config)
+		{
+			return configList.IndexOf (config);
+		}
+
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Insert"]/docs/*' />
+		public void Insert (int index, object config)
+		{
+			configList.Insert (index, config);
 		}
 		#endregion
 		
