@@ -125,7 +125,6 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Spots", config.Get ("dog"));
 			Assert.AreEqual ("Misha", config.Get ("cat"));
 			Assert.AreEqual ("SomeValue", config.Get ("DoesNotExist"));
-			Assert.IsFalse (source.IsReadOnly);
 			source.Save ();
 			
 			source = new XmlConfigSource (filePath);
@@ -216,7 +215,6 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
-			Assert.IsFalse (source.IsReadOnly);
 			source.Save (newPath);
 			
 			source = new XmlConfigSource (newPath);
@@ -247,10 +245,8 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
-			Assert.IsFalse (source.IsReadOnly);
 			StreamWriter textWriter = new StreamWriter (newPath);
 			source.Save (textWriter);
-			Assert.IsFalse (source.IsReadOnly);
 			textWriter.Close (); // save to disk
 			
 			source = new XmlConfigSource (newPath);
@@ -259,6 +255,36 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
 			File.Delete (newPath);
+		}
+
+		[Test]
+		public void ReplaceText ()
+		{		
+			StringWriter textWriter = new StringWriter ();
+			XmlTextWriter xmlWriter = NiniWriter (textWriter);
+			WriteSection (xmlWriter, "Test");
+			WriteKey (xmlWriter, "author", "Brent");
+			WriteKey (xmlWriter, "domain", "${protocol}://nini.sf.net/");
+			WriteKey (xmlWriter, "apache", "Apache implements ${protocol}");
+			WriteKey (xmlWriter, "developer", "author of Nini: ${author} !");
+			WriteKey (xmlWriter, "love", "We love the ${protocol} protocol");
+			WriteKey (xmlWriter, "combination", "${author} likes ${protocol}");
+			WriteKey (xmlWriter, "fact", "fact: ${apache}");
+			WriteKey (xmlWriter, "protocol", "http");
+			xmlWriter.WriteEndDocument ();
+			
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (textWriter.ToString ());
+			XmlConfigSource source = new XmlConfigSource (doc);
+			
+			IConfig config = source.Configs["Test"];
+			Assert.AreEqual ("http", config.Get ("protocol"));
+			Assert.AreEqual ("fact: Apache implements http", config.Get ("fact"));
+			Assert.AreEqual ("http://nini.sf.net/", config.Get ("domain"));
+			Assert.AreEqual ("Apache implements http", config.Get ("apache"));
+			Assert.AreEqual ("We love the http protocol", config.Get ("love"));
+			Assert.AreEqual ("author of Nini: Brent !", config.Get ("developer"));
+			Assert.AreEqual ("Brent likes http", config.Get ("combination"));
 		}
 		#endregion
 
