@@ -22,8 +22,8 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Property[@name="AutoSave"]/docs/*' />
 		bool AutoSave { get; set; }
 		
-		/// <include file='IConfigSource.xml' path='//Property[@name="GlobalAlias"]/docs/*' />
-		AliasText GlobalAlias { get; }
+		/// <include file='IConfigSource.xml' path='//Property[@name="Alias"]/docs/*' />
+		AliasText Alias { get; }
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Merge"]/docs/*' />
 		void Merge (IConfigSource source);
