@@ -31,10 +31,9 @@ namespace Nini.Test.Config
 			WriteKey (xmlWriter, "bird", "tweety");
 			xmlWriter.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-
-			XmlConfigSource xmlSource = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource xmlSource = new XmlConfigSource (xmlReader);
 			
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[People]");
@@ -78,10 +77,9 @@ namespace Nini.Test.Config
 			WriteKey (xmlWriter, "cat", "muffy");
 			xmlWriter.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
-
-			XmlConfigSource xmlSource = new XmlConfigSource (doc);
+			StringReader reader = new StringReader (xmlWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource xmlSource = new XmlConfigSource (xmlReader);
 			
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[People]");
@@ -262,10 +260,10 @@ namespace Nini.Test.Config
 			WriteKey (xmlWriter, "Is Mammal", "False");
 			xmlWriter.WriteEndDocument ();
 			
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (textWriter.ToString ());
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
 
-			XmlConfigSource source = new XmlConfigSource (doc);
 			source.Alias.AddAlias ("true", true);
 			source.Alias.AddAlias ("false", false);
 			
