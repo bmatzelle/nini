@@ -15,6 +15,7 @@ using System.Collections;
 
 namespace Nini.Ini
 {
+	#region IniReadState enumeration
 	/// <include file='IniReader.xml' path='//Enum[@name="IniReadState"]/docs/*' />
 	public enum IniReadState : int
 	{
@@ -29,7 +30,9 @@ namespace Nini.Ini
 		/// <include file='IniReader.xml' path='//Enum[@name="IniReadState"]/Value[@name="Interactive"]/docs/*' />
 		Interactive
 	};
+	#endregion
 
+	#region IniType enumeration
 	/// <include file='IniReader.xml' path='//Enum[@name="IniType"]/docs/*' />
 	public enum IniType : int
 	{
@@ -40,9 +43,10 @@ namespace Nini.Ini
 		/// <include file='IniReader.xml' path='//Enum[@name="IniType"]/Value[@name="Empty"]/docs/*' />
 		Empty
 	}
+	#endregion
 
 	/// <include file='IniReader.xml' path='//Class[@name="IniReader"]/docs/*' />
-	public class IniReader
+	public class IniReader : IDisposable
 	{
 		#region Private variables
 		int lineNumber = 1;
@@ -57,6 +61,7 @@ namespace Nini.Ini
 		Hashtable keyList = new Hashtable ();
 		Hashtable sectionList = new Hashtable ();
 		bool hasComment = false;
+		bool disposed = false;
 		#endregion
 
 		#region Public properties
@@ -193,6 +198,27 @@ namespace Nini.Ini
 				textReader.Close ();
 			}
 		}
+
+		/// <include file='IniReader.xml' path='//Method[@name="Dispose"]/docs/*' />
+		public void Dispose ()
+		{
+			Dispose (true);
+		}
+		#endregion
+		
+		#region Protected methods
+		/// <include file='IniReader.xml' path='//Method[@name="DisposeBoolean"]/docs/*' />
+		protected virtual void Dispose (bool disposing)
+		{
+			if (!disposed) {
+				textReader.Close ();
+				disposed = true;
+
+				if (disposing) {
+					GC.SuppressFinalize (this);
+				}
+			}
+		}
 		#endregion
 		
 		#region Private methods
@@ -201,7 +227,7 @@ namespace Nini.Ini
 		/// </summary>
 		~IniReader ()
 		{
-			Close ();
+			Dispose (false);
 		}
 
 		/// <summary>
