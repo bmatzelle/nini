@@ -34,6 +34,10 @@
 			<summary>Adds a new alias using the items in an enumeration.</summary>
 			<param name="key">Config key.</param>
 			<param name="enumAlias">An enum instance.</param>
+			<remarks>
+				This method is not available for the .NET Compact Framework
+				version of Nini.
+			</remarks>
 		</docs>
 	</Method>
 
