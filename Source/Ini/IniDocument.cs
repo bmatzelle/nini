@@ -15,6 +15,19 @@ using Nini.Util;
 
 namespace Nini.Ini
 {
+	#region IniFileType enumeration
+	/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/docs/*' />
+	public enum IniFileType
+	{
+		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="Standard"]/docs/*' />
+		Standard,
+		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="PythonStyle"]/docs/*' />
+		PythonStyle,
+		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="SambaStyle"]/docs/*' />
+		SambaStyle
+	}
+	#endregion
+
 	/// <include file='IniDocument.xml' path='//Class[@name="IniDocument"]/docs/*' />
 	public class IniDocument
 	{
@@ -32,11 +45,23 @@ namespace Nini.Ini
 			: this (new StreamReader (filePath))
 		{
 		}
-		
+
+		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorPathType"]/docs/*' />
+		public IniDocument (string filePath, IniFileType type)
+			: this (new StreamReader (filePath), type)
+		{
+		}
+
 		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
 		public IniDocument (TextReader reader)
+			: this (reader, IniFileType.Standard)
 		{
-			Load (new IniReader (reader));
+		}
+
+		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
+		public IniDocument (TextReader reader, IniFileType type)
+		{
+			Load (GetIniReader (reader, type));
 		}
 		
 		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStream"]/docs/*' />
@@ -44,7 +69,19 @@ namespace Nini.Ini
 			: this (new StreamReader (stream))
 		{
 		}
-		
+
+		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStreamType"]/docs/*' />
+		public IniDocument (Stream stream, IniFileType type)
+			: this (new StreamReader (stream), type)
+		{
+		}
+
+		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorIniReader"]/docs/*' />
+		public IniDocument (IniReader reader)
+		{
+			Load (reader);
+		}
+
 		/// <include file='IniDocument.xml' path='//Constructor[@name="Constructor"]/docs/*' />
 		public IniDocument ()
 		{
@@ -135,6 +172,33 @@ namespace Nini.Ini
 			}
 
 			reader.Close ();
+		}
+
+		/// <summary>
+		/// Returns a proper INI reader depending upon the type parameter.
+		/// </summary>
+		private IniReader GetIniReader (TextReader reader, IniFileType type)
+		{
+			IniReader result = new IniReader (reader);
+
+			switch (type)
+			{
+			case IniFileType.Standard:
+				// do nothing
+				break;
+			case IniFileType.PythonStyle:
+				result.AcceptCommentAfterKey = false;
+				result.CommentDelimiter = new char[] { ';', '#' };
+				result.AssignDelimiter = new char[] { ':' };
+				break;
+			case IniFileType.SambaStyle:
+				result.AcceptCommentAfterKey = false;
+				result.CommentDelimiter = new char[] { ';', '#' };
+				result.LineContinuation = true;
+				break;
+			}
+
+			return result;
 		}
 		#endregion
 	}
