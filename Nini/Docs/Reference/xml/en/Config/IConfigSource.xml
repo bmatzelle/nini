@@ -17,39 +17,43 @@
 		</docs>
 	</Property>
 	
-	<Property name="IsReadOnly">
+	<Property name="GlobalAlias">
 		<docs>
-			<summary>Returns true if the source is read only.</summary>
+			<summary>
+				Gets the global <see cref="AliasText"/> for all IConfigs
+				in this source.
+			</summary>
 		</docs>
 	</Property>
 
+	<Property name="AutoSave">
+		<docs>
+			<summary>
+				Gets or sets whether the source will be automatically 
+				saved.
+			</summary>
+			<remarks>
+				This save process occurs each time the the 
+				<code>IConfig.Set</code> method
+				is called.  Take a look at the <code>Save</code> method of 
+				each configuration source to determine when this method can 
+				be activated.
+			</remarks>
+		</docs>
+	</Property>
+	
 	<Method name="Save">
 		<docs>
 			<summary>
-				Saves the value of all configurations to the parent IConfigSource.  
+				Saves all configuration values.  
 			</summary>
 			<remarks>
-				This can only can be done if the source IsReadOnly is false.  This
-				value depends on the method in which the file was loaded.  
-				For instance, if it is an INI file loaded from disk then 
-				this value is false, but if it is loaded by a TextReader then
-				the value is true.
+				Look at the class that implements this interface to determine
+				when this can be called.
 			</remarks>
 			<exception cref="Exception">
-				The object IsReadOnly is true.
+				An error occurred.
 			</exception>
-		</docs>
-	</Method>
-	
-	<Method name="SaveAll">
-		<docs>
-			<summary>
-				Saves all the IConfigSources in the current IConfigSource 
-				including those that were merged.
-			</summary>
-			<remarks>
-				TODO.
-			</remarks>
 		</docs>
 	</Method>
 	
@@ -68,6 +72,27 @@
 			<exception cref="Exception">
 				If the IConfigSource has already been merged. 
 				If the IConfigSource is <b>this</b>.
+				If an IConfig of the same name already exists.
+			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="AddConfig">
+		<docs>
+			<summary>
+				Adds a new IConfig.
+			</summary>
+			<remarks>
+				This creates a new IConfig and adds it to the 
+				<see cref="Configs"/> collection.
+			</remarks>
+			<param name="name">
+				The name of the new IConfig.
+			</param>
+			<returns>
+				The new IConfig.
+			</returns>
+			<exception cref="Exception">
 				If an IConfig of the same name already exists.
 			</exception>
 		</docs>
