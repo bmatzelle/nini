@@ -27,6 +27,12 @@ namespace Nini.Config
 		#endregion
 
 		#region Constructors
+		/// <include file='IniConfigSource.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public IniConfigSource ()
+		{
+			iniDocument = new IniDocument ();
+		}
+
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public IniConfigSource (string filePath)
 			: this (new StreamReader (filePath))
@@ -89,6 +95,16 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 			iniDocument.Save (writer);
 			savePath = null;
+		}
+
+		/// <include file='IniConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
+		public override string ToString ()
+		{
+			MergeConfigsIntoDocument ();
+			StringWriter writer = new StringWriter ();
+			iniDocument.Save (writer);
+
+			return writer.ToString ();
 		}
 		#endregion
 		
