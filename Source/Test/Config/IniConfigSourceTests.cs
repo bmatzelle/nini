@@ -126,15 +126,12 @@ namespace Nini.Test.Config
 			writer.WriteLine (" bool 4 = OfF");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			
-			AliasText alias = new AliasText ();
-			alias.AddAlias ("true", true);
-			alias.AddAlias ("false", false);
-			alias.AddAlias ("on", true);
-			alias.AddAlias ("off", false);
-			
+
 			IConfig config = source.Configs["Test"];
-			config.Alias = alias;
+			config.Alias.AddAlias ("true", true);
+			config.Alias.AddAlias ("false", false);
+			config.Alias.AddAlias ("on", true);
+			config.Alias.AddAlias ("off", false);
 			
 			Assert.IsTrue (config.GetBoolean ("bool 1"));
 			Assert.IsFalse (config.GetBoolean ("bool 2"));
@@ -153,12 +150,9 @@ namespace Nini.Test.Config
 			writer.WriteLine (" bool 2 = FalSe");
 			IniConfigSource source = new IniConfigSource (new StringReader (writer.ToString ()));
 			
-			AliasText alias = new AliasText ();
-			alias.AddAlias ("true", true);
-			alias.AddAlias ("false", false);
-			
 			IConfig config = source.Configs["Test"];
-			config.Alias = alias;
+			config.Alias.AddAlias ("true", true);
+			config.Alias.AddAlias ("false", false);
 			
 			Assert.IsTrue (config.GetBoolean ("Not Here", true));
 			Assert.IsFalse (config.GetBoolean ("Not Here Also"));
@@ -173,12 +167,9 @@ namespace Nini.Test.Config
 			writer.WriteLine (" bool 1 = not boolean");
 			IniConfigSource source = new IniConfigSource (new StringReader (writer.ToString ()));
 
-			AliasText alias = new AliasText ();
-			alias.AddAlias ("true", true);
-			alias.AddAlias ("false", false);
-
 			IConfig config = source.Configs["Test"];
-			config.Alias = alias;
+			config.Alias.AddAlias ("true", true);
+			config.Alias.AddAlias ("false", false);
 			
 			Assert.IsTrue (config.GetBoolean ("bool 1"));
 		}
@@ -193,14 +184,11 @@ namespace Nini.Test.Config
 			IniConfigSource source = new IniConfigSource (new StringReader (writer.ToString ()));
 			
 			const int WARN = 100, ERROR = 200;
-			AliasText alias = new AliasText ();
-			alias.AddAlias ("error code", "waRn", WARN);
-			alias.AddAlias ("error code", "eRRor", ERROR);
-			alias.AddAlias ("node type", new System.Xml.XmlNodeType ());
-			alias.AddAlias ("default", "age", 31);
-			
 			IConfig config = source.Configs["Test"];
-			config.Alias = alias;
+			config.Alias.AddAlias ("error code", "waRn", WARN);
+			config.Alias.AddAlias ("error code", "eRRor", ERROR);
+			config.Alias.AddAlias ("node type", new System.Xml.XmlNodeType ());
+			config.Alias.AddAlias ("default", "age", 31);
 			
 			Assert.AreEqual (WARN, config.GetInt ("error code", true));
 			Assert.AreEqual ((int)System.Xml.XmlNodeType.Text, 
