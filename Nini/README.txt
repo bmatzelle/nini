@@ -45,24 +45,25 @@ BUILDING FROM SOURCE
 There are several methods to build Nini.  These builds all write files to the 
 same directory structure as found in the INSTALL section above.
 
+* Visual Studio .NET
+  At this time only a Visual Studio .NET 2002 solution file and project 
+  file are supplied.  They are located in the Source directory (Nini.sln).
+  To load this file simply double click the solutions and click 
+  Build -> Build Solution.
+
 * NAnt (http://nant.sourceforge.net)
   In the Source directory there is a Cyrus.build NAnt file.  Here is how to 
   build for each runtime:
   
   To build MS .NET Framework 1.0
-  # nant build-dotnet-1.0
+  > nant build-dotnet-1.0
   
   To build MS .NET Framework 1.1
-  # nant build-dotnet-1.1
+  > nant build-dotnet-1.1
   
   To build Mono 1.0
-  # nant build-mono
+  > nant build-mono
 
-* Visual Studio .NET
-  At this time only a Visual Studio .NET 2003 solution file and project 
-  file are supplied.  They are located in the Source directory (Nini.sln).
-  To load this file simply open the Nini.sln and click Build -> Build Solution
-  
 * Note: If you would like to run the unit test then download and install 
   NUnit (http://nunit.org/).
 
@@ -81,7 +82,15 @@ DOCUMENTATION
   * Docs\Reference\xml - Contains the XML source for the reference 
                          documentation.  If you'd like to add more documentation
 						 to the project then start here.
-  
+
+EXAMPLES
+--------
+The Nini project contains some example applications to help you get started.  
+These files are located in the Examples directory.  Pay special attention to 
+the NiniEdit project.  This is a fully-functional command line application 
+that edits INI, XML, and .NET configuration file types.  Reference the 
+README file for more information about it.
+
 QUESTIONS, HELP, & SUGGESTIONS
 ------------------------------
 Go to the following places for help using Nini or if you'd like to request 
