@@ -245,7 +245,7 @@ namespace Nini.Config
 			}
 
 			if (!keys.Contains (key)) {
-				keys.Add (key, value);
+				keys.Add (key, value.ToString ());
 			} else {
 				keys[key] = value.ToString ();
 			}
@@ -277,7 +277,7 @@ namespace Nini.Config
 			string result = null;
 			
 			if (keys.Contains (key)) {
-				result = (string)keys[key];
+				result = keys[key].ToString ();
 			}
 
 			return result;
