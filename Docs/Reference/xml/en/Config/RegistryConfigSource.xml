@@ -11,6 +11,9 @@
 			configurations. Be careful writing code with this program 
 			that writes to the registry. If coded incorrectly you 
 			can corrupt your Registry.
+			
+			This class is not available for the .NET Compact Framework
+			version of Nini.
 		</remarks>
 	</docs>
 	
