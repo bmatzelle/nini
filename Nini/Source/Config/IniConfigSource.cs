@@ -36,9 +36,15 @@ namespace Nini.Config
 		
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
 		public IniConfigSource (TextReader reader)
+			: this (new IniDocument (reader))
+		{
+		}
+
+		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorIniDocument"]/docs/*' />
+		public IniConfigSource (IniDocument document)
 		{
 			this.Merge (this); // required for SaveAll
-			iniDocument = new IniDocument (reader);
+			iniDocument = document;
 			Load ();
 		}
 		
