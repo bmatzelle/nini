@@ -96,7 +96,6 @@ namespace Nini.Test.Config
 			AddKey (doc, "NewSection", "cat", "Muffy");
 			doc.Save (filePath);
 
-			Console.WriteLine (doc.OuterXml);
 			DotNetConfigSource source = new DotNetConfigSource (filePath);
 			
 			IConfig config = source.Configs["NewSection"];
