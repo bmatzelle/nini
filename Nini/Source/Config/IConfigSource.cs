@@ -22,6 +22,9 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Property[@name="AutoSave"]/docs/*' />
 		bool AutoSave { get; set; }
 		
+		/// <include file='IConfigSource.xml' path='//Property[@name="GlobalAlias"]/docs/*' />
+		AliasText GlobalAlias { get; }
+		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Merge"]/docs/*' />
 		void Merge (IConfigSource source);
 		
@@ -33,9 +36,6 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		void Save (TextWriter writer);
-		
-		/// <include file='IConfigSource.xml' path='//Method[@name="SetGlobalAlias"]/docs/*' />
-		void SetGlobalAlias (AliasText alias);
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
 		IConfig AddConfig (string name);
