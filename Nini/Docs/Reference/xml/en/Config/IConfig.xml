@@ -129,6 +129,11 @@
 			<summary>
 				Returns a boolean key value. 
 			</summary>
+			<remarks>
+				In order to get boolean values you will need to set the 
+				<see cref="Alias"/> property correctly.  See the Nini Manual
+				for more information.
+			</remarks>
 			<param name="key">Configuration key.</param>
 			<exception cref="System.Exception">
 				No key was found.
@@ -141,6 +146,11 @@
 			<summary>
 				Returns a string key value.  
 			</summary>
+			<remarks>
+				In order to get boolean values you will need to set the 
+				<see cref="Alias"/> property correctly.  See the Nini Manual
+				for more information.
+			</remarks>
 			<param name="key">Configuration key.</param>
 			<param name="defaultValue">
 				Default value if the key is not found.
@@ -223,6 +233,13 @@
 			<summary>Returns an Array of the key strings.</summary>
 		</docs>
 	</Method>
+
+	<Method name="GetValues">
+		<docs>
+			<summary>Returns an Array of all key values.</summary>
+		</docs>
+	</Method>
+
 </Interface>
 
 </NiniDocs>
