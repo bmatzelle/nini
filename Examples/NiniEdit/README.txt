@@ -27,15 +27,19 @@ BUILDING
   In the Source directory there is a Cyrus.build NAnt file.  Here is how to 
   build for each runtime:
   
-  To build with the MS .NET Framework
-  > nant build-dotnet
+  To build with the MS .NET Framework 1.0
+  > nant build-dotnet-1.0
+  
+  To build with the MS .NET Framework 1.1
+  > nant build-dotnet-1.1
   
   To build with Mono
   > nant build-mono
 
 INSTALL
 -------
-Just place "niniedit.exe" and "Nini.dll" somewhere in your path.  
+Just place "niniedit.exe" and "Nini.dll" somewhere in your path and run it 
+via the console for your operating system (cmd.exe on Windows).
 
 USING THE PROGRAM
 -----------------
