@@ -30,17 +30,19 @@ namespace Nini.Ini
 	#endregion
 
 	/// <include file='IniWriter.xml' path='//Class[@name="IniWriter"]/docs/*' />
-	public class IniWriter
+	public class IniWriter : IDisposable
 	{
 		#region Private variables
 		int indentation = 0;
 		bool useValueQuotes = false;
 		IniWriteState writeState = IniWriteState.Start;
-		char commentDelimiter = '#';
+		char commentDelimiter = ';';
+		char assignDelimiter = '=';
 		TextWriter textWriter = null;
 		string eol = Environment.NewLine;
 		StringBuilder indentationBuffer = new StringBuilder ();
 		Stream baseStream = null;
+		bool disposed = false;
 		#endregion
 		
 		#region Public properties
@@ -77,12 +79,14 @@ namespace Nini.Ini
 		public char CommentDelimiter
 		{
 			get { return commentDelimiter; }
-			set
-			{
-				if (value != ';' || value != '#')
-					throw new ArgumentException ("Comment must be ';' or '#'");
-				commentDelimiter = value;
-			}
+			set { commentDelimiter = value; }
+		}
+		
+		/// <include file='IniWriter.xml' path='//Property[@name="AssignDelimiter"]/docs/*' />
+		public char AssignDelimiter
+		{
+			get { return assignDelimiter; }
+			set { assignDelimiter = value; }
 		}
 		
 		/// <include file='IniWriter.xml' path='//Property[@name="BaseStream"]/docs/*' />
@@ -156,14 +160,14 @@ namespace Nini.Ini
 		public void WriteKey (string key, string value)
 		{
 			ValidateStateKey ();
-			WriteLine (key + " = " + GetKeyValue (value));
+			WriteLine (key + " " + assignDelimiter + " " + GetKeyValue (value));
 		}
 		
 		/// <include file='IniWriter.xml' path='//Method[@name="WriteKeyComment"]/docs/*' />
 		public void WriteKey (string key, string value, string comment)
 		{
 			ValidateStateKey ();
-			WriteLine (key + " = " + GetKeyValue (value) + Comment (comment));
+			WriteLine (key + " " + assignDelimiter + " " + GetKeyValue (value) + Comment (comment));
 		}
 	
 		/// <include file='IniWriter.xml' path='//Method[@name="WriteEmpty"]/docs/*' />
@@ -189,6 +193,29 @@ namespace Nini.Ini
 				WriteLine (commentDelimiter + " " + comment);
 			}
 		}
+		
+		/// <include file='IniWriter.xml' path='//Method[@name="Dispose"]/docs/*' />
+		public void Dispose ()
+		{
+			Dispose (true);
+		}
+		#endregion
+		
+		#region Protected methods
+		/// <include file='IniWriter.xml' path='//Method[@name="DisposeBoolean"]/docs/*' />
+		protected virtual void Dispose (bool disposing)
+		{
+			if (!disposed) 
+			{
+				textWriter.Close ();
+				disposed = true;
+
+				if (disposing) 
+				{
+					GC.SuppressFinalize (this);
+				}
+			}
+		}
 		#endregion
 		
 		#region Private methods
@@ -197,7 +224,7 @@ namespace Nini.Ini
 		/// </summary>
 		~IniWriter ()
 		{
-			Close ();
+			Dispose (false);
 		}
 
 		/// <summary>
