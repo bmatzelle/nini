@@ -75,6 +75,12 @@ namespace Nini.Ini
 		{
 			list.CopyTo (array, index);
 		}
+		
+		/// <include file='IniSectionCollection.xml' path='//Method[@name="CopyToStrong"]/docs/*' />
+		public void CopyTo (IniSection[] array, int index)
+		{
+			((ICollection)list).CopyTo (array, index);
+		}
 
 		/// <include file='IniSectionCollection.xml' path='//Method[@name="GetEnumerator"]/docs/*' />
 		public IEnumerator GetEnumerator () 
