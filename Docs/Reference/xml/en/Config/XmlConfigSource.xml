@@ -29,6 +29,17 @@
 		</example>
 	</docs>
 	
+	<Constructor name="Constructor">
+		<docs>
+			<summary>Constructor.  Loads an empty XML source.</summary>
+			<remarks>
+				This constructor is useful if you want to create an XML source
+				programmatically.  You can then call one of the <see cref="Save"/>
+				methods to save it to a file or object.  
+			</remarks>
+		</docs>
+	</Constructor>
+	
 	<Constructor name="ConstructorPath">
 		<docs>
 			<summary>
@@ -117,6 +128,17 @@
 			<exception cref="Exception">
 				An error has occurred.
 			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="ToString">
+		<docs>
+			<summary>
+				Returns all characters in the document.  
+			</summary>
+			<remarks>
+				It returns the XML string of the document.
+			</remarks>
 		</docs>
 	</Method>
 	
