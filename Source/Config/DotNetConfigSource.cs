@@ -36,15 +36,14 @@ namespace Nini.Config
 			Load ();
 		}
 
-		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorFile"]/docs/*' />
+		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="Constructor"]/docs/*' />
 		public DotNetConfigSource ()
 		{
-			savePath = ConfigFileName ();
 			configDoc = new XmlDocument ();
-			configDoc.Load (savePath);
+			configDoc.LoadXml ("<configuration><configSections/></configuration>");
 			PerformLoad (configDoc.CreateNavigator ());
 		}
-		
+
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public DotNetConfigSource (string path)
 		{
@@ -72,6 +71,12 @@ namespace Nini.Config
 		public string SavePath
 		{
 			get { return savePath; }
+		}
+
+		/// <include file='DotNetConfigSource.xml' path='//Property[@name="AssemblyConfigFile"]/docs/*' />
+		public static string AssemblyConfigFile
+		{
+			get { return ConfigFileName (); }
 		}
 		#endregion
 		
@@ -108,6 +113,16 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 			savePath = null;
+		}
+
+		/// <include file='DotNetConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
+		public override string ToString ()
+		{
+			MergeConfigsIntoDocument ();
+			StringWriter writer = new StringWriter ();
+			configDoc.Save (writer);
+
+			return writer.ToString ();
 		}
 		#endregion
 
@@ -192,7 +207,8 @@ namespace Nini.Config
 		/// </summary>
 		private void LoadOtherSection (XPathNavigator navigator, string nodeName)
 		{
-			XPathNodeIterator iterator = navigator.Select (nodeName);
+			XPathNodeIterator iterator = 
+							navigator.Select ("/configuration/" + nodeName);
 			ConfigBase config = null;
 			
 			if (iterator.Count > 0) {
@@ -345,10 +361,9 @@ namespace Nini.Config
 		/// <summary>
 		/// Returns the name of the configuration file for this application.
 		/// </summary>
-		private string ConfigFileName ()
+		private static string ConfigFileName ()
 		{
-			return ((Assembly.GetEntryAssembly ()).GetName ()).Name +
-					".exe.config";
+			return (Assembly.GetEntryAssembly().Location + ".config");
 		}
 		
 		/// <summary>
@@ -357,7 +372,7 @@ namespace Nini.Config
 		private bool IsSavable ()
 		{
 			return (this.savePath != null
-					&& configDoc != null);
+					|| configDoc != null);
 		}
 		#endregion
 	}
