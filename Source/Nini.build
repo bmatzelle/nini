@@ -144,7 +144,6 @@
 			<arg value="${project.src}\Config\ConfigCollection.cs" />
 			
 			<arg value="${project.src}\Util\ArgvParser.cs" />
-			<arg value="${project.src}\Util\IOrderedDictionary.cs" />
 			<arg value="${project.src}\Util\OrderedList.cs" />
 			<arg value="${project.src}\Util\OrderedListEnumerator.cs" />
 		</exec>
