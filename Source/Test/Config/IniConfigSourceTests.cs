@@ -213,6 +213,24 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("bool 2", config.GetKeys ()[1]);
 			Assert.AreEqual ("bool 3", config.GetKeys ()[2]);
 		}
+
+		[Test]
+		public void GetValues ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" key 1 = value 1");
+			writer.WriteLine (" key 2 = value 2");
+			writer.WriteLine (" key 3 = value 3");
+			IniConfigSource source = 
+					new IniConfigSource (new StringReader (writer.ToString ()));
+			
+			IConfig config = source.Configs["Test"];
+			Assert.AreEqual (3, config.GetValues ().Length);
+			Assert.AreEqual ("value 1", config.GetValues ()[0]);
+			Assert.AreEqual ("value 2", config.GetValues ()[1]);
+			Assert.AreEqual ("value 3", config.GetValues ()[2]);
+		}
 		
 		[Test]
 		public void SetAndSave ()
@@ -515,6 +533,34 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Tweety", config.Get ("bird"));
+
+			File.Delete (filePath);
+		}
+
+		[Test]
+		public void Reload ()
+		{
+			string filePath = "Reload.ini";
+			IniConfigSource source = new IniConfigSource ();
+
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("cat", "Muffy");
+			source.Save (filePath);
+
+			Assert.AreEqual (1, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+
+			IniConfigSource newSource = new IniConfigSource (filePath);
+			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Muffy", newSource.Configs["Pets"].Get ("cat"));
+
+			source = new IniConfigSource (filePath);
+			source.Configs["Pets"].Set ("cat", "Misha");
+			source.Save (); // saves new value
+
+			newSource.Reload ();
+			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Misha", newSource.Configs["Pets"].Get ("cat"));
 
 			File.Delete (filePath);
 		}

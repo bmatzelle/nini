@@ -333,6 +333,34 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void Reload ()
+		{
+			string filePath = "ReloadDot.xml";
+			DotNetConfigSource source = new DotNetConfigSource ();
+
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("cat", "Muffy");
+			source.Save (filePath);
+
+			Assert.AreEqual (1, config.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+
+			DotNetConfigSource newSource = new DotNetConfigSource (filePath);
+			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Muffy", newSource.Configs["Pets"].Get ("cat"));
+
+			source = new DotNetConfigSource (filePath);
+			source.Configs["Pets"].Set ("cat", "Misha");
+			source.Save (); // saves new value
+
+			newSource.Reload ();
+			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Misha", newSource.Configs["Pets"].Get ("cat"));
+
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods

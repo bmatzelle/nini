@@ -201,6 +201,32 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Quentin", config.Get ("man"));
 			*/
 		}
+
+		[Test]
+		public void Reload ()
+		{
+			RegistryConfigSource source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+			source.Configs["Pets"].Set ("cat", "Muffy");
+			source.Save ();
+
+			Assert.AreEqual (3, source.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Muffy", source.Configs["Pets"].Get ("cat"));
+
+			RegistryConfigSource newSource = new RegistryConfigSource ();
+			newSource.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+			Assert.AreEqual (3, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Muffy", newSource.Configs["Pets"].Get ("cat"));
+
+			source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+			source.Configs["Pets"].Set ("cat", "Misha");
+			source.Save (); // saves new value
+
+			newSource.Reload ();
+			Assert.AreEqual (3, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Misha", newSource.Configs["Pets"].Get ("cat"));
+		}
 		
 		[SetUp]
 		public void Setup ()
