@@ -17,7 +17,7 @@ PRE {
   padding: 5pt;
   border-style: solid;
   border-width: 1;
-  font-size: 11pt;
+  font-size: 10pt;
 }
 .code-keyword {
   color: #333399;
@@ -35,52 +35,52 @@ Nini .NET Configuration Library (<a href="http://nini.sourceforge.net/">http://n
 <br/>
 Copyright &copy; 2004 Brent R. Matzelle
 <ul>
-  <li> <a href="#Introduction">I. Introduction</a> 
+  <li>1. <a href="#Introduction">Introduction</a> 
     <ul>
-      <li><a href="#WhatIsApplicationConfigurationData">What is Application Configuration 
+      <li>1.1 <a href="#WhatIsApplicationConfigurationData">What is Application Configuration 
         Data?</a></li>
-      <li><a href="#TheProblem">The Problem</a></li>
-      <li><a href="#IntroducingNini">Introducing Nini</a></li>
+      <li>1.2 <a href="#TheProblem">The Problem</a></li>
+      <li>1.3 <a href="#IntroducingNini">Introducing Nini</a></li>
     </ul>
   </li>
-  <li><a href="#GettingStarted">II. Getting Started </a> 
+  <li>2. <a href="#GettingStarted">Getting Started </a> 
     <ul>
-      <li><a href="#ASimpleExample">A Simple Example</a></li>
-      <li><a href="#DefaultValues">Default Values</a></li>
-      <li><a href="#SettingSavingRemoving">Setting, Saving, and Removing Keys</a></li>
-      <li><a href="#AddingRemovingConfigs">Adding and Removing Configs</a></li>
-      <li><a href="#KeyValueReplacment">Key Value Replacement</a></li>
+      <li>2.1 <a href="#ASimpleExample">A Simple Example</a></li>
+      <li>2.2 <a href="#DefaultValues">Default Values</a></li>
+      <li>2.3 <a href="#SettingSavingRemoving">Setting, Saving, and Removing Keys</a></li>
+      <li>2.4 <a href="#AddingRemovingConfigs">Adding and Removing Configs</a></li>
+      <li>2.5 <a href="#KeyValueReplacment">Key Value Replacement</a></li>
     </ul>
   </li>
-  <li><a href="#AdvancedTopics">III. Advanced Topics </a> 
+  <li>3. <a href="#AdvancedTopics">Advanced Topics </a> 
     <ul>
-      <li><a href="#Merging">Merging</a></li>
-      <li><a href="#ValueAliases">Value Aliases</a></li>
-      <li><a href="#KeyValueLists">Key Value Lists</a></li>
+      <li>3.1 <a href="#Merging">Merging</a></li>
+      <li>3.2 <a href="#ValueAliases">Value Aliases</a></li>
+      <li>3.3 <a href="#KeyValueLists">Key Value Lists</a></li>
     </ul>
   </li>
-  <li><a href="#OtherConfigurationTypes">IV. Other Configuration Types </a> 
+  <li>4. <a href="#OtherConfigurationTypes">Other Configuration Types </a> 
     <ul>
-      <li><a href="#XMLConfiguration">XML Configuration</a></li>
-      <li><a href="#WindowsRegistryConfiguration">Windows Registry Configuration</a></li>
-      <li><a href="#.NETCOnfiguration">.NET Configuration Files</a></li>
-      <li><a href="#ArgvConfiguration">Command Line (Argv) Configuration</a></li>
+      <li>4.1 <a href="#XMLConfiguration">XML Configuration</a></li>
+      <li>4.2 <a href="#WindowsRegistryConfiguration">Windows Registry Configuration</a></li>
+      <li>4.3 <a href="#.NETCOnfiguration">.NET Configuration Files</a></li>
+      <li>4.4 <a href="#ArgvConfiguration">Command Line (Argv) Configuration</a></li>
     </ul>
   </li>
-  <li><a href="#UsingNiniEffectively">V. Using Nini Effectively</a> 
+  <li>5. <a href="#UsingNiniEffectively">Using Nini Effectively</a> 
     <ul>
-      <li><a href="#MultipleUsers">Handling configuration for multiple users</a></li>
-      <li><a href="#Database">Storing configuration data in a database</a></li>
-      <li><a href="#AutomatingWithNiniEdit">Automating configuration file creation</a></li>
-      <li><a href="#Progammatically">Creating configuration files programmatically</a></li>
-      <li><a href="#Choosing">Choosing the right configuration file type for your application</a></li>
+      <li>5.1 <a href="#MultipleUsers">Handling configuration for multiple users</a></li>
+      <li>5.2 <a href="#Database">Storing configuration data in a database</a></li>
+      <li>5.3 <a href="#AutomatingWithNiniEdit">Automating configuration file creation</a></li>
+      <li>5.4 <a href="#Progammatically">Creating configuration files programmatically</a></li>
+      <li>5.5 <a href="#Choosing">Choosing the right configuration file type for your application</a></li>
     </ul>
   </li>
 </ul>
 <a name="Introduction" />
-<h2>I. Introduction</h2>
+<h2>1. Introduction</h2>
 <a name="WhatIsApplicationConfigurationData" />
-<h3><b>What is Application Configuration Data?</b></h3>
+<h3>1.1 What is Application Configuration Data?</h3>
 
 <p>As a developer you deal with application configuration data all of the time.  
   Common examples of this are <a href="http://webopedia.com/TERM/_/_INI_file.html">INI</a> 
@@ -92,7 +92,7 @@ href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/h
   to edit.  </p>
 
 <a name="TheProblem" />
-<h3>The Problem</h3> 
+<h3>1.2 The Problem</h3> 
   Attempts to create configuration file access schemes do not satisfy the needs 
 of either programmers or end-users.  To give a real life scenario I worked for 
 an organization that configured their original programs using the Windows registry 
@@ -140,7 +140,7 @@ can be improved:
 </ul>
 
 <a name="IntroducingNini" />
-<h3>Introducing Nini</h3>
+<h3>1.3 Introducing Nini</h3>
 <p>Nini is the uncommonly powerful .NET configuration library. The goal of this 
   project is to provide developers with a tool that makes it easy to write highly 
   configurable applications in a short amount of time.  Nini provides a solution that 
@@ -152,12 +152,12 @@ can be improved:
   done in the examples below. </p>
   
   <a name="GettingStarted" />
-<h2>II. Getting Started</h2>
+<h2>2. Getting Started</h2>
 
 <a name="ASimpleExample" />
-<h3>A Simple Example</h3>
+<h3>2.1 A Simple Example</h3>
 <p>In order to show you how Nini solves these problems let’s go over an example.  
-  First, let’s take an example configuration file.  I will choose the <a href="http://webopedia.com/TERM/X/XML.html">INI 
+  First, let’s take an example configuration file.  I will choose the <a href="http://webopedia.com/TERM/_/_INI_file.html">INI 
   format</a> for most of the examples in this manual. INI files are a tried and 
   true configuration file type used in well known open source projects such as 
   <a href="http://www.mysql.com/">MySQL</a>, <a href="http://www.php.net/">PHP</a>, 
@@ -178,17 +178,29 @@ MessageColumns = 5
 MaxFileSize = 40000000000000
 </pre>
 
-<p>Below is an example piece of code that describes how to access the configuration 
+<p>Below is a C# example piece of code that describes how to access the configuration 
   data from the INI file from the file above: </p>
 
 <pre><span class="code-keyword">using</span> Nini.Config;
 
 IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;MyApp.ini&quot;);
 
-<span class="code-keyword">string</span> fileName = config.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
-<span class="code-keyword">int</span> columns = config.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
-<span class="code-keyword">long</span> fileSize = config.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
+<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
+<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
+<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
 </pre>
+
+<p>Here is the example in VB: </p>
+
+<pre><span class="code-keyword">Imports</span> Nini.Config
+
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource (&quot;MyApp.ini&quot;)
+
+<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;File Name&quot;)
+<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;MessageColumns&quot;)
+<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;MaxFileSize&quot;)
+</pre>
+
 <p>Okay, that example threw a few things at you. First, we include Nini's configuration 
   namespace to the imaginary app with <strong>using Nini.Config</strong>. Next 
   we load up the INI file with the <a href="../Reference/html/Nini.Config.IniConfigSource.html">IniConfigSource</a> 
@@ -212,7 +224,7 @@ IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&q
 </p>
   
   <a name="DefaultValues" />
-<h3>Default Values</h3>
+<h3>2.2 Default Values</h3>
 <p>Sometimes an option will not be present in a configuration file.  This might 
   be because it hasn’t been added to the project’s main build or because it should 
   remain secret to users.  For these cases Nini provides provides overloaded methods 
@@ -225,8 +237,17 @@ IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&q
 <span class="code-keyword">int</span> smallNumber = config.GetInt (&quot;Not Present&quot;, 50);
 </pre>
 
+Here is the same example in VB:
+
+<pre><span class="code-comment">' Sets missing to the default value, &quot;Default result&quot;.</span>
+<span class="code-keyword">Dim</span> missing <span class="code-keyword">As String</span> = config.Get (&quot;Missing Config&quot;, &quot;Default result&quot;)
+
+<span class="code-comment">' Sets smallNumber to the default value, 50.</span>
+<span class="code-keyword">Dim</span> smallNumber <span class="code-keyword">As Integer</span> = config.GetInt (&quot;Not Present&quot;, 50)
+</pre>
+
 <a name="SettingSavingRemoving" />
-<h3>Setting, Saving, and Removing Keys</h3>
+<h3>2.3 Setting, Saving, and Removing Keys</h3>
 <p>It is also possible to set and save new values into the configuration file. 
   Calling the Set method will change an existing value or if it does not exist 
   add it. Here is an example:</p>
@@ -236,6 +257,7 @@ config.Set (&quot;MessageColumns&quot;, 45);
 config.Remove (&quot;File Name&quot;);
 
 source.Save ();</pre>
+
 <p>It is necessary to call the Save method to save a file, h0wever, you can also 
   set the AutoSave property on an IConfigSource and that will automatically save 
   the file each time the Set method is called. If you want to save a document 
@@ -255,9 +277,20 @@ source.Save (writer); <span class="code-comment">// Save to StringWriter (TextWr
 source.Save ("some/new/path.ini"); <span class="code-comment">// Save to new path</span>
 </pre>
 
+Here is the example in VB:
+
+<pre><span class="code-keyword">Imports</span> System.IO
+
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As</span> IniConfigSource = <span class="code-keyword">new</span> IniConfigSource (&quot;Test.ini&quot;)
+<span class="code-keyword">Dim</span> writer <span class="code-keyword">As New</span> StringWriter ()
+source.Save (writer) <span class="code-comment">' Save to StringWriter (TextWriter)</span>
+
+source.Save ("some/new/path.ini") <span class="code-comment">' Save to new path</span>
+</pre>
+
 <a name="AddingRemovingConfigs"/>
 
-<h3>Adding and Removing Configs</h3>
+<h3>2.4 Adding and Removing Configs</h3>
 
 <p>On occassion you will want to add and remove IConfigs yourself. Nini has a 
   simple means to accomplish both of these actions. Here is an example where I 
@@ -269,8 +302,16 @@ IConfig newConfig = source.AddConfig ("NewConfig");
 source.Configs.Remove (newConfig);
 </pre>
 
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Dim</span> newConfig <span class="code-keyword">As</span> IConfig = source.AddConfig ("NewConfig")
+
+source.Configs.Remove (newConfig)
+</pre>
+
 <p><a name="KeyValueReplacment"/></p>
-<h3>Key Value Replacement</h3>
+<h3>2.5 Key Value Replacement</h3>
 <p>In many cases you will find that your key values are dependent on the values 
   of other keys. For instance you have a root path configuration value and several 
   values for files that use this path like in this example:</p>
@@ -303,14 +344,22 @@ WebPage = <strong>${RootPath}</strong>\index.html
 IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;MyApp.ini&quot;);
 source.ReplaceKeyValues ();
 </pre>
+
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IConfigSource (&quot;MyApp.ini&quot;)
+source.ReplaceKeyValues ()
+</pre>
+
 <p>That’s how easy it is to create your first Nini configured application.  The 
   following sections will explain some more advanced features of Nini. </p>
   
   <a name="AdvancedTopics" />
-<h2>III. Advanced Topics</h2>
+<h2>3. Advanced Topics</h2>
 
 <a name="Merging" />
-<h3>Merging</h3>
+<h3>3.1 Merging</h3>
 
 <p>Merging is a very powerful functionality that allows developers to combine 
   together the configuration data from multiple sources into a single object. 
@@ -328,6 +377,17 @@ mainSource.Merge (xmlSource);
 <span class="code-keyword">string</span> xmlValue = mainSource.Configs["SomeXmlSection"].Get ("AnOption");
 </pre>
 
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Dim</span> mainSource <span class="code-keyword">As New</span> IniConfigSource ("MyApp.ini")
+<span class="code-keyword">Dim</span> xmlSource <span class="code-keyword">As New</span> XmlConfigSource ("MyApp.xml")
+mainSource.Merge (xmlSource)
+
+<span class="code-comment">' Now you can access any IConfig from mainSource and xmlSource</span>
+<span class="code-keyword">Dim</span> xmlValue <span class="code-keyword">As</a> String = mainSource.Configs ("SomeXmlSection").Get ("AnOption")
+</pre>
+
 <p>When the data is merged between files any IConfigs of the same name or containing 
   the same keys the file being merged in will overwrite the previous ones. This 
   is very important for those of you with clients that have different configuration 
@@ -335,7 +395,7 @@ mainSource.Merge (xmlSource);
   a client specific file that will override the settings of the main file if needed. 
   This will save you tons of work. It did for me. </p>
 <a name="ValueAliases" />
-<h3>Value Aliases</h3>
+<h3>3.2 Value Aliases</h3>
 <p>Many configuration files have options that are clear to programmers but very 
   confusing to non-programmers. In order to help make a configuration file easier 
   for non-programmers to understand a common practice is to make the keys and 
@@ -387,6 +447,24 @@ IConfig config = source.Configs[&quot;Web Browser&quot;];
 <span class="code-keyword">bool</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;);
 <span class="code-keyword">int</span> errorCode = config.GetInt (&quot;Error Code&quot;, <span class="code-keyword">true</span>);
 </pre>
+
+Here is the example in VB:
+
+<pre><span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource (&quot;AliasExample.ini&quot;)
+
+<span class="code-comment">' Creates two Boolean aliases.</span>
+source.Alias.AddAlias (&quot;On&quot;, <span class="code-keyword">True</span>)
+source.Alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">False</span>)
+
+<span class="code-comment">' Sets two integer aliases.</span>
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100)
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200)
+
+<span class="code-keyword">Dim</span> config <span class="code-keyword">As</span> IConfig = source.Configs(&quot;Web Browser&quot;)
+<span class="code-keyword">Dim</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;)
+<span class="code-keyword">int</span> errorCode = config.GetInt (&quot;Error Code&quot;, <span class="code-keyword">True</span>)
+</pre>
+
 <p>The first two calls to <a href="../Reference/html/Nini.Config.IConfig.AddAlias_overloads.html">AddAlias</a> 
   add Boolean values to the text “On” and “Off”.  The next two calls to this method 
   add alias text to the “Error Level” configuration with the text of “Warn” and 
@@ -396,7 +474,7 @@ IConfig config = source.Configs[&quot;Web Browser&quot;];
   as a literal integer value.</p>
 <a name="KeyValueLists"/>
 
-<h3>Key Value Lists</h3>
+<h3>3.3 Key Value Lists</h3>
 
 <p>Nini does not have a specialized method for returning lists of information. 
   This is because there already is way to do this using a little trick with the 
@@ -414,14 +492,16 @@ Now using the Split method we will return the list of servers as an array of str
 <span class="code-keyword">string</span>[] serverList = source.Configs["MailServers"].Get ("ServerList").Split ('|');
 </pre>
 
+Here is the example in VB:
+
 You can use any number of delimeters with the Split method. Be creative.  Just pick a 
 delimeter that you will not be using as a key value.
 
 <p><a name="OtherConfigurationTypes" /></p>
-<h2>IV. Other Configuration Types</h2>
+<h2>4. Other Configuration Types</h2>
 
 <a name="XMLConfiguration" id="XMLConfiguration" /> 
-<h3>XML Configuration</h3>
+<h3>4.1 XML Configuration</h3>
 <p>Nini has it's own XML configuration file structure. It provides more flexibility 
   than does the .NET configuration file format. It's main advantages are that 
   you can have more than one XML configuration file and that the format is much 
@@ -444,8 +524,17 @@ XmlConfigSource source = <span class="code-keyword">new</span> XmlConfigSource (
 <span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
 </pre>
 
+Here is the example in VB:
+
+<pre>
+<span class="code-comment">' Loads the XML file</span>
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> XmlConfigSource ("MyApp.xml")
+<span class="code-comment">' Retrieves a value</span>
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+</pre>
+
 <a name="WindowsRegistryConfiguration" />
-<h3> Windows Registry Configuration</h3>
+<h3>4.2 Windows Registry Configuration</h3>
 
 If you are using one of the many Microsoft Windows operating systems then you 
 can access data from the <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfmicrosoftwin32registryclasstopic.asp">Windows 
@@ -466,6 +555,18 @@ source.AddMapping (Registry.LocalMachine, "Software\\MyApp\\Logging");
 <span class="code-comment">// Retrieves a value</span>
 <span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
 </pre>
+
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Imports</span> Microsoft.Win32
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource ()
+<span class="code-comment">' Loads the registry tree</span>
+source.AddMapping (Registry.LocalMachine, "Software\\MyApp\\Logging")
+<span class="code-comment">' Retrieves a value</span>
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+</pre>
+
 <p>If you'd like to recursively retrieve all data under a specified registry key 
   there is a method to accomplish this as well. If you want to get all subkeys 
   underneath a key with a flat name you can do this:</p>
@@ -480,9 +581,21 @@ source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Fla
 <span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
 </pre>
 
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Imports</span> Microsoft.Win32
+<span class="code-comment">' Loads the registry tree and all nodes beneath it without </span>
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource ()
+source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened)
+
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> String = source.Configs("MyApp").GetString ("SomeConfig");
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+</pre>
+
 <a name=".NETCOnfiguration"/>
 
-<h3>.NET Configuration Files</h3>
+<h3>4.3 .NET Configuration Files</h3>
 <p>The .NET Framework has it's own configuration file mechanism that uses a specific 
   <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconconfigurationfiles.asp">XML 
   format</a>. You may be familiar with them in ASP.NET as <strong>web.config</strong> 
@@ -509,13 +622,23 @@ Accessing the data is very similar to loading an INI or XML file:
 <pre>
 IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ());
 
-<span class="code-keyword">string</span> fileName = config.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
-<span class="code-keyword">int</span> columns = config.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
-<span class="code-keyword">long</span> fileSize = config.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
+<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
+<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
+<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
+</pre> 
+
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ())
+
+<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;File Name&quot;)
+<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;MessageColumns&quot;)
+<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;MaxFileSize&quot;)
 </pre> 
 
 <p><a name="ArgvConfiguration" /></p>
-<h3>Command Line (Argv) Configuration</h3>
+<h3>4.4 Command Line (Argv) Configuration</h3>
 <p>Since the beginning of programming applications have had the capability to 
   accept command line switches. These switches are simply strings passed into 
   the application when it is first started. The Windows program Xcopy has many 
@@ -544,18 +667,36 @@ IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource 
 
    <span class="code-keyword">if</span> (args.Length > 0)
    {
-      <span class="code-keyword">string</span> fileName = config.Configs[&quot;Logging&quot;].Get (&quot;file-name&quot;);
-      <span class="code-keyword">int</span> columns = config.Configs[&quot;Logging&quot;].GetInt (&quot;columns&quot;);
-      <span class="code-keyword">long</span> fileSize = config.Configs[&quot;Logging&quot;].GetLong (&quot;max-file-size&quot;);
+      <span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;file-name&quot;);
+      <span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;columns&quot;);
+      <span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;max-file-size&quot;);
    }
 }
 </pre> 
 
+Here is the example in VB:
+
+<pre>
+<span class="code-keyword">Public Static Function</span> Main (args() <span class="code-keyword">As</span> String) <span class="code-keyword">As</span> Integer
+   <span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> ArgvConfigSource (args)
+
+   source.AddSwitch ("Logging", "file-name", "f")
+   source.AddSwitch ("Logging", "columns", "c")
+   source.AddSwitch ("Logging", "max-file-size", "m")
+
+   <span class="code-keyword">If</span> (args.Length > 0) <span class="code-keyword">Then</span>
+      <span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;file-name&quot;)
+      <span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;columns&quot;)
+      <span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;max-file-size&quot;)
+   <span class="code-keyword">End If</span>
+<span class="code-keyword">End Function</span>
+</pre> 
+
 <p><a name="UsingNiniEffectively" /></p>
-<h2>V. Using Nini Effictively</h2>
+<h2>5. Using Nini Effictively</h2>
 
 <a name="MultipleUsers" />
-<h3>Handling configuration for multiple users</h3>
+<h3>5.1 Handling configuration for multiple users</h3>
 
 <p>
 You might notice that the ConfigurationSettings class for .NET 1.0 and 1.1 
@@ -587,7 +728,7 @@ You can get this path programatically with the following path:
 </pre>
 
 <a name="Database" />
-<h3>Storing configuration data in a database</h3>
+<h3>5.2 Storing configuration data in a database</h3>
 
 <p>
 If you are running an ASP.NET application then you probably have multiple 
@@ -617,7 +758,8 @@ load a Nini configuration values like this:
 <pre>
 <span class="code-keyword">string</span> userId = GetUserId (); // retrieve the user id somehow
 
-SqlCommand command = <span class="code-keyword">new</span> SqlCommand ("SELECT Settings FROM UserSettings WHERE ID = " + userId, connection);
+SqlCommand command = <span class="code-keyword">new</span> SqlCommand ("SELECT Settings FROM UserSettings WHERE ID = "
+                                     + userId, connection);
 
 connection.Open();
 
@@ -634,7 +776,7 @@ connection.Close();
 </p>
 
 <a name="AutomatingWithNiniEdit" />
-<h3>Automating configuration file creation</h3>
+<h3>5.3 Automating configuration file creation</h3>
 
 <p>
 Being able to create builds automatically is essential for any development 
@@ -697,7 +839,7 @@ command-line applications with Nini.
 </p>
 
 <a name="Progammatically" />
-<h3>Creating configuration files programmatically</h3>
+<h3>5.4 Creating configuration files programmatically</h3>
 
 <p>
 On occassion it might be useful to create your configuration files 
@@ -737,7 +879,7 @@ source.Save ("MyApp.ini");
 </p>
 
 <a name="Choosing" />
-<h3>Choosing the right configuration file type for your application</h3>
+<h3>5.5 Choosing the right configuration file type for your application</h3>
 
 <p>
 Nini was written to make all configuration file types first-class 
