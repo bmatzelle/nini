@@ -23,8 +23,8 @@ namespace Nini.Test.Ini
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("");
-			writer.WriteLine (" ; Something");
-			writer.WriteLine (" #   Some comment  ");
+			writer.WriteLine (" ; Something"); 
+			writer.WriteLine (" ;   Some comment  ");
 			writer.WriteLine (" ;");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			
@@ -53,7 +53,7 @@ namespace Nini.Test.Ini
 		public void NormalSectionAndKey ()
 		{
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("[Logging] ; Logging section");
+			writer.WriteLine ("[Logging]");
 			writer.WriteLine (" great logger =   log4net  ");
 			writer.WriteLine ("  [Pets] ; pets comment  ");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
@@ -64,7 +64,7 @@ namespace Nini.Test.Ini
 			Assert.AreEqual (IniType.Section, reader.Type);
 			Assert.AreEqual ("Logging", reader.Name);
 			Assert.AreEqual ("", reader.Value);
-			Assert.AreEqual ("Logging section", reader.Comment);
+			Assert.IsNull (reader.Comment);
 			
 			Assert.IsTrue (reader.Read ());
 			Assert.AreEqual (IniType.Key, reader.Type);
@@ -76,7 +76,7 @@ namespace Nini.Test.Ini
 			Assert.AreEqual (IniType.Section, reader.Type);
 			Assert.AreEqual ("Pets", reader.Name);
 			Assert.AreEqual ("", reader.Value);
-			Assert.AreEqual ("pets comment", reader.Comment);
+			Assert.IsNull (reader.Comment);
 		}
 		
 		[Test]
@@ -115,7 +115,7 @@ namespace Nini.Test.Ini
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("; Test");
-			writer.WriteLine ("# Test 1");
+			writer.WriteLine ("; Test 1");
 			writer.WriteLine ("[Nini Thing");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			
@@ -180,12 +180,11 @@ namespace Nini.Test.Ini
 		public void IgnoreComments ()
 		{
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("[Nini] ; my comment 1");
+			writer.WriteLine ("[Nini]");
 			writer.WriteLine (" some key = something ; my comment 1");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			
 			Assert.IsTrue (reader.Read ());
-			Assert.AreEqual ("my comment 1", reader.Comment);
 			reader.IgnoreComments = true;
 			Assert.IsTrue (reader.Read ());
 			Assert.AreEqual (null, reader.Comment);
@@ -267,7 +266,7 @@ namespace Nini.Test.Ini
 		public void NoEndOfLineComment ()
 		{
 			StringWriter writer = new StringWriter ();
-			writer.Write (" #   Some comment  ");
+			writer.Write (" ;   Some comment  ");
 
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			reader.Read ();
@@ -329,6 +328,134 @@ namespace Nini.Test.Ini
 			Assert.IsTrue (reader.Read (), "Could not find last float");
 			Assert.AreEqual ("float2", reader.Name);
 			Assert.AreEqual ("2.0", reader.Value);
+		}
+		
+		[Test]
+		[ExpectedException (typeof (IniException))]
+		public void NoLineContinuation ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = this will be \\ ");
+			writer.WriteLine ("continued later");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+		}
+		
+		[Test]
+		public void LineContinuation ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = this will be \\ ");
+			writer.WriteLine ("continued later");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.LineContinuation = true;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("this will be continued later", reader.Value);
+			Assert.IsFalse (reader.Read ());
+		}
+		
+		[Test]
+		public void LineContinuationMoreSpace ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = this will be \\ ");
+			writer.WriteLine ("     continued later");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.LineContinuation = true;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("this will be      continued later", reader.Value);
+			Assert.IsFalse (reader.Read ());
+		}
+		
+		[Test]
+		public void LineContinuationAnotherChar ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option1 = this will be \\ continued");
+			writer.WriteLine (" option2 = this will be continued");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.LineContinuation = true;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("this will be \\ continued", reader.Value);
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("this will be continued", reader.Value);
+			Assert.IsFalse (reader.Read ());
+		}
+		
+		[Test]
+		public void LineContinuationNoSpace ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = this will be \\");
+			writer.WriteLine ("continued later");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.LineContinuation = true;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("this will be continued later", reader.Value);
+			Assert.IsFalse (reader.Read ());
+		}
+		
+		[Test]
+		public void CommentAfterKey ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = someValue ; some comment");
+			writer.WriteLine ("");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.AcceptCommentAfterKey = true;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("someValue", reader.Value);
+			Assert.AreEqual ("some comment", reader.Comment);
+			Assert.IsTrue (reader.Read ());
+		}
+		
+		[Test]
+		public void NoCommentAfterKey ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = someValue ; some comment");
+			writer.WriteLine ("");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+			reader.AcceptCommentAfterKey = false;
+
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("someValue ; some comment", reader.Value);
+			Assert.IsTrue (reader.Read ());
 		}
 		#endregion
 		
