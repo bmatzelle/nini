@@ -43,7 +43,7 @@ namespace NiniEdit
 		/// </summary>
 		public void ProcessArgs ()
 		{
-			if (argvSource.Arguments.Length < 1 
+			if (argvSource.GetArguments ().Length < 1 
 				|| IsArg ("help")) {
 				PrintUsage ();
 				return;
@@ -87,8 +87,8 @@ namespace NiniEdit
 		/// </summary>
 		private string ConfigPath ()
 		{
-			int length = argvSource.Arguments.Length;
-			return argvSource.Arguments[length - 1];
+			int length = argvSource.GetArguments ().Length;
+			return argvSource.GetArguments ()[length - 1];
 		}
 		
 		/// <summary>
