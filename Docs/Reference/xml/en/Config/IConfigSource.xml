@@ -97,6 +97,45 @@
 			</exception>
 		</docs>
 	</Method>
+	
+	<Method name="ReplaceKeyValues">
+		<docs>
+			<summary>
+				Replaces all key values.  
+			</summary>
+			<remarks>
+				Calling this method replaces all key values with the values
+				of other keys.  See the example below for more information.
+			</remarks>
+			<example>
+				In many cases you will find that your key values are dependent 
+				on the values of other keys. For instance you have a root path 
+				configuration value and several values for files that use this 
+				path like in this example:
+				<code>
+[File Path]
+RootPath = C:\Program Files\My Program
+Logging = MyApp.log
+WebPage = index.html
+				</code>
+				Without Nini if you wanted to combine the value of "RootPath" 
+				with "Logging" and "WebPage" then you would have to perform 
+				ugly string concatenations to get 
+				"C:\Program Files\My Program\index.html". In Nini you do not 
+				need to do this:
+				<code>
+[File Path]
+RootPath = C:\Program Files\My Program
+Logging = ${RootPath}\MyApp.log
+WebPage = ${RootPath}\index.html
+				</code>
+				This can save you a lot of trouble concatenating them yourself 
+				and make your code a lot cleaner. If you want to grab a value 
+				from a different section you can do the same above but add the 
+				section name followed by a bar ("|") like so: ${section|key}.
+			</example>
+		</docs>
+	</Method>
 </Interface>
 
 </NiniDocs>
