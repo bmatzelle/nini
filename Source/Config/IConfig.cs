@@ -74,6 +74,9 @@ namespace Nini.Config
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetKeys"]/docs/*' />
 		string[] GetKeys ();
+
+		/// <include file='IConfig.xml' path='//Method[@name="GetValues"]/docs/*' />
+		string[] GetValues ();
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Set"]/docs/*' />
 		void Set (string key, object value);
