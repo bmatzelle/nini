@@ -196,5 +196,43 @@ namespace Nini.Test.Ini
 							doc.Sections["test"].GetValue ("cat"));
 			Assert.AreEqual ("dogs bark", doc.Sections["test"].GetValue ("dog"));
 		}
+
+		[Test]
+		public void DuplicateSections ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" my key = something");
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" another key = something else");
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" value 0 = something 0");
+			writer.WriteLine (" value 1 = something 1");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()));
+			
+			Assert.IsNotNull (doc.Sections["Test"]);
+			Assert.AreEqual (1, doc.Sections.Count);
+			Assert.AreEqual (2, doc.Sections["Test"].ItemCount);
+			Assert.IsNull (doc.Sections["Test"].GetValue ("my key"));
+			Assert.IsNotNull (doc.Sections["Test"].GetValue ("value 0"));
+			Assert.IsNotNull (doc.Sections["Test"].GetValue ("value 1"));
+		}
+
+		[Test]
+		public void DuplicateKeys ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" a value = something 0");
+			writer.WriteLine (" a value = something 1");
+			writer.WriteLine (" a value = something 2");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()));
+			
+			Assert.IsNotNull (doc.Sections["Test"]);
+			Assert.AreEqual (1, doc.Sections.Count);
+			Assert.AreEqual (1, doc.Sections["Test"].ItemCount);
+			Assert.IsNotNull (doc.Sections["Test"].GetValue ("a value"));
+			Assert.AreEqual ("something 2", doc.Sections["Test"].GetValue ("a value"));
+		}
 	}
 }
