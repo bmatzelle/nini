@@ -22,17 +22,15 @@ namespace Nini.Test.Config
 		#region Private variables
 		IConfig eventConfig = null;
 		IConfigSource eventSource = null;
-		int configAddedCount = 0;
 		int reloadedCount = 0;
 		int savedCount = 0;
-
 		string keyName = null;
 		string keyValue = null;
 		int keySetCount = 0;
 		int keyRemovedCount = 0;
 		#endregion
 
-		#region Tests
+		#region Unit tests
 		[Test]
 		public void Merge ()
 		{
@@ -319,36 +317,30 @@ namespace Nini.Test.Config
 		{
 			string filePath = "EventTest.ini";
 			IniConfigSource source = new IniConfigSource ();
-			source.ConfigAdded += 
-					new ConfigSourceEventHandler (this.source_configAdded);
-			source.Saved += new ConfigSourceEventHandler (this.source_saved);
-			source.Reloaded += new ConfigSourceEventHandler (this.source_reloaded);
+			source.Saved += new EventHandler (this.source_saved);
+			source.Reloaded += new EventHandler (this.source_reloaded);
 
-			Assert.AreEqual (configAddedCount, 0);
 			Assert.IsNull (eventConfig);
 			Assert.IsNull (eventSource);
 
 			IConfig config = source.AddConfig ("Test");
-			Assert.AreEqual (source, eventSource);
-			Assert.AreEqual (configAddedCount, 1);
-			Assert.AreEqual (config, eventConfig);
 
 			eventSource = null;
 			Assert.AreEqual (savedCount, 0);
 			source.Save (filePath);
 			Assert.AreEqual (savedCount, 1);
-			Assert.AreEqual (source, eventSource);
+			Assert.IsTrue (source == eventSource);
 
 			eventSource = null;
 			source.Save ();
 			Assert.AreEqual (savedCount, 2);
-			Assert.AreEqual (source, eventSource);
+			Assert.IsTrue (source == eventSource);
 
 			eventSource = null;
 			Assert.AreEqual (reloadedCount, 0);
 			source.Reload ();
 			Assert.AreEqual (reloadedCount, 1);
-			Assert.AreEqual (source, eventSource);
+			Assert.IsTrue (source == eventSource);
 		}
 
 		[Test]
@@ -357,8 +349,8 @@ namespace Nini.Test.Config
 			IConfigSource source = new IniConfigSource ();
 
 			IConfig config = source.AddConfig ("Test");
-			config.KeySet += new ConfigEventHandler (this.config_keySet);
-			config.KeyRemoved += new ConfigEventHandler (this.config_keyRemoved);
+			config.KeySet += new ConfigKeyEventHandler (this.config_keySet);
+			config.KeyRemoved += new ConfigKeyEventHandler (this.config_keyRemoved);
 
 			// Set key events
 			Assert.AreEqual (keySetCount, 0);
@@ -392,36 +384,26 @@ namespace Nini.Test.Config
 		{
 			eventConfig = null;
 			eventSource = null;
-			configAddedCount = 0;
-			reloadedCount = 0;
 			savedCount = 0;
-
 			keySetCount = 0;
 			keyRemovedCount = 0;
 		}
 		#endregion
 
 		#region Private methods
-		private void source_configAdded (object sender, ConfigSourceEventArgs e)
-		{
-			configAddedCount++;
-			eventConfig = e.Config;
-			eventSource = (IConfigSource)sender;
-		}
-
-		private void source_saved (object sender, ConfigSourceEventArgs e)
+		private void source_saved (object sender, EventArgs e)
 		{
 			savedCount++;
 			eventSource = (IConfigSource)sender;
 		}
 
-		private void source_reloaded (object sender, ConfigSourceEventArgs e)
+		private void source_reloaded (object sender, EventArgs e)
 		{
 			reloadedCount++;
 			eventSource = (IConfigSource)sender;
 		}
 
-		private void config_keySet (object sender, ConfigEventArgs e)
+		private void config_keySet (object sender, ConfigKeyEventArgs e)
 		{
 			keySetCount++;
 			keyName = e.KeyName;
@@ -429,7 +411,7 @@ namespace Nini.Test.Config
 			eventConfig = (IConfig)sender;
 		}
 
-		private void config_keyRemoved (object sender, ConfigEventArgs e)
+		private void config_keyRemoved (object sender, ConfigKeyEventArgs e)
 		{
 			keyRemovedCount++;
 			keyName = e.KeyName;
