@@ -178,14 +178,20 @@ namespace Nini.Config
 			if (replaces.Length > 1) {
 				IConfig newConfig = this.Configs[replaces[0]];
 				if (newConfig == null) {
-					throw new ArgumentException ("IConfig not found: " + replaces[0]);
+					throw new ArgumentException ("Replace config not found: "
+												 + replaces[0]);
 				}
 				result = newConfig.Get (replaces[1]);
 				if (result == null) {
-					throw new ArgumentException ("Key not found: " + result);
+					throw new ArgumentException ("Replace key not found: "
+												 + replaces[1]);
 				}
 			} else {
 				result = config.Get (search);
+				
+				if (result == null) {
+				    throw new ArgumentException ("Key not found: " + search);
+				}
 			}
 			
 			return result;
