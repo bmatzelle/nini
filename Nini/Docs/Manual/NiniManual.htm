@@ -510,9 +510,7 @@ IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource 
   here</a>. Our first example is very similar to the others you have seen so far. 
   The difference is that the <a href="../Reference/html/Nini.Config.IConfig.AddSwitch_overloads.html">AddSwitch</a> 
   method needs to be called for each configuration key. There is a short key and 
-  a long key that both can be used to fetch configuration data. There is a parameter 
-  to set a description for each configuration as well, which the GetUsage method 
-  uses. </p>
+  a long key that both can be used to fetch configuration data. </p>
   
   
 <pre>
@@ -520,19 +518,15 @@ IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource 
 {
    ArgvConfigSource source = <span class="code-keyword">new</span> ArgvConfigSource (args);
 
-   source.AddSwitch ("Logging", "file-name", "f", "Logging file name");
-   source.AddSwitch ("Logging", "columns", "c", "Columns of debugging information to display");
-   source.AddSwitch ("Logging", "max-file-size", "m", "Maximum allowed log size");
+   source.AddSwitch ("Logging", "file-name", "f");
+   source.AddSwitch ("Logging", "columns", "c");
+   source.AddSwitch ("Logging", "max-file-size", "m");
 
    <span class="code-keyword">if</span> (args.Length > 0)
    {
       <span class="code-keyword">string</span> fileName = config.Configs[&quot;Logging&quot;].Get (&quot;file-name&quot;);
       <span class="code-keyword">int</span> columns = config.Configs[&quot;Logging&quot;].GetInt (&quot;columns&quot;);
       <span class="code-keyword">long</span> fileSize = config.Configs[&quot;Logging&quot;].GetLong (&quot;max-file-size&quot;);
-   }
-   <span class="code-keyword">else</span>
-   {
-      Console.WriteLine (source.GetUsage ());
    }
 }
 </pre> 
