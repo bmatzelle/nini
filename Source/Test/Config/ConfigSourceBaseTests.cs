@@ -379,6 +379,42 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("Value 2", keyValue);
 		}
 
+		[Test]
+		public void ReplaceKeyValuesConfigError ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[server]");
+			writer.WriteLine (" domain1 = ${web|protocol}://nini.sf.net/");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			try {
+				source.ReplaceKeyValues ();
+			}
+			catch (Exception ex) {
+				Assert.AreEqual ("Replace config not found: web", ex.Message);
+			}
+		}
+
+		[Test]
+		public void ReplaceKeyValuesKeyError ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine ("not-protocol = hah!");
+			writer.WriteLine ("[server]");
+			writer.WriteLine (" domain1 = ${web|protocol}://nini.sf.net/");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			try {
+				source.ReplaceKeyValues ();
+			}
+			catch (Exception ex) {
+				Assert.AreEqual ("Replace key not found: protocol", ex.Message);
+			}
+		}
+
 		[SetUp]
 		public void Setup ()
 		{
