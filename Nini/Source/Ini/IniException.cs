@@ -56,8 +56,7 @@ namespace Nini.Ini
 					return base.Message;
 				}
 
-				return String.Format (CultureInfo.InvariantCulture, "{0} Line {1}, position {2}.",
-
+				return String.Format (CultureInfo.InvariantCulture, "{0} - Line: {1}, Position: {2}.",
 										base.Message, this.LineNumber, this.LinePosition);
 			}
 		}
@@ -100,7 +99,7 @@ namespace Nini.Ini
 		#endregion
 		
 		#region Public methods
-		/// <include file='IniException.xml' path='//Constructor[@name="GetObjectData"]/docs/*' />
+		/// <include file='IniException.xml' path='//Method[@name="GetObjectData"]/docs/*' />
 		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
 		public override void GetObjectData (SerializationInfo info, 
 											StreamingContext context)
