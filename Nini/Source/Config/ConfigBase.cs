@@ -51,7 +51,6 @@ namespace Nini.Config
 		public AliasText Alias
 		{
 			get { return aliasText; }
-			set { aliasText = value; }
 		}
 		#endregion
 
@@ -107,7 +106,7 @@ namespace Nini.Config
 				throw new Exception ("Integer value not found");
 			}
 
-			return aliasText.GetInt (key, result);
+			return GetIntAlias (key, result);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetIntDefault"]/docs/*' />
@@ -127,7 +126,7 @@ namespace Nini.Config
 
 			string result = GetValue (key);
 			
-			return (result == null) ? defaultValue : aliasText.GetInt (key, result);
+			return (result == null) ? defaultValue : GetIntAlias (key, result);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetLong"]/docs/*' />
@@ -159,7 +158,7 @@ namespace Nini.Config
 				throw new Exception ("Boolean value not found");
 			}
 			
-			return aliasText.GetBoolean (text);
+			return GetBooleanAlias (text);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetBooleanDefault"]/docs/*' />
@@ -167,7 +166,7 @@ namespace Nini.Config
 		{
 			string text = GetValue (key);
 			
-			return (text == null) ? defaultValue : aliasText.GetBoolean (text);
+			return (text == null) ? defaultValue : GetBooleanAlias (text);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetFloat"]/docs/*' />
@@ -229,6 +228,10 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="Set"]/docs/*' />
 		public void Set (string key, object value)
 		{
+			if (value == null) {
+				throw new ArgumentNullException ("Value may not be null");
+			}
+
 			if (!keys.Contains (key)) {
 				keys.Add (key, value);
 			} else {
@@ -266,7 +269,39 @@ namespace Nini.Config
 			return result;
 		}
 		
+		/// <summary>
+		/// Returns the integer alias first from this IConfig then 
+		/// the parent if there is none.
+		/// </summary>
+		private int GetIntAlias (string key, string alias)
+		{
+			int result = -1;
+			
+			if (aliasText.ContainsInt (key, alias)) {
+				result = aliasText.GetInt (key, alias);
+			} else {
+				result = ConfigSource.GlobalAlias.GetInt (key, alias);
+			}			
+			
+			return result;
+		}
 		
+		/// <summary>
+		/// Returns the boolean alias first from this IConfig then 
+		/// the parent if there is none.
+		/// </summary>
+		private bool GetBooleanAlias (string key)
+		{
+			bool result = false;
+			
+			if (aliasText.ContainsBoolean (key)) {
+				result = aliasText.GetBoolean (key);
+			} else {
+				result = ConfigSource.GlobalAlias.GetBoolean (key);
+			}	
+			
+			return result;
+		}
 		#endregion
 	}
 }
