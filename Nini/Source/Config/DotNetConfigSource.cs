@@ -11,7 +11,6 @@
 using System;
 using System.IO;
 using System.Xml;
-using System.Xml.XPath;
 using System.Reflection;
 using System.Collections;
 using System.Configuration;
@@ -41,7 +40,7 @@ namespace Nini.Config
 		{
 			configDoc = new XmlDocument ();
 			configDoc.LoadXml ("<configuration><configSections/></configuration>");
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
@@ -50,19 +49,15 @@ namespace Nini.Config
 			savePath = path;
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 		
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorDoc"]/docs/*' />
-		public DotNetConfigSource (IXPathNavigable document)
+		public DotNetConfigSource (XmlReader reader)
 		{
-			XmlNode node = document as XmlNode;
-			if (node != null) {
-				configDoc = (node.OwnerDocument == null)
-							? (XmlDocument)node
-							: (XmlDocument)node.OwnerDocument;  
-			}
-			PerformLoad (document.CreateNavigator ());
+			configDoc = new XmlDocument ();
+			configDoc.Load (reader);
+			PerformLoad (configDoc);
 		}
 		#endregion
 		
@@ -120,7 +115,7 @@ namespace Nini.Config
 			this.Configs.Clear ();
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc.CreateNavigator ());
+			PerformLoad (configDoc);
 		}
 
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
@@ -182,69 +177,70 @@ namespace Nini.Config
 		/// <summary>
 		/// Loads all sections and keys.
 		/// </summary>
-		private void PerformLoad (XPathNavigator navigator)
+		private void PerformLoad (XmlDocument document)
 		{
 			this.Merge (this); // required for SaveAll
-			
-			navigator.MoveToRoot (); // start at root node
-			XPathNodeIterator iterator = navigator.Select ("/configuration");
-			if (iterator.Count < 1) {
+
+			if (document.DocumentElement.Name != "configuration") {
 				throw new ArgumentException ("Did not find configuration node");
 			}
-			
-			LoadSections (navigator);
+
+			LoadSections (document.DocumentElement);
 		}
 		
 		/// <summary>
 		/// Loads all configuration sections.
 		/// </summary>
-		private void LoadSections (XPathNavigator navigator)
+		private void LoadSections (XmlNode rootNode)
 		{
-			XPathNodeIterator iterator = navigator.Select 
-										("/configuration/configSections/section");
+			XmlNode sections = GetChildElement (rootNode, "configSections");
 			ConfigBase config = null;
 			
-			while (iterator.MoveNext ())
+			foreach (XmlNode node in sections.ChildNodes)
 			{
-				config = new ConfigBase 
-							(iterator.Current.GetAttribute ("name", ""), this);
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "section") {
+					config = new ConfigBase 
+							(node.Attributes["name"].Value, this);
 				
-				this.Configs.Add (config);
-				LoadKeys (navigator, config);
+					this.Configs.Add (config);
+					LoadKeys (rootNode, config);
+				}
 			}
-			LoadOtherSection (navigator, "appSettings");
+			LoadOtherSection (rootNode, "appSettings");
 		}
 		
 		/// <summary>
 		/// Loads special sections that are not loaded in the configSections
 		/// node.  This includes such sections such as appSettings.
 		/// </summary>
-		private void LoadOtherSection (XPathNavigator navigator, string nodeName)
+		private void LoadOtherSection (XmlNode rootNode, string nodeName)
 		{
-			XPathNodeIterator iterator = 
-							navigator.Select ("/configuration/" + nodeName);
+			XmlNode section = GetChildElement (rootNode, nodeName);
 			ConfigBase config = null;
 			
-			if (iterator.Count > 0) {
-				config = new ConfigBase (nodeName, this);
+			if (section != null) {
+				config = new ConfigBase (section.Name, this);
 				
 				this.Configs.Add (config);
-				LoadKeys (iterator.Current, config);
+				LoadKeys (rootNode, config);
 			}
 		}
 		
 		/// <summary>
 		/// Loads all keys for a config.
 		/// </summary>
-		private static void LoadKeys (XPathNavigator navigator, ConfigBase config)
+		private void LoadKeys (XmlNode rootNode, ConfigBase config)
 		{
-			XPathNodeIterator iterator = navigator.Select ("/configuration/" +
-														   config.Name + "/add");
+			XmlNode section = GetChildElement (rootNode, config.Name);
 
-			while (iterator.MoveNext ())
+			foreach (XmlNode node in section.ChildNodes)
 			{
-				config.Add (iterator.Current.GetAttribute ("key", ""),
-							iterator.Current.GetAttribute ("value", ""));
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "add") {
+					config.Add (node.Attributes["key"].Value,
+								node.Attributes["value"].Value);
+				}
 			}
 		}
 		
@@ -254,19 +250,23 @@ namespace Nini.Config
 		private void RemoveConfigs ()
 		{
 			XmlAttribute attr = null;
-			XmlNodeList list = configDoc.SelectNodes ("/configuration/configSections/section");
+			XmlNode sections = GetChildElement (configDoc.DocumentElement, 
+												"configSections");
 			
 			// TODO, remove the other section node as well - /configuration/sectionname
 
-			foreach (XmlNode node in list)
+			foreach (XmlNode node in sections.ChildNodes)
 			{
-				attr = node.Attributes["name"];
-				if (attr != null) {
-					if (this.Configs[attr.Value] == null) {
-						node.ParentNode.RemoveChild (node);
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "section") {
+					attr = node.Attributes["name"];
+					if (attr != null) {
+						if (this.Configs[attr.Value] == null) {
+							node.ParentNode.RemoveChild (node);
+						}
+					} else {
+						throw new ArgumentException ("Section name attribute not found");
 					}
-				} else {
-					throw new ArgumentException ("Section name attribute not found");
 				}
 			}
 		}
@@ -276,20 +276,23 @@ namespace Nini.Config
 		/// </summary>
 		private void RemoveKeys (string sectionName)
 		{
-			string search = "/configuration/" + sectionName;
-			XmlNode node = configDoc.SelectSingleNode (search);
+			XmlNode node = GetChildElement (configDoc.DocumentElement, 
+											sectionName);
 			XmlAttribute keyName = null;
 			
 			if (node != null) {
-				foreach (XmlNode key in node.SelectNodes ("add"))
+				foreach (XmlNode key in node.ChildNodes)
 				{
-					keyName = key.Attributes["key"];
-					if (keyName != null) {
-						if (this.Configs[sectionName].Get (keyName.Value) == null) {
-							node.RemoveChild (key);
+					if (node.NodeType == XmlNodeType.Element
+						&& node.Name == "add") {
+						keyName = key.Attributes["key"];
+						if (keyName != null) {
+							if (this.Configs[sectionName].Get (keyName.Value) == null) {
+								node.RemoveChild (key);
+							}
+						} else {
+							throw new ArgumentException ("Key attribute not found in node");
 						}
-					} else {
-						throw new ArgumentException ("Key attribute not found in node");
 					}
 				}
 			}
@@ -300,13 +303,22 @@ namespace Nini.Config
 		/// </summary>
 		private void SetKey (XmlNode sectionNode, string key, string value)
 		{
-			string search = "add[@key='" + key + "']";
-			XmlNode node = sectionNode.SelectSingleNode (search);
+			XmlNode keyNode = null;
+
+			foreach (XmlNode node in sectionNode.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "add"
+					&& node.Attributes["key"].Value == key) {
+					keyNode = node;
+					break;
+				}
+			}
 			
-			if (node == null) {
+			if (keyNode == null) {
 				CreateKey (sectionNode, key, value);
 			} else {
-				node.Attributes["value"].Value = value;
+				keyNode.Attributes["value"].Value = value;
 			}
 		}
 		
@@ -387,6 +399,25 @@ namespace Nini.Config
 		{
 			return (this.savePath != null
 					|| configDoc != null);
+		}
+
+		/// <summary>
+		/// Returns the single named child element.
+		/// </summary>
+		private XmlNode GetChildElement (XmlNode parentNode, string name)
+		{
+			XmlNode result = null;
+
+			foreach (XmlNode node in parentNode.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == name) {
+					result = node;
+					break;
+				}
+			}
+
+			return result;
 		}
 		#endregion
 	}
