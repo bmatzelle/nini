@@ -62,6 +62,10 @@ namespace Nini.Ini
 		Hashtable sectionList = new Hashtable ();
 		bool hasComment = false;
 		bool disposed = false;
+		bool lineContinuation = false;
+		bool acceptCommentAfterKey = true;
+		char[] commentDelimiter = new char[] { ';' };
+		char[] assignDelimiter = new char[] { '=' };
 		#endregion
 
 		#region Public properties
@@ -112,6 +116,49 @@ namespace Nini.Ini
 		public IniReadState ReadState
 		{
 			get { return readState; }
+		}
+		
+		/// <include file='IniReader.xml' path='//Property[@name="LineContinuation"]/docs/*' />
+		public bool LineContinuation
+		{
+			get { return lineContinuation; }
+			set { lineContinuation = value; }
+		}
+		
+		/// <include file='IniReader.xml' path='//Property[@name="AcceptCommentAfterKey"]/docs/*' />
+		public bool AcceptCommentAfterKey
+		{
+			get { return acceptCommentAfterKey; }
+			set { acceptCommentAfterKey = value; }
+		}
+		
+		/// <include file='IniReader.xml' path='//Property[@name="CommentDelimiter"]/docs/*' />
+		public char[] CommentDelimiter
+		{
+			get { return commentDelimiter; }
+			set
+			{
+				if (value.Length < 1) {
+					throw new ArgumentException ("Must have at least one delimiter");
+				}
+				
+				commentDelimiter = value;
+			}
+		}
+		
+		/// <include file='IniReader.xml' path='//Property[@name="AssignDelimiter"]/docs/*' />
+		public char[] AssignDelimiter
+		{
+			get { return assignDelimiter; }
+			set
+			{
+				if (value.Length < 1) 
+				{
+					throw new ArgumentException ("Must have at least one delimiter");
+				}
+				
+				assignDelimiter = value;
+			}
 		}
 		#endregion
 		
@@ -250,15 +297,17 @@ namespace Nini.Ini
 			bool result = true;
 			int ch = PeekChar ();
 			Reset ();
+			
+			if (IsComment (ch)) {
+				iniType = IniType.Empty;
+				ReadChar (); // consume comment character
+				ReadComment ();
+
+				return result;
+			}
 
 			switch (ch)
 			{
-				case '#':
-				case ';':
-					iniType = IniType.Empty;
-					ReadChar (); // consume comment character
-					ReadComment ();
-					break;
 				case ' ':
 				case '\t':
 				case '\r':
@@ -319,24 +368,25 @@ namespace Nini.Ini
 		{
 			int ch = -1;
 			iniType = IniType.Key;
-
+			
 			while (true)
 			{
 				ch = PeekChar ();
 
-				if (ch == '=') { // or ':'
+				if (IsAssign (ch)) {
 					ReadChar ();
 					break;
 				}
 				
 				if (EndOfLine (ch)) {
-					throw new IniException (this, "Expected '='");
+					throw new IniException (this, "Expected assign character");
 				}
 
 				this.name.Append ((char)ReadChar ());
 			}
 			
 			ReadKeyValue ();
+			
 			SearchForComment ();
 			
 			RemoveTrailingWhitespace (this.name);
@@ -382,8 +432,34 @@ namespace Nini.Ini
 				if (foundQuote && EndOfLine (ch)) {
 					throw new IniException (this, "Expected '\"'");
 				}
+				
+				// Handle line continuation
+				if (lineContinuation && ch == '\\') 
+				{
+					StringBuilder buffer = new StringBuilder ();
+					buffer.Append ((char)ReadChar ()); // append '\'
+					
+					while (PeekChar () != '\n' && IsWhitespace (PeekChar ()))
+					{
+						if (PeekChar () != '\r') {
+							buffer.Append ((char)ReadChar ());
+						} else {
+							ReadChar (); // consume '\r'
+						}
+					}
+					
+					if (PeekChar () == '\n') {
+						// continue reading key value on next line
+						ReadChar ();
+						continue;
+					} else {
+						// Replace consumed characters
+						this.value.Append (buffer.ToString ());
+					}
+				}
 
-				if (IsComment (ch) || EndOfLine (ch)) {
+				// If accepting comments then don't consume as key value
+				if ((acceptCommentAfterKey && IsComment (ch)) || EndOfLine (ch)) {
 					break;
 				}
 
@@ -417,9 +493,8 @@ namespace Nini.Ini
 
 				this.name.Append ((char)ReadChar ());
 			}
-			
-			SearchForComment ();
-			
+
+			ConsumeToEnd (); // all after '[' is garbage			
 			RemoveTrailingWhitespace (this.name);
 			
 			if (sectionList.Contains (this.name.ToString ())) {
@@ -493,7 +568,34 @@ namespace Nini.Ini
 		/// </summary>
 		private bool IsComment (int ch)
 		{
-			return (ch == ';' || ch == '#');
+			return HasCharacter (commentDelimiter, ch);
+		}
+		
+		/// <summary>
+		/// Returns true if character is an assign character.
+		/// </summary>
+		private bool IsAssign (int ch)
+		{
+			return HasCharacter (assignDelimiter, ch);
+		}
+
+		/// <summary>
+		/// Returns true if the character is found in the given array.
+		/// </summary>
+		private bool HasCharacter (char[] characters, int ch)
+		{
+			bool result = false;
+			
+			for (int i = 0; i < characters.Length; i++)
+			{
+				if (ch == characters[i]) 
+				{
+					result = true;
+					break;
+				}
+			}
+			
+			return result;
 		}
 		
 		/// <summary>
