@@ -320,5 +320,31 @@ namespace Nini.Test.Config
 			
 			File.Delete  (fileName);
 		}
+		
+		[Test]
+		public void SetAndRemove ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine (" cat = muffy");
+			writer.WriteLine (" dog = rover");
+			writer.WriteLine (" bird = tweety");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Pets", config.Name);
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			
+			config.Set ("snake", "cobra");
+			Assert.AreEqual (4, config.GetKeys ().Length);
+
+			// Test removing			
+			Assert.IsNotNull (config.Get ("dog"));
+			config.Remove ("dog");
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.IsNull (config.Get ("dog"));
+			Assert.IsNotNull (config.Get ("snake"));
+		}
 	}
 }
