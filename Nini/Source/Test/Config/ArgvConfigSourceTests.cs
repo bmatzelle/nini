@@ -11,6 +11,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Text;
 using Nini.Config;
 using NUnit.Framework;
 
@@ -21,39 +22,50 @@ namespace Nini.Test.Config
 	{
 		#region Tests
 		[Test]
-		public void GetConfig ()
+		public void AddSwitch ()
 		{
-			// add some switches here
-			Assert.Fail ();
-		}
-		
-		[Test]
-		public void GetString ()
-		{
-			Assert.Fail ();
-		}
-		
-		[Test]
-		public void GetInt ()
-		{
-			Assert.Fail ();
-		}
+			string[] arguments = new string[] { "--help", "-d", "doc.xml", 
+												"/pet:cat"};
+			ArgvConfigSource source = new ArgvConfigSource (arguments);
+			Assert.IsTrue (source.IsReadOnly);
 
+			source.AddSwitch ("Base", "help", "h", "Display help menu");
+			source.AddSwitch ("Base", "doc", "d", "Document");
+
+			Assert.IsTrue (source.GetUsage ().Length > 0);
+
+			IConfig config = source.Configs["Base"];
+			Assert.IsNotNull (config.Get ("help"));
+			Assert.IsNull (config.Get ("h"));
+			Assert.IsNull (config.Get ("not here"));
+			Assert.IsNull (config.Get ("pets"));
+			Assert.AreEqual ("doc.xml", config.Get ("doc"));
+			
+			source.AddSwitch ("Pets", "pet", "p", "Add a pet");
+			config = source.Configs["Pets"];
+			Assert.IsNotNull (config.Get ("pet"));
+			Assert.AreEqual ("cat", config.Get ("pet"));
+		}
+		
 		[Test]
-		public void SetAndSave ()
+		public void GetUsage ()
 		{
 			string[] arguments = new string[] { "--help", "/pets:", "cat", "dog" };
 			ArgvConfigSource source = new ArgvConfigSource (arguments);
 			Assert.IsTrue (source.IsReadOnly);
 			
-			source.AddSwitch ("help", "h", "Display help menu");
-			source.AddSwitch ("pets", "p", "Add one or more pets");
+			source.AddSwitch ("Base", "help", "h", "Display help menu");
+			source.AddSwitch ("Base", "pets", "p", "Add one or more pets");
+			source.AddSwitch ("Base", "person", "Add a person");
 
 			Assert.IsTrue (source.GetUsage ().Length > 0);
+
+			StringBuilder usage = new StringBuilder ();
+			usage.Append ("  -h,  --help           Display help menu");
+			usage.Append ("  -p,  --pets           Add one or more pets");
+			usage.Append ("       --person         Add a person");
 			
-			IConfig config = source.Configs["SwitchList"];
-			Assert.IsTrue (config.Get ("help") != null);
-			Assert.IsTrue (config.Get ("h") != null);
+			Assert.AreEqual (usage.ToString (), source.GetUsage ());
 		}
 		#endregion
 
