@@ -316,6 +316,40 @@ namespace Nini.Test.Config
 			
 			File.Delete (filePath);
 		}
+		
+		[Test]
+		public void RemoveConfigAndKeyFromFile ()
+		{
+			string filePath = "Test.xml";
+
+			StreamWriter xmlWriter = new StreamWriter (filePath);
+			XmlTextWriter writer = NiniWriter (xmlWriter);
+			WriteSection (writer, "test 1");
+			WriteKey (writer, "dog", "Rover");
+			writer.WriteEndElement ();
+			WriteSection (writer, "test 2");
+			WriteKey (writer, "cat", "Muffy");
+			WriteKey (writer, "lizard", "Lizzy");
+			writer.WriteEndDocument ();
+			xmlWriter.Close ();
+
+			XmlConfigSource source = new XmlConfigSource (filePath);
+			Assert.IsNotNull (source.Configs["test 1"]);
+			Assert.IsNotNull (source.Configs["test 2"]);
+			Assert.IsNotNull (source.Configs["test 2"].Get ("cat"));
+			
+			source.Configs.Remove (source.Configs["test 1"]);
+			source.Configs["test 2"].Remove ("cat");
+			source.AddConfig ("cause error");
+			source.Save ();
+
+			source = new XmlConfigSource (filePath);
+			Assert.IsNull (source.Configs["test 1"]);
+			Assert.IsNotNull (source.Configs["test 2"]);
+			Assert.IsNull (source.Configs["test 2"].Get ("cat"));
+
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods

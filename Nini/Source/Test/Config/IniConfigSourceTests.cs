@@ -438,5 +438,36 @@ namespace Nini.Test.Config
 			
 			File.Delete (filePath);
 		}
+		
+		[Test]
+		public void RemoveConfigAndKeyFromFile ()
+		{
+			string filePath = "Test.ini";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			writer.WriteLine ("[test 1]");
+			writer.WriteLine (" dog = Rover");
+			writer.WriteLine ("[test 2]");
+			writer.WriteLine (" cat = Muffy");
+			writer.WriteLine (" lizard = Lizzy");
+			writer.Close ();
+
+			IniConfigSource source = new IniConfigSource (filePath);
+			Assert.IsNotNull (source.Configs["test 1"]);
+			Assert.IsNotNull (source.Configs["test 2"]);
+			Assert.IsNotNull (source.Configs["test 2"].Get ("cat"));
+			
+			source.Configs.Remove (source.Configs["test 1"]);
+			source.Configs["test 2"].Remove ("cat");
+			source.AddConfig ("cause error");
+			source.Save ();
+
+			source = new IniConfigSource (filePath);
+			Assert.IsNull (source.Configs["test 1"]);
+			Assert.IsNotNull (source.Configs["test 2"]);
+			Assert.IsNull (source.Configs["test 2"].Get ("cat"));
+
+			File.Delete (filePath);
+		}
 	}
 }
