@@ -1,33 +1,29 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<title>Nini Manual - Configuration Library for the .NET Framework</title>
+<title>Nini Manual - .NET Configuration Library</title>
 <style>
 <!--
-BODY
-{
-	font-family:georgia,verdana,arial,helvetica;
-	margin:10;
-	background-color:#ffffff;
-	color:#000000;
-    font-size:10pt;
+BODY {
+	font-family: verdana,arial,helvetica;
+	margin: 10;
+	background-color: #ffffff;
+	color: #000000;
+    font-size: 10pt;
 }
-PRE
-{
-	background:#EEEEEE;
-	margin-top:1em; margin-bottom:1em; margin-left:0px;
-	padding:5pt;
+PRE {
+	background: #EEEEEE;
+	margin-top: 1em; margin-bottom:1em; margin-left:0px;
+	padding: 5pt;
 	border-style: solid;
-	border-width:1;
-	font-size:11pt;
+	border-width: 1;
+	font-size: 11pt;
 }
-.code-keyword
-{
+.code-keyword {
     color: #333399;
 	font-weight: bold;
 }
-.code-comment
-{
+.code-comment {
     color: #339900;
 }
 -->
@@ -35,7 +31,7 @@ PRE
 </head>
 <body bgcolor="#FFFFFF" link=blue vlink=purple class="Normal" lang=EN-US>
 <h1> Nini Manual</h1>
-Nini Configuration Data Management Library (<a href="http://nini.sourceforge.net/">http://nini.sourceforge.net/</a>)
+Nini .NET Configuration Library (<a href="http://nini.sourceforge.net/">http://nini.sourceforge.net/</a>) 
 <br/>
 Copyright &copy; 2004 Brent R. Matzelle
 <ul>
@@ -352,7 +348,7 @@ Error Level = warn</pre>
   value of <strong>false</strong> when the value is set to &quot;Off&quot;. Furthermore, 
   I'd like the <strong>Error Level</strong> to return the integer value of 100 
   when it is set to &quot;Warn&quot; and a value of 200 when the value is set 
-  to &quot;Error&quot;. The following code shows how to add rules to the GlobalAlias 
+  to &quot;Error&quot;. The following code shows how to add rules to the Alias 
   property of the IConfigSource that defines the rules that I just defined in 
   the previous paragraph:</p>
 
@@ -361,12 +357,12 @@ Error Level = warn</pre>
 <pre>IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;AliasExample.ini&quot;);
 
 <span class="code-comment">// Creates two Boolean aliases.</span>
-source.GlobalAlias.AddAlias (&quot;On&quot;, <span class="code-keyword">true</span>);
-source.GlobalAlias.AddAlias (&quot;Off&quot;, <span class="code-keyword">false</span>);
+source.Alias.AddAlias (&quot;On&quot;, <span class="code-keyword">true</span>);
+source.Alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">false</span>);
 
 <span class="code-comment">// Sets two integer aliases.</span>
-source.GlobalAlias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100);
-source.GlobalAlias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200);
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100);
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200);
 
 IConfig config = source.Configs[&quot;Web Browser&quot;];
 <span class="code-keyword">bool</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;);
