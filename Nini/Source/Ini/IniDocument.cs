@@ -58,7 +58,7 @@ namespace Nini.Ini
 		{
 		}
 
-		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
+		/// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReaderType"]/docs/*' />
 		public IniDocument (TextReader reader, IniFileType type)
 		{
 			Load (GetIniReader (reader, type));
@@ -188,12 +188,12 @@ namespace Nini.Ini
 				break;
 			case IniFileType.PythonStyle:
 				result.AcceptCommentAfterKey = false;
-				result.CommentDelimiter = new char[] { ';', '#' };
-				result.AssignDelimiter = new char[] { ':' };
+				result.SetCommentDelimiters (new char[] { ';', '#' });
+				result.SetAssignDelimiters (new char[] { ':' });
 				break;
 			case IniFileType.SambaStyle:
 				result.AcceptCommentAfterKey = false;
-				result.CommentDelimiter = new char[] { ';', '#' };
+				result.SetCommentDelimiters (new char[] { ';', '#' });
 				result.LineContinuation = true;
 				break;
 			}
