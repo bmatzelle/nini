@@ -16,6 +16,7 @@ using Nini.Ini;
 
 namespace Nini.Config
 {
+	#region RegistryRecurse enumeration
 	/// <include file='RegistryConfigSource.xml' path='//Enum[@name="RegistryRecurse"]/docs/*' />
 	public enum RegistryRecurse
 	{
@@ -26,6 +27,7 @@ namespace Nini.Config
 		/// <include file='RegistryConfigSource.xml' path='//Enum[@name="RegistryRecurse"]/Value[@name="Namespacing"]/docs/*' />
 		Namespacing
 	}
+	#endregion
 
 	/// <include file='RegistryConfigSource.xml' path='//Class[@name="RegistryConfigSource"]/docs/*' />
 	public class RegistryConfigSource : ConfigSourceBase
@@ -104,6 +106,12 @@ namespace Nini.Config
 				}
 			}
 		}
+
+		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		public override void Reload ()
+		{
+			ReloadKeys ();
+		}
 		#endregion
 		
 		#region Private methods
@@ -122,6 +130,25 @@ namespace Nini.Config
 				config.Add (value, key.GetValue (value).ToString ());
 			}
 			this.Configs.Add (config);
+		}
+
+		/// <summary>
+		/// Reloads all keys.
+		/// </summary>
+		private void ReloadKeys ()
+		{
+			RegistryKey[] keys = new RegistryKey[this.Configs.Count];
+
+			for (int i = 0; i < keys.Length; i++)
+			{
+				keys[i] = ((RegistryConfig)this.Configs[i]).Key;
+			}
+
+			this.Configs.Clear ();
+			for (int i = 0; i < keys.Length; i++)
+			{
+				LoadKeyValues (keys[i], ShortKeyName (keys[i]));
+			}
 		}
 		
 		/// <summary>

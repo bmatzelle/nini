@@ -79,6 +79,9 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public abstract void Save ();
+
+		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		public abstract void Reload ();
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
 		public void ReplaceKeyValues ()

@@ -97,6 +97,20 @@ namespace Nini.Config
 			savePath = null;
 		}
 
+		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		public override void Reload ()
+		{
+			if (savePath == null) {
+				throw new ArgumentException ("Error reloading: You must have "
+							+ "the loaded the source from a file");
+			}
+
+			this.Configs.Clear ();
+			this.Merge (this); // required for SaveAll
+			iniDocument = new IniDocument (savePath);
+			Load ();
+		}
+
 		/// <include file='IniConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
 		public override string ToString ()
 		{
