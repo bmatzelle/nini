@@ -72,12 +72,6 @@ namespace Nini.Config
 		{
 			get { return savePath; }
 		}
-
-		/// <include file='DotNetConfigSource.xml' path='//Property[@name="AssemblyConfigFile"]/docs/*' />
-		public static string AssemblyConfigFile
-		{
-			get { return ConfigFileName (); }
-		}
 		#endregion
 		
 		#region Public methods
@@ -123,6 +117,12 @@ namespace Nini.Config
 			configDoc.Save (writer);
 
 			return writer.ToString ();
+		}
+
+		/// <include file='DotNetConfigSource.xml' path='//Method[@name="GetFullConfigPath"]/docs/*' />
+		public static string GetFullConfigPath ()
+		{
+			return ConfigFileName ();
 		}
 		#endregion
 
@@ -222,7 +222,7 @@ namespace Nini.Config
 		/// <summary>
 		/// Loads all keys for a config.
 		/// </summary>
-		private void LoadKeys (XPathNavigator navigator, ConfigBase config)
+		private static void LoadKeys (XPathNavigator navigator, ConfigBase config)
 		{
 			XPathNodeIterator iterator = navigator.Select ("/configuration/" +
 														   config.Name + "/add");

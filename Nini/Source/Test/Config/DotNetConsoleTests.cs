@@ -58,7 +58,7 @@ namespace Nini.Test.Config
 		private static void FileTest ()
 		{
 			DotNetConfigSource source = 
-				new DotNetConfigSource (DotNetConfigSource.AssemblyConfigFile);
+				new DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ());
 			IConfig config = source.Configs["appSettings"];
 
 			Assert (config != null, "IConfig is null");
@@ -73,7 +73,7 @@ namespace Nini.Test.Config
 		private static void FileAndSaveTest ()
 		{
 			DotNetConfigSource source = 
-				new DotNetConfigSource (DotNetConfigSource.AssemblyConfigFile);
+				new DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ());
 			IConfig config = source.Configs["appSettings"];
 
 			config = source.Configs["Pets"];
