@@ -22,7 +22,7 @@ namespace Nini.Config
 		string Name { get; }
 		
 		/// <include file='IConfig.xml' path='//Property[@name="Alias"]/docs/*' />
-		AliasText Alias { get; set; }
+		AliasText Alias { get; }
 
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
 		string Get (string key);
