@@ -49,6 +49,8 @@
 				configuration changes because the <see cref="SavePath"/>
 				will be null.  Use this for configuration ASP.NET 
 				web sites that use the Web.config file.
+				
+				This method is not supported by the .NET Compact Framework.
 			</remarks>
 			<param name="sections">
 				Array of sections contained in the XML file.  These cannout 
@@ -75,18 +77,15 @@
 		</docs>
 	</Constructor>
 	
-	<Constructor name="ConstructorDoc">
+	<Constructor name="ConstructorXmlReader">
 		<docs>
 			<summary>
 				Creates a new instance of the XML configuration source.
 			</summary>
 			<remarks>
-				Loads the source via an 
-				<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmldocumentclasstopic.asp">
-				XmlDocument</a>.  
 			</remarks>
-			<param name="document">
-				The document from which to load the configuration data.
+			<param name="reader">
+				The XML reader configuration document.
 			</param>
 		</docs>
 	</Constructor>
@@ -162,6 +161,8 @@
 			<remarks>
 				This is a file with the extension of the application:
 				MyApp.exe would be C:\Path_To_Program\MyApp.exe.config.
+				
+				This method is not supported by the .NET Compact Framework.
 			</remarks>
 		</docs>
 	</Method>
