@@ -49,7 +49,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: System.Reflection.AssemblyVersion("0.9.0.0")]
+[assembly: System.Reflection.AssemblyVersion("0.9.1.0")]
 
 [assembly:CLSCompliant(true)] // Required for CLS compliance
 
