@@ -229,10 +229,16 @@ source.Save ();</pre>
 <p>It is necessary to call the Save method to save a file, h0wever, you can also 
   set the AutoSave property on an IConfigSource and that will automatically save 
   the file each time the Set method is called. If you want to save a document 
-  to a different path or a different object then you have additional methods:</p>
+  to a different path or a different object then the <a href="../Reference/html/Nini.Config.IniConfigSource.html">IniConfigSource</a>, 
+  <a href="../Reference/html/Nini.Config.XmlConfigSource.html">XmlConfigSource</a>, 
+  and <a href="../Reference/html/Nini.Config.DotNetConfigSource.html">DotNetConfigSource</a> 
+  classes all save overloaded <strong>Save</strong> methods that allow you to 
+  save to either a new path or a <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemiotextwriterclasstopic.asp">TextWriter</a>:</p>
   
   
 <pre><span class="code-keyword">using</span> System.IO;
+
+IniConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;Test.ini&quot;);
 StringWriter writer = <span class="code-keyword">new</span> StringWriter ();
 source.Save (writer); <span class="code-comment">// Save to StringWriter (TextWriter)</span>
 
