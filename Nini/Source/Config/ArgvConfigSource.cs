@@ -33,11 +33,6 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public properties
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		public bool IsReadOnly
-		{
-			get { return true; }
-		}
 		#endregion
 		
 		#region Public methods

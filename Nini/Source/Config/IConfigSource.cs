@@ -18,9 +18,6 @@ namespace Nini.Config
 	{
 		/// <include file='IConfigSource.xml' path='//Property[@name="Configs"]/docs/*' />
 		ConfigCollection Configs { get; }
-
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		bool IsReadOnly { get; }
 		
 		/// <include file='IConfigSource.xml' path='//Property[@name="AutoSave"]/docs/*' />
 		bool AutoSave { get; set; }
