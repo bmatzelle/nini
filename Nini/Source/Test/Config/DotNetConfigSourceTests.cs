@@ -29,7 +29,8 @@ namespace Nini.Test.Config
 			AddKey (doc, "Pets", "dog", "rover");
 			AddKey (doc, "Pets", "bird", "tweety");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 			
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Pets", config.Name);
@@ -46,7 +47,8 @@ namespace Nini.Test.Config
 			AddKey (doc, "Pets", "dog", "rover");
 			AddKey (doc, "Pets", "bird", "tweety");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 			IConfig config = source.Configs["Pets"];
 			
 			Assert.AreEqual ("muffy", config.Get ("cat"));
@@ -64,7 +66,8 @@ namespace Nini.Test.Config
 			AddSection (doc, "Pets");
 			AddKey (doc, "Pets", "value 1", "49588");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 
 			IConfig config = source.Configs["Pets"];
 			
@@ -212,7 +215,8 @@ namespace Nini.Test.Config
 			AddKey (doc, "Pets", "cat", "Muffy");
 			AddKey (doc,  "Pets","dog", "Rover");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 			IConfig config = source.Configs["Pets"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
@@ -243,7 +247,8 @@ namespace Nini.Test.Config
 			AddKey (doc, "Test", "fact", "fact: ${apache}");
 			AddKey (doc, "Test", "protocol", "http");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 			source.ReplaceKeyValues ();
 			
 			IConfig config = source.Configs["Test"];
@@ -289,7 +294,8 @@ namespace Nini.Test.Config
 			AddKey (doc, "Pets", "cat", "Muffy");
 			AddKey (doc, "Pets", "dog", "Rover");
 
-			DotNetConfigSource source = new DotNetConfigSource (doc);
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
 			string eol = Environment.NewLine;
 
 			string compare = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + eol
@@ -409,6 +415,12 @@ namespace Nini.Test.Config
 			keyNode.Attributes.SetNamedItem (attrNode);
 			
 			sectionNode.AppendChild (keyNode);
+		}
+
+		private XmlTextReader DocumentToReader (XmlDocument doc)
+		{
+			StringReader reader = new StringReader (doc.OuterXml);
+			return new XmlTextReader (reader);
 		}
 		#endregion
 	}
