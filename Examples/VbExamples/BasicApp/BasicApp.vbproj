@@ -21,7 +21,7 @@
                 OptionExplicit = "On"
                 OptionStrict = "Off"
                 RootNamespace = "BasicApp"
-                StartupObject = "BasicApp.Form1"
+                StartupObject = "BasicApp.MainForm"
             >
                 <Config
                     Name = "Debug"
@@ -76,6 +76,11 @@
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
+                />
+                <Reference
+                    Name = "Nini"
+                    AssemblyName = "Nini"
+                    HintPath = "..\..\..\Bin\DotNet\1.0\Release\Nini.dll"
                 />
             </References>
             <Imports>
