@@ -52,7 +52,7 @@ namespace Nini.Config
 			PerformLoad (configDoc);
 		}
 		
-		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorDoc"]/docs/*' />
+		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorXmlReader"]/docs/*' />
 		public DotNetConfigSource (XmlReader reader)
 		{
 			configDoc = new XmlDocument ();
@@ -128,11 +128,14 @@ namespace Nini.Config
 			return writer.ToString ();
 		}
 
+#if (NET_COMPACT_1_0)
+#else
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="GetFullConfigPath"]/docs/*' />
 		public static string GetFullConfigPath ()
 		{
-			return ConfigFileName ();
+			return (Assembly.GetEntryAssembly().Location + ".config");
 		}
+#endif
 		#endregion
 
 		#region Private methods
@@ -147,8 +150,8 @@ namespace Nini.Config
 			{
 				string[] keys = config.GetKeys ();
 				
-				string search = "/configuration/" + config.Name;
-				XmlNode node = configDoc.SelectSingleNode (search);
+				XmlNode node = GetChildElement (configDoc.DocumentElement, 
+												config.Name);
 				if (node == null) {
 					node = SectionNode (config.Name);
 				}
@@ -166,12 +169,16 @@ namespace Nini.Config
 		/// </summary>
 		private void Load ()
 		{
+#if (NET_COMPACT_1_0)
+			throw new NotSupportedException ("This loading method is not supported");
+#else
 			this.Merge (this); // required for SaveAll
 			for (int i = 0; i < sections.Length; i++)
 			{
 				LoadCollection (sections[i], (NameValueCollection)ConfigurationSettings
 								.GetConfig (sections[i]));
 			}
+#endif
 		}
 		
 		/// <summary>
@@ -374,22 +381,16 @@ namespace Nini.Config
 			attr = configDoc.CreateAttribute ("type");
 			attr.Value = "System.Configuration.NameValueSectionHandler";
 			node.Attributes.Append (attr);
-			string search = "/configuration/configSections"; 
-			configDoc.SelectSingleNode (search).AppendChild (node);
+
+			XmlNode section = GetChildElement (configDoc.DocumentElement, 
+												"configSections");
+			section.AppendChild (node);
 		
 			// Add node for configuration node
 			XmlNode result = configDoc.CreateElement (name);
 			configDoc.DocumentElement.AppendChild (result);
 			
 			return result;
-		}
-		
-		/// <summary>
-		/// Returns the name of the configuration file for this application.
-		/// </summary>
-		private static string ConfigFileName ()
-		{
-			return (Assembly.GetEntryAssembly().Location + ".config");
 		}
 		
 		/// <summary>
