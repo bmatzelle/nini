@@ -34,11 +34,6 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public properties
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		public bool IsReadOnly
-		{
-			get { return false; }
-		}
 		#endregion
 
 		#region Constructors
@@ -95,10 +90,6 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
-			if (this.IsReadOnly) {
-				throw new Exception ("Source is read only");
-			}
-
 			for (int i = 0; i < this.Configs.Count; i++)
 			{
 				// New merged configs are not RegistryConfigs
@@ -143,6 +134,7 @@ namespace Nini.Config
 				config.Add (value, key.GetValue (value).ToString ());
 			}
 			this.Configs.Add (config);
+			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
