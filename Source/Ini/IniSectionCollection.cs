@@ -22,13 +22,13 @@ namespace Nini.Ini
 		#endregion
 
 		#region Public properties	
-		/// <include file='IniSectionCollection.xml' path='//Constructor[@name="ItemIndex"]/docs/*' />
+		/// <include file='IniSectionCollection.xml' path='//Property[@name="ItemIndex"]/docs/*' />
 		public IniSection this[int index]
 		{
 			get { return (IniSection)list[index]; }
 		}
 		
-		/// <include file='IniSectionCollection.xml' path='//Constructor[@name="ItemName"]/docs/*' />
+		/// <include file='IniSectionCollection.xml' path='//Property[@name="ItemName"]/docs/*' />
 		public IniSection this[string configName]
 		{
 			get { return (IniSection)list[configName]; }

@@ -25,14 +25,14 @@ namespace Nini.Ini
 		#endregion
 
 		#region Constructors
-		/// <include file='IniSection.xml' path='//Method[@name="ConstructorComment"]/docs/*' />
+		/// <include file='IniSection.xml' path='//Constructor[@name="ConstructorComment"]/docs/*' />
 		public IniSection (string name, string comment)
 		{
 			this.name = name;
 			this.comment = comment;
 		}
 		
-		/// <include file='IniSection.xml' path='//Method[@name="Constructor"]/docs/*' />
+		/// <include file='IniSection.xml' path='//Constructor[@name="Constructor"]/docs/*' />
 		public IniSection (string name)
 			: this (name, null)
 		{

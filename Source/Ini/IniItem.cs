@@ -41,7 +41,7 @@ namespace Nini.Ini
 			}
 			#endregion
 			
-			/// <include file='IniItem.xml' path='//Method[@name="Constructor"]/docs/*' />
+			/// <include file='IniItem.xml' path='//Constructor[@name="Constructor"]/docs/*' />
 			internal protected IniItem (string name, string value, IniType type, string comment)
 			{
 				iniName = name;
