@@ -19,9 +19,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace Nini.Ini
 {
 	/// <include file='IniException.xml' path='//Class[@name="IniException"]/docs/*' />
+#if (NET_COMPACT_1_0)
+#else
 	[Serializable]
-
-	public class IniException : SystemException, ISerializable
+#endif
+	public class IniException : SystemException /*, ISerializable */
 	{
 		#region Private variables
 		IniReader iniReader = null;
@@ -90,15 +92,20 @@ namespace Nini.Ini
 			iniReader = reader;
 			this.message = message;
 		}
-		
+
+#if (NET_COMPACT_1_0)
+#else
 		/// <include file='IniException.xml' path='//Constructor[@name="ConstructorSerialize"]/docs/*' />
 		protected IniException (SerializationInfo info, StreamingContext context)
 			: base (info, context)
 		{
 		}
+#endif
 		#endregion
 		
 		#region Public methods
+#if (NET_COMPACT_1_0)
+#else
 		/// <include file='IniException.xml' path='//Method[@name="GetObjectData"]/docs/*' />
 		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
 		public override void GetObjectData (SerializationInfo info, 
@@ -111,6 +118,7 @@ namespace Nini.Ini
 				info.AddValue ("linePosition", iniReader.LinePosition);
 			}
 		}
+#endif
 		#endregion
 	}
 }

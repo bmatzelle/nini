@@ -53,11 +53,14 @@ namespace Nini.Config
 			booleanAlias.Add (alias, value);
 		}
 		
+#if (NET_COMPACT_1_0)
+#else
 		/// <include file='AliasText.xml' path='//Method[@name="AddAliasEnum"]/docs/*' />
 		public void AddAlias (string key, Enum enumAlias)
 		{
 			SetAliasTypes (key, enumAlias);
 		}
+#endif
 		
 		/// <include file='AliasText.xml' path='//Method[@name="ContainsBoolean"]/docs/*' />
 		public bool ContainsBoolean (string key)
@@ -107,6 +110,8 @@ namespace Nini.Config
 		#endregion
 		
 		#region Private methods
+#if (NET_COMPACT_1_0)
+#else
 		/// <summary>
 		/// Extracts and sets the alias types from an enumeration.
 		/// </summary>
@@ -120,6 +125,7 @@ namespace Nini.Config
 				AddAlias (key, names[i], values[i]);
 			}
 		}
+#endif
 		
 		/// <summary>
 		/// Returns a case insensitive hashtable.
