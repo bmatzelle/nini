@@ -36,22 +36,10 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public methods
-		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
+		/// <include file='ArgvConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
 			throw new Exception ("Source is read only");
-		}
-		
-		/// <include file='ArgvConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
-		public void Save (string path)
-		{
-			throw new Exception ("Cannot save this data to a file");
-		}
-		
-		/// <include file='ArgvConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
-		public void Save (TextWriter writer)
-		{
-			throw new Exception ("Cannot save this data to a TextWriter");
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />

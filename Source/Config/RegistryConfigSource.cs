@@ -87,7 +87,7 @@ namespace Nini.Config
 			}
 		}
 		
-		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
+		/// <include file='RegistryConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
 			for (int i = 0; i < this.Configs.Count; i++)
@@ -103,18 +103,6 @@ namespace Nini.Config
 					}
 				}
 			}
-		}
-		
-		/// <include file='RegistryConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
-		public void Save (string path)
-		{
-			throw new Exception ("Cannot save this data to a file");
-		}
-		
-		/// <include file='RegistryConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
-		public void Save (TextWriter writer)
-		{
-			throw new Exception ("Cannot save this data to a TextWriter");
 		}
 		#endregion
 		
