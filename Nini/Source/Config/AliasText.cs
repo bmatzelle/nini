@@ -59,6 +59,25 @@ namespace Nini.Config
 			SetAliasTypes (key, enumAlias);
 		}
 		
+		/// <include file='AliasText.xml' path='//Method[@name="ContainsBoolean"]/docs/*' />
+		public bool ContainsBoolean (string key)
+		{
+			return booleanAlias.Contains (key.ToLower ());
+		}
+		
+		/// <include file='AliasText.xml' path='//Method[@name="ContainsInt"]/docs/*' />
+		public bool ContainsInt (string key, string alias)
+		{
+			bool result = false;
+
+			if (intAlias.Contains (key)) {
+				Hashtable keys = (Hashtable)intAlias[key];
+				result = (keys.Contains (alias.ToLower ()));
+			}
+			
+			return result;
+		}
+		
 		/// <include file='AliasText.xml' path='//Method[@name="GetBoolean"]/docs/*' />
 		public bool GetBoolean (string key)
 		{
