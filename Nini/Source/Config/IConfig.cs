@@ -85,9 +85,9 @@ namespace Nini.Config
 		void Remove (string key);
 
 		/// <include file='IConfig.xml' path='//Event[@name="KeySet"]/docs/*' />
-		event ConfigEventHandler KeySet;
+		event ConfigKeyEventHandler KeySet;
 
 		/// <include file='IConfig.xml' path='//Event[@name="KeyRemoved"]/docs/*' />
-		event ConfigEventHandler KeyRemoved;
+		event ConfigKeyEventHandler KeyRemoved;
 	}
 }
