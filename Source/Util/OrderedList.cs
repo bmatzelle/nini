@@ -5,7 +5,7 @@ namespace Nini.Util
 {
 	//[Serializable]
 	/// <include file='OrderedList.xml' path='//Class[@name="OrderedList"]/docs/*' />
-	public class OrderedList : ICollection, IDictionary, IEnumerable, IOrderedDictionary
+	public class OrderedList : ICollection, IDictionary, IEnumerable
 	{
 		#region Private variables
 		Hashtable table = new Hashtable ();
@@ -126,6 +126,12 @@ namespace Nini.Util
 
 		/// <include file='OrderedList.xml' path='//Method[@name="CopyTo"]/docs/*' />
 		public void CopyTo (Array array, int index)
+		{
+			table.CopyTo (array, index);
+		}
+		
+		/// <include file='OrderedList.xml' path='//Method[@name="CopyToStrong"]/docs/*' />
+		public void CopyTo (DictionaryEntry[] array, int index)
 		{
 			table.CopyTo (array, index);
 		}
