@@ -12,7 +12,7 @@
 			<remarks>
 				All options are parsed upon load.
 			</remarks>
-			<param name="Args">
+			<param name="args">
 				The command line string array to parse.
 			</param>
 		</docs>
