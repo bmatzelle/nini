@@ -9,11 +9,9 @@
 #endregion
 
 using System;
-using System.Xml;
-using System.Reflection;
+using System.Text;
 using System.Collections;
-using System.Configuration;
-using System.Collections.Specialized;
+using Nini.Util;
 
 namespace Nini.Config
 {
@@ -21,13 +19,15 @@ namespace Nini.Config
 	public class ArgvConfigSource : ConfigSourceBase, IConfigSource
 	{
 		#region Private variables
+		StringBuilder usage = new StringBuilder ();
+		ArgvParser parser = null;
 		#endregion
 
 		#region Constructors
 		/// <include file='ArgvConfigSource.xml' path='//Constructor[@name="Constructor"]/docs/*' />
 		public ArgvConfigSource (string[] arguments)
 		{
-			// Perform the load of the arguments here
+			parser = new ArgvParser (arguments);
 		}
 		#endregion
 		
@@ -47,34 +47,61 @@ namespace Nini.Config
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />
-		public void AddSwitch (string longName, string description)
+		public void AddSwitch (string configName, string longName, 
+								string description)
 		{
-			AddSwitch (longName, null, description);
+			AddSwitch (configName, longName, null, description);
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitchShort"]/docs/*' />
-		public void AddSwitch (string longName, string shortName, string description)
+		public void AddSwitch (string configName, string longName, 
+								string shortName, string description)
 		{
-			//AddSwitch (new string[] { longName, shortName }, description);
+			IConfig config = GetConfig (configName);
+
+			if (parser[longName] != null) {
+				config.Set (longName, parser[longName]);
+			} else if (shortName != null && parser[shortName] != null) {
+				config.Set (longName, parser[shortName]);
+			}
+			
+			AddUsageItem (longName, shortName, description);
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="GetUsage"]/docs/*' />
 		public string GetUsage ()
 		{
-			string result = null;
-			// return the usage string here.  Make it in one of several formats.
-			// maybe pass in a parameter to pick either windows or unix style.
-			// this enum might be useful later.
-			return result;
+			return usage.ToString ();
 		}
 		#endregion
 
 		#region Private methods
-		/// <summary>
-		/// Loads all sections and keys.
-		/// </summary>
-		private void PerformLoad ()
+		private void AddUsageItem (string longName, string shortName, string description)
 		{
+			if (shortName == null) {
+				usage.Append (String.Format ("       --{0}         {1}",
+							longName, description));
+			} else {
+				usage.Append (String.Format ("  -{0},  --{1}           {2}",
+							shortName, longName, description));
+			}
+		}
+
+		/// <summary>
+		/// Returns an IConfig.  If it does not exist then it is added.
+		/// </summary>
+		private IConfig GetConfig (string name)
+		{
+			IConfig result = null;
+			
+			if (this.Configs[name] == null) {
+				result = new ConfigBase (name, this);
+				this.Configs.Add (result);
+			} else {
+				result = this.Configs[name];
+			}
+			
+			return result;
 		}
 		#endregion
 	}
