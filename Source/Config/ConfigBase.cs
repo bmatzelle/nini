@@ -252,7 +252,9 @@ namespace Nini.Config
 				throw new ArgumentNullException ("Key may not be null");
 			}
 			
-			keys.Remove (key);
+			if (keys.Contains (keys)) {
+				keys.Remove (key);
+			}
 		}
 		#endregion
 		
