@@ -129,15 +129,11 @@ public static int Main (string[] args)
 		</docs>
 	</Method>
 	
-	<Method name="GetUsage">
+	<Method name="GetArguments">
 		<docs>
 			<summary>
-				Returns the command line usage information.
+				Returns the arguments input list.
 			</summary>
-			<remarks>
-				This returns generic usage information currently in a Unix
-				format ("--key" and "-key").
-			</remarks>
 		</docs>
 	</Method>
 	
