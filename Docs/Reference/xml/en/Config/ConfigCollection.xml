@@ -45,6 +45,13 @@
 			<param name="config">The IConfig to add.</param>
 		</docs>
 	</Method>
+	
+	<Method name="Remove">
+		<docs>
+			<summary>Removes an IConfig from the collection.</summary>
+			<param name="config">The IConfig to remove.</param>
+		</docs>
+	</Method>
 
 	<Method name="GetEnumerator">
 		<docs>

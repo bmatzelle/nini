@@ -51,6 +51,25 @@
 			<param name="alias">Config alias.</param>
 		</docs>
 	</Method>
+	
+	<Method name="ContainsBoolean">
+		<docs>
+			<summary>
+				Returns true if the Boolean value exists.
+			</summary>
+			<param name="key">Alias key.</param>
+		</docs>
+	</Method>
+	
+	<Method name="ContainsInt">
+		<docs>
+			<summary>
+				Returns true if the integer value exists.
+			</summary>
+			<param name="key">Config key.</param>
+			<param name="alias">Config alias.</param>
+		</docs>
+	</Method>
 
 </Class>
 

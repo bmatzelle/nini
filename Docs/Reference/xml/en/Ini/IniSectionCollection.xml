@@ -45,6 +45,13 @@
 			<param name="section">The section to add.</param>
 		</docs>
 	</Method>
+	
+	<Method name="Remove">
+		<docs>
+			<summary>Removes a section from the collection.</summary>
+			<param name="config">Section name.</param>
+		</docs>
+	</Method>
 
 	<Method name="GetEnumerator">
 		<docs>

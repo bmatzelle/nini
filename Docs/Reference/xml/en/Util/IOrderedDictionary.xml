@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <NiniDocs>
 
-<Interface name="ConfigCollection">
+<Interface name="IOrderedDictionary">
 	<docs>
 		<summary>A collection of IConfig objects.</summary>
 	</docs>
