@@ -132,6 +132,7 @@
 			<arg value="${project.src}\Ini\IniSection.cs" />
 			<arg value="${project.src}\Ini\IniItem.cs" />
 			
+			<arg value="${project.src}\Config\ArgvConfigSource.cs" />
 			<arg value="${project.src}\Config\ConfigBase.cs" />
 			<arg value="${project.src}\Config\ConfigSourceBase.cs" />
 			<arg value="${project.src}\Config\IniConfigSource.cs" />
@@ -142,6 +143,7 @@
 			<arg value="${project.src}\Config\IConfigSource.cs" />
 			<arg value="${project.src}\Config\ConfigCollection.cs" />
 			
+			<arg value="${project.src}\Util\ArgvParser.cs" />
 			<arg value="${project.src}\Util\IOrderedDictionary.cs" />
 			<arg value="${project.src}\Util\OrderedList.cs" />
 			<arg value="${project.src}\Util\OrderedListEnumerator.cs" />
