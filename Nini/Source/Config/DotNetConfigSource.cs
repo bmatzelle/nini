@@ -11,6 +11,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Xml.XPath;
 using System.Reflection;
 using System.Collections;
 using System.Configuration;
@@ -23,7 +24,7 @@ namespace Nini.Config
 	{
 		#region Private variables
 		string[] sections = null;
-		XmlDocument configDoc = new XmlDocument ();
+		XmlDocument configDoc = null;
 		string savePath = null;
 		#endregion
 
@@ -39,23 +40,30 @@ namespace Nini.Config
 		public DotNetConfigSource ()
 		{
 			savePath = ConfigFileName ();
+			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc);
+			PerformLoad (configDoc.CreateNavigator ());
 		}
 		
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public DotNetConfigSource (string path)
 		{
 			savePath = path;
+			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc);
+			PerformLoad (configDoc.CreateNavigator ());
 		}
 		
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorDoc"]/docs/*' />
-		public DotNetConfigSource (XmlDocument document)
+		public DotNetConfigSource (IXPathNavigable document)
 		{
-			configDoc = document;
-			PerformLoad (configDoc);
+			XmlNode node = document as XmlNode;
+			if (node != null) {
+				configDoc = (node.OwnerDocument == null)
+							? (XmlDocument)node
+							: (XmlDocument)node.OwnerDocument;  
+			}
+			PerformLoad (document.CreateNavigator ());
 		}
 		#endregion
 		
@@ -93,6 +101,10 @@ namespace Nini.Config
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter writer)
 		{
+			if (!IsSavable ()) {
+				throw new ArgumentException ("Source cannot be saved in this state");
+			}
+
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 			savePath = null;
@@ -142,67 +154,69 @@ namespace Nini.Config
 		/// <summary>
 		/// Loads all sections and keys.
 		/// </summary>
-		private void PerformLoad (XmlDocument doc)
+		private void PerformLoad (XPathNavigator navigator)
 		{
 			this.Merge (this); // required for SaveAll
-			configDoc = doc;
 			
-			XmlNode rootNode = configDoc.SelectSingleNode ("/configuration");
-			
-			if (rootNode == null) {
-				throw new ArgumentException ("Could not find root node");
+			navigator.MoveToRoot (); // start at root node
+			XPathNodeIterator iterator = navigator.Select ("/configuration");
+			if (iterator.Count < 1) {
+				throw new ArgumentException ("Did not find configuration node");
 			}
 			
-			LoadSections (rootNode);
+			LoadSections (navigator);
 			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
 		/// Loads all configuration sections.
 		/// </summary>
-		private void LoadSections (XmlNode rootNode)
+		private void LoadSections (XPathNavigator navigator)
 		{
-			XmlNodeList nodeList = rootNode.SelectNodes ("configSections/section");
+			XPathNodeIterator iterator = navigator.Select 
+										("/configuration/configSections/section");
 			ConfigBase config = null;
 			
-			for (int i = 0; i < nodeList.Count; i++)
+			while (iterator.MoveNext ())
 			{
-				config = new ConfigBase (nodeList[i].Attributes["name"].Value, this);
+				config = new ConfigBase 
+							(iterator.Current.GetAttribute ("name", ""), this);
 				
 				this.Configs.Add (config);
-				LoadKeys (rootNode, config);
+				LoadKeys (navigator, config);
 			}
-			LoadOtherSection (rootNode, "appSettings");
+			LoadOtherSection (navigator, "appSettings");
 		}
 		
 		/// <summary>
 		/// Loads special sections that are not loaded in the configSections
 		/// node.  This includes such sections such as appSettings.
 		/// </summary>
-		private void LoadOtherSection (XmlNode rootNode, string nodeName)
+		private void LoadOtherSection (XPathNavigator navigator, string nodeName)
 		{
-			XmlNode node = rootNode.SelectSingleNode (nodeName);
+			XPathNodeIterator iterator = navigator.Select (nodeName);
 			ConfigBase config = null;
 			
-			if (node != null) {
+			if (iterator.Count > 0) {
 				config = new ConfigBase (nodeName, this);
 				
 				this.Configs.Add (config);
-				LoadKeys (rootNode, config);
+				LoadKeys (iterator.Current, config);
 			}
 		}
 		
 		/// <summary>
 		/// Loads all keys for a config.
 		/// </summary>
-		private void LoadKeys (XmlNode rootNode, ConfigBase config)
+		private void LoadKeys (XPathNavigator navigator, ConfigBase config)
 		{
-			XmlNodeList nodeList = rootNode.SelectNodes (config.Name + "/add");
+			XPathNodeIterator iterator = navigator.Select ("/configuration/" +
+														   config.Name + "/add");
 
-			for (int i = 0; i < nodeList.Count; i++)
+			while (iterator.MoveNext ())
 			{
-				config.Add (nodeList[i].Attributes["key"].Value,
-							nodeList[i].Attributes["value"].Value);
+				config.Add (iterator.Current.GetAttribute ("key", ""),
+							iterator.Current.GetAttribute ("value", ""));
 			}
 		}
 		
@@ -344,7 +358,8 @@ namespace Nini.Config
 		/// </summary>
 		private bool IsSavable ()
 		{
-			return (this.savePath != null);
+			return (this.savePath != null
+					&& configDoc != null);
 		}
 		#endregion
 	}
