@@ -38,7 +38,7 @@ namespace Nini.Test.Config
 			Assert.IsNull (config.Get ("pets"));
 			Assert.AreEqual ("doc.xml", config.Get ("doc"));
 			
-			source.AddSwitch ("Pets", "pet", "p");
+			source.AddSwitch ("Pets", "pet");
 			config = source.Configs["Pets"];
 			Assert.IsNotNull (config.Get ("pet"));
 			Assert.AreEqual ("cat", config.Get ("pet"));
@@ -57,6 +57,26 @@ namespace Nini.Test.Config
 			Assert.IsNull (config.Get ("nothere"));
 			Assert.IsNull (config.Get ("help"));
 			Assert.IsNotNull (config.Get ("heat"));
+		}
+		
+		[Test]
+		public void GetArguments ()
+		{
+			string[] arguments = new string[] { "--help", "-d", "doc.xml", 
+												"/pet:cat"};
+			ArgvConfigSource source = new ArgvConfigSource (arguments);
+
+			source.AddSwitch ("Base", "help", "h");
+			source.AddSwitch ("Base", "doc", "d");
+			source.AddSwitch ("Base", "short");
+
+			string[] args = source.GetArguments ();
+			Assert.IsTrue (args != arguments); // must be a different instance
+			Assert.AreEqual (4, args.Length);
+			Assert.AreEqual ("--help", args[0]);
+			Assert.AreEqual ("-d", args[1]);
+			Assert.AreEqual ("doc.xml", args[2]);
+			Assert.AreEqual ("/pet:cat", args[3]);
 		}
 		#endregion
 
