@@ -78,7 +78,7 @@ namespace Nini.Config
 		public string[] GetArguments ()
 		{
 			string[] result = new string[this.arguments.Length];
-			Array.Copy (this.arguments, result, this.arguments.Length);
+			Array.Copy (this.arguments, 0, result, 0, this.arguments.Length);
 
 			return result;
 		}
