@@ -196,7 +196,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new Exception ("Float value not found");
+				throw new Exception ("Double value not found");
 			}
 			
 			return Convert.ToDouble (text);
@@ -229,7 +229,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="Set"]/docs/*' />
 		public void Set (string key, object value)
 		{
-			if(!keys.Contains (key)) {
+			if (!keys.Contains (key)) {
 				keys.Add (key, value);
 			} else {
 				keys[key] = value.ToString ();
@@ -238,6 +238,16 @@ namespace Nini.Config
 			if (ConfigSource.AutoSave) {
 				ConfigSource.Save ();
 			}
+		}
+		
+		/// <include file='IConfig.xml' path='//Method[@name="Remove"]/docs/*' />
+		public void Remove (string key)
+		{
+			if (key == null) {
+				throw new ArgumentNullException ("Key may not be null");
+			}
+			
+			keys.Remove (key);
 		}
 		#endregion
 		
