@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace Nini.Config
 {
-	/// <include file='IConfigSource.xml' path='//Class[@name="IConfigSource"]/docs/*' />
+	/// <include file='IConfigSource.xml' path='//Interface[@name="IConfigSource"]/docs/*' />
 	public abstract class ConfigSourceBase
 	{
 		#region Private variables
@@ -65,8 +65,14 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
 		public IConfig AddConfig (string name)
 		{
-			ConfigBase result = new ConfigBase (name, (IConfigSource)this);
-			configList.Add (result);
+			ConfigBase result = null;
+
+			if (configList[name] == null) {
+				result = new ConfigBase (name, (IConfigSource)this);
+				configList.Add (result);
+			} else {
+				throw new Exception ("An IConfig of that name already exists");
+			}
 			
 			return result;
 		}
