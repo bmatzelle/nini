@@ -77,5 +77,8 @@ namespace Nini.Config
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Set"]/docs/*' />
 		void Set (string key, object value);
+		
+		/// <include file='IConfig.xml' path='//Method[@name="Remove"]/docs/*' />
+		void Remove (string key);
 	}
 }
