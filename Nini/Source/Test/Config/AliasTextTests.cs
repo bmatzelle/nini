@@ -22,10 +22,16 @@ namespace Nini.Test.Config
 		public void GetBoolean ()
 		{
 			AliasText alias = new AliasText ();
+			
+			Assert.IsFalse (alias.ContainsBoolean ("true"));
+			Assert.IsFalse (alias.ContainsBoolean ("false"));
 			alias.AddAlias ("true", true);
 			alias.AddAlias ("faLSe", false);
 			alias.AddAlias ("oN", true);
 			alias.AddAlias ("oFF", false);
+			
+			Assert.IsTrue (alias.ContainsBoolean ("true"));
+			Assert.IsTrue (alias.ContainsBoolean ("false"));
 			
 			Assert.IsTrue (alias.GetBoolean ("tRUe"));
 			Assert.IsTrue (alias.GetBoolean ("oN"));
@@ -49,9 +55,15 @@ namespace Nini.Test.Config
 		public void GetInt ()
 		{
 			AliasText alias = new AliasText ();
+			
+			Assert.IsFalse (alias.ContainsInt ("error code", "warn"));
+			Assert.IsFalse (alias.ContainsInt ("error code", "error"));
 			alias.AddAlias ("error code", "WaRn", 100);
 			alias.AddAlias ("error code", "ErroR", 200);
 			
+			Assert.IsTrue (alias.ContainsInt ("error code", "warn"));
+			Assert.IsTrue (alias.ContainsInt ("error code", "error"));
+		
 			Assert.AreEqual (100, alias.GetInt ("error code", "warn"));
 			Assert.AreEqual (200, alias.GetInt ("error code", "ErroR"));
 		}
@@ -97,34 +109,28 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		public void SetGlobalAlias ()
+		public void GlobalAlias ()
 		{
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("[BooleanTest1]");
-			writer.WriteLine (" bool 1 = TrUe");
-			writer.WriteLine (" bool 2 = FalSe");
-			writer.WriteLine ("[BooleanTest2]");
-			writer.WriteLine (" bool 3 = ON");
-			writer.WriteLine (" bool 4 = OfF");
-			IniConfigSource source = new IniConfigSource 
-									(new StringReader (writer.ToString ()));
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" TurnOff = true");
+			writer.WriteLine (" ErrorCode = WARN");
+			IniConfigSource source = 
+					new IniConfigSource (new StringReader (writer.ToString ()));
 			
-			AliasText alias = new AliasText ();
-			alias.AddAlias ("true", true);
-			alias.AddAlias ("false", false);
-			alias.AddAlias ("on", true);
-			alias.AddAlias ("off", false);
+			source.GlobalAlias.AddAlias ("true", true);
+			source.GlobalAlias.AddAlias ("ErrorCode", "warn", 35);
 			
-			source.SetGlobalAlias (alias);
+			IConfig config = source.Configs["Test"];
 			
-			IConfig config = source.Configs["BooleanTest1"];
-			Assert.IsTrue (config.GetBoolean ("bool 1"));
-			Assert.IsFalse (config.GetBoolean ("bool 2"));
+			Assert.AreEqual (35, config.GetInt ("ErrorCode", true));
+			Assert.IsTrue (config.GetBoolean ("TurnOff"));
 			
-			config = source.Configs["BooleanTest2"];
-			Assert.IsTrue (config.GetBoolean ("bool 3"));
-			Assert.IsFalse (config.GetBoolean ("bool 4"));
-			Assert.IsTrue (config.GetBoolean ("Not Here", true));
+			config.Alias.AddAlias ("true", false);
+			config.Alias.AddAlias ("ErrorCode", "warn", 45);
+			
+			Assert.AreEqual (45, config.GetInt ("ErrorCode", true));
+			Assert.IsFalse (config.GetBoolean ("TurnOff"));
 		}
 	}
 }
