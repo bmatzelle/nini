@@ -1,13 +1,13 @@
---------------------------------------------------------
-Nini - An uncommonly powerful .NET configuration library
---------------------------------------------------------
+---------------------------------------------------------
+Nini - The uncommonly powerful .NET configuration library
+---------------------------------------------------------
 
 Homepage: http://nini.sourceforge.net/
 Author:   Brent R. Matzelle - bmatzelle [at] yahoo [dot] com
 
 ABOUT
 -----
-Nini is an uncommonly powerful .NET configuration library. The goal of this 
+Nini is the uncommonly powerful .NET configuration library. The goal of this 
 project is to provide developers with a tool that makes it easy to write 
 highly configurable applications in a short amount of time.
 
