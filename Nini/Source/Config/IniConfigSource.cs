@@ -93,6 +93,7 @@ namespace Nini.Config
 		/// </summary>
 		private void MergeConfigsIntoDocument ()
 		{
+			RemoveConfigs ();
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -102,10 +103,43 @@ namespace Nini.Config
 					IniSection section = new IniSection (config.Name);
 					iniDocument.Sections.Add (section);
 				}
+				RemoveKeys (config.Name);
 
 				for (int i = 0; i < keys.Length; i++)
 				{
 					iniDocument.Sections[config.Name].Set (keys[i], config.Get (keys[i]));
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Removes all INI sections that were removed as configs.
+		/// </summary>
+		private void RemoveConfigs ()
+		{
+			IniSection section = null;
+			for (int i = 0; i < iniDocument.Sections.Count; i++)
+			{
+				section = iniDocument.Sections[i];
+				if (this.Configs[section.Name] == null) {
+					iniDocument.Sections.Remove (section.Name);
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Removes all INI keys that were removed as config keys.
+		/// </summary>
+		private void RemoveKeys (string sectionName)
+		{
+			IniSection section = iniDocument.Sections[sectionName];
+
+			if (section != null) {
+				foreach (string key in section.GetKeys ())
+				{
+					if (this.Configs[sectionName].Get (key) == null) {
+						section.Remove (key);
+					}
 				}
 			}
 		}
