@@ -9,6 +9,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Text;
 using System.Collections;
 using Nini.Util;
@@ -44,6 +45,18 @@ namespace Nini.Config
 		public void Save ()
 		{
 			throw new Exception ("Source is read only");
+		}
+		
+		/// <include file='ArgvConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		public void Save (string path)
+		{
+			throw new Exception ("Cannot save this data to a file");
+		}
+		
+		/// <include file='ArgvConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		public void Save (TextWriter writer)
+		{
+			throw new Exception ("Cannot save this data to a TextWriter");
 		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />
