@@ -14,6 +14,34 @@ using System.Collections;
 
 namespace Nini.Config
 {
+	#region ConfigSourceEventHandler class
+	/// <include file='ConfigSourceEventArgs.xml' path='//Delegate[@name="ConfigSourceEventHandler"]/docs/*' />
+	public delegate void ConfigSourceEventHandler (object sender, ConfigSourceEventArgs e);
+
+	/// <include file='ConfigSourceEventArgs.xml' path='//Class[@name="ConfigSourceEventArgs"]/docs/*' />
+	public class ConfigSourceEventArgs : EventArgs
+	{
+		IConfig config = null;
+
+		/// <include file='ConfigSourceEventArgs.xml' path='//Constructor[@name="ConstructorIConfig"]/docs/*' />
+		public ConfigSourceEventArgs (IConfig config)
+		{
+			this.config = config;
+		}
+
+		/// <include file='ConfigSourceEventArgs.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public ConfigSourceEventArgs ()
+		{
+		}
+
+		/// <include file='ConfigSourceEventArgs.xml' path='//Property[@name="Config"]/docs/*' />
+		public IConfig Config
+		{
+			get { return config; }
+		}
+	}
+	#endregion
+
 	/// <include file='IConfigSource.xml' path='//Interface[@name="IConfigSource"]/docs/*' />
 	public abstract class ConfigSourceBase : IConfigSource
 	{
@@ -22,6 +50,9 @@ namespace Nini.Config
 		ConfigCollection configList = new ConfigCollection ();
 		bool autoSave = false;
 		AliasText alias = new AliasText ();
+		event ConfigSourceEventHandler configAddedEvent;
+		event ConfigSourceEventHandler reloadedEvent;
+		event ConfigSourceEventHandler savedEvent;
 		#endregion
 
 		#region Constructors
@@ -73,15 +104,29 @@ namespace Nini.Config
 			} else {
 				throw new ArgumentException ("An IConfig of that name already exists");
 			}
+
+			if (configAddedEvent != null) {
+				configAddedEvent (this, new ConfigSourceEventArgs (result));
+			}
 			
 			return result;
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
-		public abstract void Save ();
+		public virtual void Save ()
+		{
+			if (savedEvent != null) {
+				savedEvent (this, new ConfigSourceEventArgs ());
+			}
+		}
 
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
-		public abstract void Reload ();
+		public virtual void Reload ()
+		{
+			if (reloadedEvent != null) {
+				reloadedEvent (this, new ConfigSourceEventArgs ());
+			}
+		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
 		public void ReplaceKeyValues ()
@@ -96,6 +141,29 @@ namespace Nini.Config
 					Replace (config, keys[i]);
 				}
 			}
+		}
+		#endregion
+
+		#region Public events
+		/// <include file='IConfigSource.xml' path='//Event[@name="ConfigAdded"]/docs/*' />
+		public event ConfigSourceEventHandler ConfigAdded
+		{
+			add { configAddedEvent += value; }
+			remove { configAddedEvent -= value; }
+		}
+
+		/// <include file='IConfigSource.xml' path='//Event[@name="Reloaded"]/docs/*' />
+		public event ConfigSourceEventHandler Reloaded
+		{
+			add { reloadedEvent += value; }
+			remove { reloadedEvent -= value; }
+		}
+
+		/// <include file='IConfigSource.xml' path='//Event[@name="Saved"]/docs/*' />
+		public event ConfigSourceEventHandler Saved
+		{
+			add { savedEvent += value; }
+			remove { savedEvent -= value; }
 		}
 		#endregion
 
