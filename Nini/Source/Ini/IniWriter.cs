@@ -14,6 +14,7 @@ using System.Text;
 
 namespace Nini.Ini
 {
+	#region IniWriteState enumeration
 	/// <include file='IniWriter.xml' path='//Enum[@name="IniWriteState"]/docs/*' />
 	public enum IniWriteState : int
 	{
@@ -26,6 +27,7 @@ namespace Nini.Ini
 		/// <include file='IniWriter.xml' path='//Enum[@name="IniWriteState"]/Value[@name="Closed"]/docs/*' />
 		Closed
 	};
+	#endregion
 
 	/// <include file='IniWriter.xml' path='//Class[@name="IniWriter"]/docs/*' />
 	public class IniWriter
@@ -102,8 +104,9 @@ namespace Nini.Ini
 		{
 			textWriter = writer;
 			StreamWriter streamWriter = writer as StreamWriter;
-			if (streamWriter != null)
-				baseStream = ((StreamWriter)writer).BaseStream;
+			if (streamWriter != null) {
+				baseStream = streamWriter.BaseStream;
+			}
 		}
 		
 		/// <include file='IniWriter.xml' path='//Constructor[@name="ConstructorStream"]/docs/*' />
