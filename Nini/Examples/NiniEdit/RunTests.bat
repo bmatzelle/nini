@@ -3,15 +3,16 @@
 REM Runs all the tests for the NiniEdit program.  
 REM Usage: RunTests.bat Tests\[CONFIG FILE]
 REM The test files are in the Test directory
+REM All tests are run in verbose mode
 
-SET PROGRAM=Bin\DotNet\Release\NiniEdit.exe
-REM SET PROGRAM=mono Bin\Mono\Release\NiniEdit.exe
+SET PROGRAM=Bin\DotNet\Release\NiniEdit.exe --verbose
+REM SET PROGRAM=mono Bin\Mono\Release\NiniEdit.exe --verbose
 
 ECHO ****** Test: Lists usage ******
 %PROGRAM% --help
 
 ECHO ****** Test: Prints version ******
-%PROGRAM% -v %1
+%PROGRAM% -V %1
 
 ECHO ****** Test: Lists configs ******
 %PROGRAM% -l %1
