@@ -8,33 +8,54 @@ REM All tests are run in verbose mode
 SET PROGRAM=Bin\DotNet\Release\NiniEdit.exe --verbose
 REM SET PROGRAM=mono Bin\Mono\Release\NiniEdit.exe --verbose
 
-ECHO ****** Test: Lists usage ******
+SET TESTFILE=%1
+
+ECHO ------
+ECHO TEST: Lists usage
 %PROGRAM% --help
 
-ECHO ****** Test: Prints version ******
-%PROGRAM% -V %1
+ECHO ------
+ECHO TEST: Prints version
+%PROGRAM% -V %TESTFILE%
 
-ECHO ****** Test: Lists configs ******
-%PROGRAM% -l %1
+ECHO ------
+ECHO TEST: Lists configs
+%PROGRAM% -l %TESTFILE%
 
-ECHO ****** Test: Adds config "TestConfig" ******
-%PROGRAM% --add TestConfig %1
-%PROGRAM% -l %1
+ECHO ------
+ECHO TEST: Adds config "TestConfig"
+%PROGRAM% --add TestConfig %TESTFILE%
+%PROGRAM% -l %TESTFILE%
 
-ECHO ****** Test: Removes config "TestConfig" ******
-%PROGRAM% --remove TestConfig %1
-%PROGRAM% -l %1
+ECHO ------
+ECHO TEST: Removes config "TestConfig"
+%PROGRAM% --remove TestConfig %TESTFILE%
+%PROGRAM% -l %TESTFILE%
 
-ECHO ****** Test: Lists keys in "Logging" ******
-%PROGRAM% --config Logging --list-keys %1
+ECHO ------
+ECHO TEST: Lists keys in "Logging"
+%PROGRAM% --config Logging --list-keys %TESTFILE%
 
-ECHO ****** Test: Sets key "TestKey" ******
-%PROGRAM% --config Logging --set-key TestKey,TestValue %1
-%PROGRAM% --config Logging --list-keys %1
+ECHO ------
+ECHO TEST: Sets key "TestKey"
+%PROGRAM% --config Logging --set-key TestKey,TestValue %TESTFILE%
+%PROGRAM% --config Logging --list-keys %TESTFILE%
 
-ECHO ****** Test: Prints "TestKey" value: "TestValue" ******
-%PROGRAM% --config Logging --get-key TestKey %1
+ECHO ------
+ECHO TEST: Prints "TestKey" value: "TestValue"
+%PROGRAM% --config Logging --get-key TestKey %TESTFILE%
 
-ECHO ****** Test: Removes key "TestKey" ******
-%PROGRAM% --config Logging --remove-key TestKey %1
-%PROGRAM% --config Logging --list-keys %1
+ECHO ------
+ECHO TEST: Removes key "TestKey"
+%PROGRAM% --config Logging --remove-key TestKey %TESTFILE%
+%PROGRAM% --config Logging --list-keys %TESTFILE%
+
+ECHO ------
+SET NEWFILE=Tests\NewTest.ini
+ECHO TEST: Create file with two keys: %NEWFILE%
+%PROGRAM% --new --set-type ini %NEWFILE%
+%PROGRAM% --add Test %NEWFILE%
+%PROGRAM% --config Test --set-key TestKey1,TestValue1 %NEWFILE%
+%PROGRAM% --config Test --set-key TestKey2,TestValue2 %NEWFILE%
+%PROGRAM% --config Test --list-keys %NEWFILE%
+DEL %NEWFILE%
