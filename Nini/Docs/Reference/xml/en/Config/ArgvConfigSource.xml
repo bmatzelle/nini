@@ -15,12 +15,12 @@
 		<example>
 			This is an example that sends in Windows arguments: 
 			<code>
-				MyApp.exe -debug /file:log.txt
+MyApp.exe -debug /file:log.txt
 			</code>
 			
 			This is an example that sends in Unix arguments: 
 			<code>
-				MyApp.exe -D --file log.txt --debug=yes
+MyApp.exe -D --file log.txt --debug=yes
 			</code>
 		</example>
 	</docs>
@@ -34,7 +34,7 @@
 				See the examples below. 
 			</remarks>
 			<param name="arguments">
-				The arguments as passed in
+				The arguments as passed in by the main application.
 			</param>
 			<example>
 				This is an example that sends in Windows arguments: 
