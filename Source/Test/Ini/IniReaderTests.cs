@@ -134,7 +134,6 @@ namespace Nini.Test.Ini
 		}
 		
 		[Test]
-		[ExpectedException (typeof (IniException))]
 		public void KeysWithSameName ()
 		{
 			StringWriter writer = new StringWriter ();
@@ -142,7 +141,7 @@ namespace Nini.Test.Ini
 			writer.WriteLine (" superkey = legal ");
 			writer.WriteLine ("[Pets]");
 			writer.WriteLine (" superkey = legal ");
-			writer.WriteLine (" superkey = not legal ");
+			writer.WriteLine (" superkey = overrides original ");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			
 			Assert.IsTrue (reader.Read ());
@@ -154,12 +153,11 @@ namespace Nini.Test.Ini
 		}
 		
 		[Test]
-		[ExpectedException (typeof (IniException))]
 		public void SectionsWithSameName ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[Nini]");
-			writer.WriteLine (" some key = \" something ");
+			writer.WriteLine (" some key = something");
 			writer.WriteLine ("[Nini]");
 			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
 			
@@ -456,6 +454,27 @@ namespace Nini.Test.Ini
 			Assert.IsTrue (reader.Read ());
 			Assert.AreEqual ("someValue ; some comment", reader.Value);
 			Assert.IsTrue (reader.Read ());
+		}
+
+		[Test]
+		public void GetAndSetDelimiters ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Test]");
+			writer.WriteLine (" option = someValue ; some comment");
+			
+			IniReader reader = new IniReader 
+				(new StringReader (writer.ToString ()));
+
+			Assert.AreEqual ('=', reader.GetAssignDelimiters ()[0]);
+			reader.SetAssignDelimiters (new char[] {':', '='});
+			Assert.AreEqual (':', reader.GetAssignDelimiters ()[0]);
+			Assert.AreEqual ('=', reader.GetAssignDelimiters ()[1]);
+
+			Assert.AreEqual (';', reader.GetCommentDelimiters ()[0]);
+			reader.SetCommentDelimiters (new char[] {'#', ';'});
+			Assert.AreEqual ('#', reader.GetCommentDelimiters ()[0]);
+			Assert.AreEqual (';', reader.GetCommentDelimiters ()[1]);
 		}
 		#endregion
 		
