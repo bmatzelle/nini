@@ -84,6 +84,7 @@ namespace Nini.Config
 		/// </summary>
 		private void MergeConfigsIntoDocument ()
 		{
+			RemoveConfigs ();
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -94,10 +95,55 @@ namespace Nini.Config
 					node = SectionNode (config.Name);
 					configDoc.DocumentElement.AppendChild (node);
 				}
+				RemoveKeys (config.Name);
 				
 				for (int i = 0; i < keys.Length; i++)
 				{
 					SetKey (node, keys[i], config.Get (keys[i]));
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Removes all XML sections that were removed as configs.
+		/// </summary>
+		private void RemoveConfigs ()
+		{
+			XmlAttribute attr = null;
+			XmlNodeList list = configDoc.SelectNodes ("Nini/Section");
+			foreach (XmlNode node in list)
+			{
+				attr = node.Attributes["Name"];
+				if (attr != null) {
+					if (this.Configs[attr.Value] == null) {
+						configDoc.DocumentElement.RemoveChild (node);
+					}
+				} else {
+					throw new Exception ("Section name attribute not found");
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Removes all XML keys that were removed as config keys.
+		/// </summary>
+		private void RemoveKeys (string sectionName)
+		{
+			string search = "Nini/Section[@Name='" + sectionName + "']";
+			XmlNode node = configDoc.SelectSingleNode (search);
+			XmlAttribute keyName = null;
+			
+			if (node != null) {
+				foreach (XmlNode key in node.SelectNodes ("Key"))
+				{
+					keyName = node.Attributes["Name"];
+					if (keyName != null) {
+						if (this.Configs[sectionName].Get (keyName.Value) == null) {
+							node.RemoveChild (key);
+						}
+					} else {
+						throw new Exception ("Name attribute not found in key");
+					}
 				}
 			}
 		}
