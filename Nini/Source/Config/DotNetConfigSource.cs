@@ -79,6 +79,7 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 		
 			configDoc.Save (savePath);
+			base.Save ();
 		}
 		
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
@@ -116,6 +117,7 @@ namespace Nini.Config
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
 			PerformLoad (configDoc);
+			base.Reload ();
 		}
 
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />

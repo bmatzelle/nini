@@ -80,6 +80,7 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 			
 			iniDocument.Save (this.savePath);
+			base.Save ();
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
@@ -109,6 +110,7 @@ namespace Nini.Config
 			this.Merge (this); // required for SaveAll
 			iniDocument = new IniDocument (savePath);
 			Load ();
+			base.Reload ();
 		}
 
 		/// <include file='IniConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
