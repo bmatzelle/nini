@@ -40,13 +40,10 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
 		void ReplaceKeyValues ();
 
-		/// <include file='IConfigSource.xml' path='//Event[@name="ConfigAdded"]/docs/*' />
-		event ConfigSourceEventHandler ConfigAdded;
-
 		/// <include file='IConfigSource.xml' path='//Event[@name="Reloaded"]/docs/*' />
-		event ConfigSourceEventHandler Reloaded;
+		event EventHandler Reloaded;
 
 		/// <include file='IConfigSource.xml' path='//Event[@name="Saved"]/docs/*' />
-		event ConfigSourceEventHandler Saved;
+		event EventHandler Saved;
 	}
 }
