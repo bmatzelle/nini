@@ -26,15 +26,14 @@ namespace BasicApp
 		private System.Windows.Forms.TextBox logFileNameText;
 		private System.Windows.Forms.TextBox maxFileSizeText;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button viewIniButton;
 		private System.Windows.Forms.Button saveIniButton;
 		private System.Windows.Forms.TextBox userEmailText;
 		private System.Windows.Forms.Label userEmailLabel;
 		private System.Windows.Forms.TextBox userNameText;
 		private System.Windows.Forms.Label userNameLabel;
-		private IConfigSource iniSource = null;
+		private System.Windows.Forms.Button closeButton;
+		private IConfigSource source = null;
 
 		public MainForm ()
 		{
@@ -46,23 +45,22 @@ namespace BasicApp
 			LoadConfigs ();
 		}
 
+		/// <summary>
+		/// Loads all configuration values into the UI controls.
+		/// </summary>
 		private void LoadConfigs ()
 		{
 			// Load the configuration source file
-			iniSource = new IniConfigSource (@"..\..\BasicApp.ini");
+			source = new IniConfigSource (@"..\..\BasicApp.ini");
 
 			// Set the config to the Logging section of the INI file.
-			IConfig config = iniSource.Configs["Logging"];
+			IConfig config = source.Configs["Logging"];
 
 			// Load up some normal configuration values
 			logFileNameText.Text = config.Get ("File Name");
 			maxFileSizeText.Text = config.Get ("MaxFileSize");
-
-			// Here we'll show how to load them up without even
-			// creating an IConfig
-			
-			userNameText.Text = iniSource.Configs["User"].Get ("Name");
-			userEmailText.Text = iniSource.Configs["User"].Get ("Email");
+			userNameText.Text = source.Configs["User"].Get ("Name");
+			userEmailText.Text = source.Configs["User"].Get ("Email");
 		}
 
 		#region Required methods
@@ -102,15 +100,14 @@ namespace BasicApp
 			this.loggingGroup = new System.Windows.Forms.GroupBox();
 			this.userNameText = new System.Windows.Forms.TextBox();
 			this.userNameLabel = new System.Windows.Forms.Label();
-			this.userEmailText = new System.Windows.Forms.TextBox();
-			this.userEmailLabel = new System.Windows.Forms.Label();
 			this.saveIniButton = new System.Windows.Forms.Button();
 			this.viewIniButton = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.maxFileSizeText = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.logFileNameText = new System.Windows.Forms.TextBox();
+			this.userEmailText = new System.Windows.Forms.TextBox();
+			this.userEmailLabel = new System.Windows.Forms.Label();
+			this.closeButton = new System.Windows.Forms.Button();
 			this.loggingGroup.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -125,12 +122,11 @@ namespace BasicApp
 			// loggingGroup
 			// 
 			this.loggingGroup.Controls.AddRange(new System.Windows.Forms.Control[] {
+																					   this.closeButton,
 																					   this.userNameText,
 																					   this.userNameLabel,
 																					   this.saveIniButton,
 																					   this.viewIniButton,
-																					   this.textBox1,
-																					   this.label2,
 																					   this.maxFileSizeText,
 																					   this.label1,
 																					   this.logFileNameText,
@@ -139,14 +135,14 @@ namespace BasicApp
 																					   this.userEmailLabel});
 			this.loggingGroup.Location = new System.Drawing.Point(16, 24);
 			this.loggingGroup.Name = "loggingGroup";
-			this.loggingGroup.Size = new System.Drawing.Size(472, 240);
+			this.loggingGroup.Size = new System.Drawing.Size(440, 200);
 			this.loggingGroup.TabIndex = 2;
 			this.loggingGroup.TabStop = false;
-			this.loggingGroup.Text = "IConfigs (Sections) in BasicApp.ini";
+			this.loggingGroup.Text = "IConfigs (Sections) in INI file";
 			// 
 			// userNameText
 			// 
-			this.userNameText.Location = new System.Drawing.Point(128, 152);
+			this.userNameText.Location = new System.Drawing.Point(128, 120);
 			this.userNameText.Name = "userNameText";
 			this.userNameText.Size = new System.Drawing.Size(152, 20);
 			this.userNameText.TabIndex = 12;
@@ -154,27 +150,11 @@ namespace BasicApp
 			// 
 			// userNameLabel
 			// 
-			this.userNameLabel.Location = new System.Drawing.Point(16, 152);
+			this.userNameLabel.Location = new System.Drawing.Point(16, 120);
 			this.userNameLabel.Name = "userNameLabel";
 			this.userNameLabel.Size = new System.Drawing.Size(88, 16);
 			this.userNameLabel.TabIndex = 11;
 			this.userNameLabel.Text = "User Name";
-			// 
-			// userEmailText
-			// 
-			this.userEmailText.Location = new System.Drawing.Point(128, 192);
-			this.userEmailText.Name = "userEmailText";
-			this.userEmailText.Size = new System.Drawing.Size(152, 20);
-			this.userEmailText.TabIndex = 10;
-			this.userEmailText.Text = "";
-			// 
-			// userEmailLabel
-			// 
-			this.userEmailLabel.Location = new System.Drawing.Point(16, 192);
-			this.userEmailLabel.Name = "userEmailLabel";
-			this.userEmailLabel.Size = new System.Drawing.Size(88, 16);
-			this.userEmailLabel.TabIndex = 9;
-			this.userEmailLabel.Text = "User Email";
 			// 
 			// saveIniButton
 			// 
@@ -191,24 +171,8 @@ namespace BasicApp
 			this.viewIniButton.Name = "viewIniButton";
 			this.viewIniButton.Size = new System.Drawing.Size(112, 23);
 			this.viewIniButton.TabIndex = 7;
-			this.viewIniButton.Text = "View BasicApp.ini";
+			this.viewIniButton.Text = "View INI File";
 			this.viewIniButton.Click += new System.EventHandler(this.viewIniButton_Click);
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(128, 112);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(152, 20);
-			this.textBox1.TabIndex = 6;
-			this.textBox1.Text = "";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(16, 112);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(88, 16);
-			this.label2.TabIndex = 5;
-			this.label2.Text = "Max File Size:";
 			// 
 			// maxFileSizeText
 			// 
@@ -234,35 +198,74 @@ namespace BasicApp
 			this.logFileNameText.TabIndex = 2;
 			this.logFileNameText.Text = "";
 			// 
+			// userEmailText
+			// 
+			this.userEmailText.Location = new System.Drawing.Point(128, 160);
+			this.userEmailText.Name = "userEmailText";
+			this.userEmailText.Size = new System.Drawing.Size(152, 20);
+			this.userEmailText.TabIndex = 10;
+			this.userEmailText.Text = "";
+			// 
+			// userEmailLabel
+			// 
+			this.userEmailLabel.Location = new System.Drawing.Point(16, 160);
+			this.userEmailLabel.Name = "userEmailLabel";
+			this.userEmailLabel.Size = new System.Drawing.Size(88, 16);
+			this.userEmailLabel.TabIndex = 9;
+			this.userEmailLabel.Text = "User Email";
+			// 
+			// closeButton
+			// 
+			this.closeButton.Location = new System.Drawing.Point(312, 120);
+			this.closeButton.Name = "closeButton";
+			this.closeButton.Size = new System.Drawing.Size(112, 23);
+			this.closeButton.TabIndex = 13;
+			this.closeButton.Text = "Close";
+			this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(520, 445);
+			this.ClientSize = new System.Drawing.Size(472, 245);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {
 																		  this.loggingGroup});
 			this.Name = "MainForm";
-			this.Text = "BasicApp";
+			this.Text = "Nini C# BasicApp";
 			this.loggingGroup.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
 
+		/// <summary>
+		/// Handles saving the file.
+		/// </summary>
 		private void saveIniButton_Click (object sender, System.EventArgs e)
 		{
-			iniSource.Configs["Logging"].Set ("File Name", logFileNameText.Text);
-			iniSource.Configs["Logging"].Set ("MaxFileSize", maxFileSizeText.Text);
+			source.Configs["Logging"].Set ("File Name", logFileNameText.Text);
+			source.Configs["Logging"].Set ("MaxFileSize", maxFileSizeText.Text);
 
-			iniSource.Configs["User"].Set ("Name", userNameText.Text);
-			iniSource.Configs["User"].Set ("Email", userEmailText.Text);
+			source.Configs["User"].Set ("Name", userNameText.Text);
+			source.Configs["User"].Set ("Email", userEmailText.Text);
 
 			// Save the INI file
-			iniSource.Save ();
+			source.Save ();
 		}
 
+		/// <summary>
+		/// Loads up the INI file in whatever editor is the default.
+		/// </summary>
 		private void viewIniButton_Click (object sender, System.EventArgs e)
 		{
 			Process.Start("notepad.exe", @"..\..\BasicApp.ini");
+		}
+
+		/// <summary>
+		/// Handles the close button event.
+		/// </summary>
+		private void closeButton_Click (object sender, System.EventArgs e)
+		{
+			this.Close ();
 		}
 
 	}
