@@ -87,6 +87,12 @@ namespace Nini.Config
 			}
 		}
 		
+		/// <include file='ConfigCollection.xml' path='//Method[@name="Remove"]/docs/*' />
+		public void Remove (IConfig config)
+		{
+			configList.Remove (config);
+		}
+		
 		/// <include file='ConfigCollection.xml' path='//Method[@name="GetEnumerator"]/docs/*' />
 		public IEnumerator GetEnumerator ()
 		{
