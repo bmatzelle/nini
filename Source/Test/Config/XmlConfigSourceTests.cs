@@ -43,6 +43,29 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
+		public void GetConfigNotXmlDocument ()
+		{
+			StringWriter textWriter = new StringWriter ();
+			XmlTextWriter writer = NiniWriter (textWriter);
+			WriteSection (writer, "Pets");
+			WriteKey (writer, "cat", "muffy");
+			WriteKey (writer, "dog", "rover");
+			WriteKey (writer, "bird", "tweety");
+			writer.WriteEndDocument ();
+			
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (textWriter.ToString ());
+
+			XmlNode node = doc.SelectSingleNode ("/Nini/Section[@Name='Pets']");
+			XmlConfigSource source = new XmlConfigSource (node);
+			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Pets", config.Name);
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual (source, config.ConfigSource);
+		}
+		
+		[Test]
 		public void GetString ()
 		{
 			StringWriter textWriter = new StringWriter ();
