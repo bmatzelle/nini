@@ -18,13 +18,21 @@ namespace Nini.Test.Config
 	[TestFixture]
 	public class ConfigCollectionTests
 	{
+		#region Private variables
+		IConfig eventConfig = null;
+		ConfigCollection eventCollection = null;
+		int configAddedCount = 0;
+		int configRemovedCount = 0;
+		#endregion
+
+		#region Unit tests
 		[Test]
 		public void GetConfig ()
 		{
 			ConfigBase config1 = new ConfigBase ("Test1", null);
 			ConfigBase config2 = new ConfigBase ("Test2", null);
 			ConfigBase config3 = new ConfigBase ("Test3", null);
-			ConfigCollection collection = new ConfigCollection ();
+			ConfigCollection collection = new ConfigCollection (null);
 			
 			collection.Add (config1);
 			Assert.AreEqual (1, collection.Count);
@@ -44,7 +52,7 @@ namespace Nini.Test.Config
 		public void AlreadyExistsException ()
 		{
 			ConfigBase config = new ConfigBase ("Test", null);
-			ConfigCollection collection = new ConfigCollection ();
+			ConfigCollection collection = new ConfigCollection (null);
 			collection.Add (config);
 			collection.Add (config); // exception
 		}
@@ -54,7 +62,7 @@ namespace Nini.Test.Config
 		{
 			ConfigBase config1 = new ConfigBase ("Test", null);
 			ConfigBase config2 = new ConfigBase ("Test", null);
-			ConfigCollection collection = new ConfigCollection ();
+			ConfigCollection collection = new ConfigCollection (null);
 			collection.Add (config1);
 			collection.Add (config2); // merges, no exception
 		}
@@ -64,7 +72,7 @@ namespace Nini.Test.Config
 		{
 			ConfigBase config1 = new ConfigBase ("Test", null);
 			ConfigBase config2 = new ConfigBase ("Another", null);
-			ConfigCollection collection = new ConfigCollection ();
+			ConfigCollection collection = new ConfigCollection (null);
 			collection.Add (config1);
 			collection.Add (config2);
 			
@@ -77,5 +85,61 @@ namespace Nini.Test.Config
 			Assert.IsNotNull (collection["Test"]);
 			Assert.IsNull (collection["Another"]);
 		}
+
+		[Test]
+		public void ConfigCollectionEvents ()
+		{
+			IniConfigSource source = new IniConfigSource ();
+			source.Configs.ConfigAdded += 
+							new ConfigEventHandler (this.source_configAdded);
+			source.Configs.ConfigRemoved += 
+							new ConfigEventHandler (this.source_configRemoved);
+
+			Assert.AreEqual (configAddedCount, 0);
+
+			eventCollection = null;
+			IConfig config = source.AddConfig ("Test");
+			Assert.IsTrue (source.Configs == eventCollection);
+			Assert.AreEqual (configAddedCount, 1);
+			Assert.AreEqual ("Test", eventConfig.Name);
+
+			eventCollection = null;
+			config = source.Configs.Add ("Test 2");
+			Assert.IsTrue (source.Configs == eventCollection);
+			Assert.AreEqual (configAddedCount, 2);
+			Assert.AreEqual ("Test 2", eventConfig.Name);
+
+			eventCollection = null;
+			source.Configs.RemoveAt (0);
+			Assert.IsTrue (source.Configs == eventCollection);
+			Assert.AreEqual (configAddedCount, 2);
+			Assert.AreEqual ("Test", eventConfig.Name);
+		}
+
+		[SetUp]
+		public void Setup ()
+		{
+			eventConfig = null;
+			eventCollection = null;
+			configAddedCount = 0;
+			configRemovedCount = 0;
+		}
+		#endregion
+
+		#region Private methods
+		private void source_configAdded (object sender, ConfigEventArgs e)
+		{
+			configAddedCount++;
+			eventConfig = e.Config;
+			eventCollection = (ConfigCollection)sender;
+		}
+
+		private void source_configRemoved (object sender, ConfigEventArgs e)
+		{
+			configRemovedCount++;
+			eventConfig = e.Config;
+			eventCollection = (ConfigCollection)sender;
+		}
+		#endregion
 	}
 }
