@@ -8,7 +8,10 @@
 // 
 #endregion
 
+using System;
 using System.Reflection;
+using System.Security.Permissions;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 #if (NET_1_0)
@@ -21,7 +24,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Nini")]
 #endif
 
-[assembly: AssemblyDescription("Configuration Library - http://nini.sourceforge.net/")]
+[assembly: AssemblyDescription(".NET Configuration Library - http://nini.sourceforge.net/")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brent R. Matzelle")]
 [assembly: AssemblyProduct("Nini")]
@@ -48,3 +51,12 @@ using System.Runtime.CompilerServices;
 
 [assembly: System.Reflection.AssemblyVersion("0.8.0.0")]
 
+[assembly:CLSCompliant(true)] // Required for CLS compliance
+
+// Mark as false by default and explicity set others as true
+[assembly:ComVisible(false)]
+
+// Permview attributes
+[assembly:IsolatedStorageFilePermission(SecurityAction.RequestMinimum)]
+[assembly:SecurityPermission(SecurityAction.RequestRefuse)]
+[assembly:FileIOPermission(SecurityAction.RequestMinimum)]
