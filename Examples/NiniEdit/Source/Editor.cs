@@ -24,6 +24,7 @@ namespace NiniEdit
 		ArgvConfigSource argvSource = null;
 		const string configName = "ConfigList";
 		string configPath = null;
+		bool verbose = false;
 		#endregion
 
 		#region Constructors
@@ -48,7 +49,9 @@ namespace NiniEdit
 				PrintUsage ();
 				return;
 			}
-			
+
+			verbose = IsArg ("verbose");
+
 			if (IsArg ("version")) {
 				PrintVersion ();
 				return;
@@ -168,6 +171,9 @@ namespace NiniEdit
 					ThrowError ("Unknown config file type");
 					break;
 			}
+			if (verbose) {
+				PrintLine ("Loaded file of type: " + result.GetType ().Name);
+			}
 			
 			return result;
 		}
@@ -180,10 +186,16 @@ namespace NiniEdit
 		private void ListConfigs ()
 		{
 			IConfigSource source = LoadSource (configPath);
+			int configCount = 0;
 			
 			foreach (IConfig config in source.Configs)
 			{
 				PrintLine (config.Name);
+				configCount++;
+			}
+
+			if (verbose) {
+				PrintLine ("Total configs: " + configCount);
 			}
 		}
 		
@@ -202,6 +214,10 @@ namespace NiniEdit
 			
 			source.Configs.Remove (config);
 			source.Save ();
+
+			if (verbose) {
+				PrintLine ("Config was removed: " + configName);
+			}
 		}
 		
 		/// <summary>
@@ -213,6 +229,10 @@ namespace NiniEdit
 			source.AddConfig (GetArg ("add"));
 			
 			source.Save ();
+
+			if (verbose) {
+				PrintLine ("Config was added: " + GetArg ("add"));
+			}
 		}
 		#endregion
 
@@ -226,6 +246,7 @@ namespace NiniEdit
 			if (configName == null) {
 				ThrowError ("You must supply a config switch");
 			}
+			int keyCount = 0;
 			
 			IConfigSource source = LoadSource (configPath);
 			string[] keys = GetConfig (source, configName).GetKeys ();
@@ -233,6 +254,11 @@ namespace NiniEdit
 			foreach (string key in keys)
 			{
 				PrintLine (key);
+				keyCount++;
+			}
+
+			if (verbose) {
+				PrintLine ("Total keys: " + keyCount);
 			}
 		}
 		
@@ -255,6 +281,10 @@ namespace NiniEdit
 			}
 			config.Set (keyValue[0], keyValue[1]);
 			source.Save ();
+
+			if (verbose) {
+				PrintLine ("Key " + keyValue[0] + " was saved as " + keyValue[1]);
+			}
 		}
 		
 		/// <summary>
@@ -294,6 +324,10 @@ namespace NiniEdit
 			
 			config.Remove (GetArg ("remove-key"));
 			source.Save ();
+
+			if (verbose) {
+				PrintLine ("Key removed: " + GetArg ("remove-key"));
+			}
 		}
 		
 		#endregion
@@ -306,7 +340,8 @@ namespace NiniEdit
 		{
 			// Application switches
 			argvSource.AddSwitch (configName, "help", "h");
-			argvSource.AddSwitch (configName, "version", "v");
+			argvSource.AddSwitch (configName, "version", "V");
+			argvSource.AddSwitch (configName, "verbose", "v");
 								  
 			// Config switches
 			argvSource.AddSwitch (configName, "list", "l");
@@ -335,8 +370,9 @@ namespace NiniEdit
 			writer.WriteLine ("");
 			writer.WriteLine ("General Options:");
 			writer.WriteLine ("  -h,  --help                   Shows this help");
-			writer.WriteLine ("  -v,  --version                Displays the application version");
+			writer.WriteLine ("  -V,  --version                Displays the application version");
 			writer.WriteLine ("  -s,  --set-type=TYPE          Specifies file type (ini, xml, or config)");
+			writer.WriteLine ("  -v,  --verbose                Be verbose with messages");
 			writer.WriteLine ("");
 			writer.WriteLine ("Config Options:");
 			writer.WriteLine ("  -l,  --list                   Lists all configs");
@@ -375,7 +411,7 @@ namespace NiniEdit
 		/// </summary>
 		private string GetProductVersion ()
 		{
-			return "0.1.0";
+			return "0.2.0";
 		}
 		#endregion
 	}
