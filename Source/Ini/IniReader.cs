@@ -64,8 +64,8 @@ namespace Nini.Ini
 		bool disposed = false;
 		bool lineContinuation = false;
 		bool acceptCommentAfterKey = true;
-		char[] commentDelimiter = new char[] { ';' };
-		char[] assignDelimiter = new char[] { '=' };
+		char[] commentDelimiters = new char[] { ';' };
+		char[] assignDelimiters = new char[] { '=' };
 		#endregion
 
 		#region Public properties
@@ -130,35 +130,6 @@ namespace Nini.Ini
 		{
 			get { return acceptCommentAfterKey; }
 			set { acceptCommentAfterKey = value; }
-		}
-		
-		/// <include file='IniReader.xml' path='//Property[@name="CommentDelimiter"]/docs/*' />
-		public char[] CommentDelimiter
-		{
-			get { return commentDelimiter; }
-			set
-			{
-				if (value.Length < 1) {
-					throw new ArgumentException ("Must have at least one delimiter");
-				}
-				
-				commentDelimiter = value;
-			}
-		}
-		
-		/// <include file='IniReader.xml' path='//Property[@name="AssignDelimiter"]/docs/*' />
-		public char[] AssignDelimiter
-		{
-			get { return assignDelimiter; }
-			set
-			{
-				if (value.Length < 1) 
-				{
-					throw new ArgumentException ("Must have at least one delimiter");
-				}
-				
-				assignDelimiter = value;
-			}
 		}
 		#endregion
 		
@@ -250,6 +221,44 @@ namespace Nini.Ini
 		public void Dispose ()
 		{
 			Dispose (true);
+		}
+		
+		/// <include file='IniReader.xml' path='//Method[@name="GetCommentDelimiters"]/docs/*' />
+		public char[] GetCommentDelimiters ()
+		{
+			char[] result = null;
+			Array.Copy (commentDelimiters, result, commentDelimiters.Length);
+
+			return result;
+		}
+		
+		/// <include file='IniReader.xml' path='//Method[@name="SetCommentDelimiters"]/docs/*' />
+		public void SetCommentDelimiters (char[] delimiters)
+		{
+			if (delimiters.Length < 1) {
+				throw new ArgumentException ("Must supply at least one delimiter");
+			}
+			
+			commentDelimiters = delimiters;
+		}
+		
+		/// <include file='IniReader.xml' path='//Method[@name="GetAssignDelimiters"]/docs/*' />
+		public char[] GetAssignDelimiters ()
+		{
+			char[] result = null;
+			Array.Copy (assignDelimiters, result, assignDelimiters.Length);
+
+			return result;
+		}
+		
+		/// <include file='IniReader.xml' path='//Method[@name="SetAssignDelimiters"]/docs/*' />
+		public void SetAssignDelimiters (char[] delimiters)
+		{
+			if (delimiters.Length < 1) {
+				throw new ArgumentException ("Must supply at least one delimiter");
+			}
+			
+			assignDelimiters = delimiters;
 		}
 		#endregion
 		
@@ -568,7 +577,7 @@ namespace Nini.Ini
 		/// </summary>
 		private bool IsComment (int ch)
 		{
-			return HasCharacter (commentDelimiter, ch);
+			return HasCharacter (commentDelimiters, ch);
 		}
 		
 		/// <summary>
@@ -576,7 +585,7 @@ namespace Nini.Ini
 		/// </summary>
 		private bool IsAssign (int ch)
 		{
-			return HasCharacter (assignDelimiter, ch);
+			return HasCharacter (assignDelimiters, ch);
 		}
 
 		/// <summary>
