@@ -7,6 +7,12 @@
 			Class for loading a Microsoft .NET XML configuration file 
 			IConfigSource.
 		</summary>
+		<remarks>
+			.NET configuration section names are 
+			<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmldocumentclasscreateelementtopic.asp">
+			element nodes</a> they cannot contain certain characters such as
+			whitespace.
+		</remarks>
 	</docs>
 	
 	<Constructor name="ConstructorFile">
