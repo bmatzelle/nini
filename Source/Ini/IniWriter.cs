@@ -39,7 +39,7 @@ namespace Nini.Ini
 		char commentDelimiter = ';';
 		char assignDelimiter = '=';
 		TextWriter textWriter = null;
-		string eol = Environment.NewLine;
+		string eol = "\r\n";
 		StringBuilder indentationBuffer = new StringBuilder ();
 		Stream baseStream = null;
 		bool disposed = false;
