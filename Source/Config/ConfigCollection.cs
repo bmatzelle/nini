@@ -104,6 +104,12 @@ namespace Nini.Config
 		{
 			configList.CopyTo (array, index);
 		}
+		
+		/// <include file='ConfigCollection.xml' path='//Method[@name="CopyToStrong"]/docs/*' />
+		public void CopyTo (IConfig[] array, int index)
+		{
+			((ICollection)configList).CopyTo (array, index);
+		}
 		#endregion
 		
 		#region Private methods
