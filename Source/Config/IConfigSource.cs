@@ -9,6 +9,7 @@
 #endregion
 
 using System;
+using System.IO;
 
 namespace Nini.Config
 {
@@ -29,6 +30,12 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		void Save ();
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		void Save (string path);
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		void Save (TextWriter writer);
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="SetGlobalAlias"]/docs/*' />
 		void SetGlobalAlias (AliasText alias);
