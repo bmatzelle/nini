@@ -42,6 +42,12 @@ namespace Nini.Config
 		{
 			throw new ArgumentException ("Source is read only");
 		}
+
+		/// <include file='ArgvConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		public override void Reload ()
+		{
+			throw new ArgumentException ("Source cannot be reloaded");
+		}
 		
 		/// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitch"]/docs/*' />
 		public void AddSwitch (string configName, string longName)

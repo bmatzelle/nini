@@ -90,6 +90,20 @@ namespace Nini.Config
 			savePath = null;
 		}
 
+		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		public override void Reload ()
+		{
+			if (savePath == null) {
+				throw new ArgumentException ("Error reloading: You must have "
+							+ "the loaded the source from a file");
+			}
+
+			this.Configs.Clear ();
+			configDoc = new XmlDocument ();
+			configDoc.Load (savePath);
+			PerformLoad (configDoc.CreateNavigator ());
+		}
+
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="ToString"]/docs/*' />
 		public override string ToString ()
 		{

@@ -30,6 +30,9 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		void Save ();
+
+		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
+		void Reload ();
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
 		IConfig AddConfig (string name);
