@@ -33,5 +33,8 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
 		IConfig AddConfig (string name);
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
+		void ReplaceKeyValues ();
 	}
 }
