@@ -177,11 +177,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Util\IOrderedDictionary.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Util\OrderedList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
