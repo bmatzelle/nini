@@ -96,14 +96,15 @@ namespace Nini.Config
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
-				
+
+				// Create a new section if one doesn't exist
+				if (iniDocument.Sections[config.Name] == null) {
+					IniSection section = new IniSection (config.Name);
+					iniDocument.Sections.Add (section);
+				}
+
 				for (int i = 0; i < keys.Length; i++)
 				{
-					// Create a new section if one doesn't exist
-					if (iniDocument.Sections[config.Name] == null) {
-						IniSection section = new IniSection (config.Name);
-						iniDocument.Sections.Add (section);
-					}
 					iniDocument.Sections[config.Name].Set (keys[i], config.Get (keys[i]));
 				}
 			}

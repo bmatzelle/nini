@@ -88,9 +88,16 @@ namespace Nini.Config
 			{
 				string[] keys = config.GetKeys ();
 				
+				string search = "Nini/Section[@Name='" + config.Name + "']";
+				XmlNode node = configDoc.SelectSingleNode (search);
+				if (node == null) {
+					node = SectionNode (config.Name);
+					configDoc.DocumentElement.AppendChild (node);
+				}
+				
 				for (int i = 0; i < keys.Length; i++)
 				{
-					SetKey (config.Name, keys[i], config.Get (keys[i]));
+					SetKey (node, keys[i], config.Get (keys[i]));
 				}
 			}
 		}
@@ -147,15 +154,13 @@ namespace Nini.Config
 		/// <summary>
 		/// Sets an XML key.  If it does not exist then it is created.
 		/// </summary>
-		private void SetKey (string section, string key, string value)
+		private void SetKey (XmlNode sectionNode, string key, string value)
 		{
-			string search = "Nini/Section[@Name='" + section 
-							+ "']/Key[@Name='" + key + "']";
-			
-			XmlNode node = configDoc.SelectSingleNode (search);
+			string search = "Key[@Name='" + key + "']";
+			XmlNode node = sectionNode.SelectSingleNode (search);
 			
 			if (node == null) {
-				CreateKey (section, key, value);
+				CreateKey (sectionNode, key, value);
 			} else {
 				node.Attributes["Value"].Value = value;
 			}
@@ -164,7 +169,7 @@ namespace Nini.Config
 		/// <summary>
 		/// Creates a key node and adds it to the collection at the end.
 		/// </summary>
-		private void CreateKey (string section, string key, string value)
+		private void CreateKey (XmlNode sectionNode, string key, string value)
 		{
 			XmlNode node = configDoc.CreateElement ("Key");
 			XmlAttribute keyAttr = configDoc.CreateAttribute ("Name");
@@ -174,14 +179,6 @@ namespace Nini.Config
 
 			node.Attributes.Append (keyAttr);
 			node.Attributes.Append (valueAttr);
-			
-			string search = "Nini/Section[@Name='" + section + "']";
-			XmlNode sectionNode = configDoc.SelectSingleNode (search);
-			
-			if (sectionNode == null) {
-				sectionNode = SectionNode (section);
-				configDoc.DocumentElement.AppendChild (sectionNode);
-			}
 
 			sectionNode.AppendChild (node);
 		}
