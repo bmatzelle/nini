@@ -23,7 +23,6 @@ namespace Nini.Config
 	{
 		#region Private variables
 		string[] sections = null;
-		bool isReadOnly = false;
 		XmlDocument configDoc = new XmlDocument ();
 		string savePath = null;
 		#endregion
@@ -33,7 +32,6 @@ namespace Nini.Config
 		public DotNetConfigSource (string[] sections)
 		{
 			this.sections = sections;
-			isReadOnly = true;
 			Load ();
 		}
 
@@ -43,24 +41,18 @@ namespace Nini.Config
 			savePath = ConfigFileName ();
 			configDoc.Load (savePath);
 			this.sections = SectionList (configDoc.DocumentElement);
-			isReadOnly = false;
 			Load ();
 		}
 		#endregion
 		
 		#region Public properties
-		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
-		public bool IsReadOnly
-		{
-			get { return isReadOnly; }
-		}
 		#endregion
 		
 		#region Public methods
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public void Save ()
 		{
-			if (this.IsReadOnly) {
+			if (!IsSavable ()) {
 				throw new Exception ("Source is read only");
 			}
 
@@ -72,7 +64,7 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
 		public void Save (string path)
 		{
-			if (this.IsReadOnly) {
+			if (!IsSavable ()) {
 				throw new Exception ("Source is read only");
 			}
 
@@ -117,6 +109,7 @@ namespace Nini.Config
 				LoadCollection (sections[i], (NameValueCollection)ConfigurationSettings
 								.GetConfig (sections[i]));
 			}
+			base.ReplaceTextAll ();
 		}
 		
 		/// <summary>
@@ -191,6 +184,14 @@ namespace Nini.Config
 		{
 			return ((Assembly.GetEntryAssembly()).GetName()).Name +
 					".exe.config";
+		}
+		
+		/// <summary>
+		/// Returns true if this instance is savable.
+		/// </summary>
+		private bool IsSavable ()
+		{
+			return (this.savePath != null);
 		}
 		#endregion
 	}
