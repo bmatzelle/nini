@@ -54,7 +54,7 @@
 		</docs>
 	</Constructor>
 
-	<Constructor name="ConstructorXmlDoc">
+	<Constructor name="ConstructorXmlReader">
 		<docs>
 			<summary>
 				Creates a new instance of the XML configuration source.
@@ -62,8 +62,8 @@
 			<remarks>
 				This instance type is read only.
 			</remarks>
-			<param name="document">
-				An XmlDocument instance.
+			<param name="reader">
+				An XmlReader instance.
 			</param>
 		</docs>
 	</Constructor>
