@@ -79,13 +79,9 @@ namespace Nini.Config
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public abstract void Save ();
-		#endregion
-
-		#region Protected methods
-		/// <summary>
-		/// This performs a total lazy replace of all text.
-		/// </summary>
-		protected void ReplaceTextAll ()
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
+		public void ReplaceKeyValues ()
 		{
 			string[] keys = null;
 
