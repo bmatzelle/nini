@@ -115,7 +115,6 @@ namespace Nini.Test.Config
 			
 			Assert.AreEqual ("Spots", config.Get ("dog"));
 			Assert.AreEqual ("Misha", config.Get ("cat"));
-			Assert.IsFalse (source.IsReadOnly);
 			
 			source = new IniConfigSource (filePath);
 			config = source.Configs["new section"];
@@ -159,7 +158,6 @@ namespace Nini.Test.Config
 			writer.WriteLine (" protocol = http");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			source.ReplaceText = true;
 
 			IConfig config = source.Configs["Test"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -182,7 +180,6 @@ namespace Nini.Test.Config
 			writer.WriteLine (" domain = ${web|protocol}://nini.sf.net/");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			source.ReplaceText = true;
 
 			IConfig config = source.Configs["web"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -216,18 +213,6 @@ namespace Nini.Test.Config
 			Assert.AreEqual (2, config.GetKeys ().Length);
 			Assert.AreEqual ("February 8th", config.Get ("Birthday"));
 			Assert.AreEqual ("Brent", config.Get ("Author"));
-		}
-		
-		[Test]
-		public void SaveToNewObject ()
-		{
-			// this is where classes should be able to save to multiple
-			// objects: StreamWriter, new file path, etc.
-			
-			// Should saves only be available for text file types like
-			// ini and xml?  registry does not fit the mold.  possibly
-			// it should simply throw an exception in this case.
-			Assert.Fail ("TODO: Fix me!");
 		}
 		#endregion
 
