@@ -50,14 +50,32 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (ArgumentException))]
-		public void NameAlreadyExistsException ()
+		public void NameAlreadyExists ()
 		{
 			ConfigBase config1 = new ConfigBase ("Test", null);
 			ConfigBase config2 = new ConfigBase ("Test", null);
 			ConfigCollection collection = new ConfigCollection ();
 			collection.Add (config1);
-			collection.Add (config2); // exception
+			collection.Add (config2); // merges, no exception
+		}
+		
+		[Test]
+		public void AddAndRemove ()
+		{
+			ConfigBase config1 = new ConfigBase ("Test", null);
+			ConfigBase config2 = new ConfigBase ("Another", null);
+			ConfigCollection collection = new ConfigCollection ();
+			collection.Add (config1);
+			collection.Add (config2);
+			
+			Assert.AreEqual (2, collection.Count);
+			Assert.IsNotNull (collection["Test"]);
+			Assert.IsNotNull (collection["Another"]);
+
+			collection.Remove (config2);
+			Assert.AreEqual (1, collection.Count);
+			Assert.IsNotNull (collection["Test"]);
+			Assert.IsNull (collection["Another"]);
 		}
 	}
 }
