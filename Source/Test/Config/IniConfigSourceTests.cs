@@ -375,7 +375,8 @@ namespace Nini.Test.Config
 			writer.WriteLine (" cat = Muffy");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			
+
+			Assert.IsNull (source.SavePath);
 			IConfig config = source.Configs["new section"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
@@ -385,11 +386,31 @@ namespace Nini.Test.Config
 			textWriter.Close (); // save to disk
 			
 			source = new IniConfigSource (newPath);
+			Assert.AreEqual (newPath, source.SavePath);
 			config = source.Configs["new section"];
 			Assert.AreEqual ("Rover", config.Get ("dog"));
 			Assert.AreEqual ("Muffy", config.Get ("cat"));
 			
 			File.Delete (newPath);
+		}
+		
+		[Test]
+		public void SaveAfterTextWriter ()
+		{
+			string filePath = "Test.ini";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			writer.WriteLine ("[new section]");
+			writer.WriteLine (" dog = Rover");
+			writer.Close ();
+
+			IniConfigSource source = new IniConfigSource (filePath);
+			Assert.AreEqual (filePath, source.SavePath);
+			StringWriter textWriter = new StringWriter ();
+			source.Save (textWriter);
+			Assert.IsNull (source.SavePath);
+
+			File.Delete (filePath);
 		}
 	}
 }
