@@ -45,11 +45,12 @@ Nini Configuration Data Management Library  (<a href="http://nini.sourceforge.ne
       <li><a href="#IntroducingNini">Introducing Nini</a></li>
     </ul>
   </li>
-  <li><a href="#GettingStarted">Getting Started </a>
+  <li><a href="#GettingStarted">Getting Started </a> 
     <ul>
       <li><a href="#ASimpleExample">A Simple Example</a></li>
       <li><a href="#DefaultValues">Default Values</a></li>
       <li><a href="#SettingAndSaving">Setting and Saving</a></li>
+      <li><a href="#KeyValueReplacment">Key Value Replacement</a></li>
     </ul>
   </li>
   <li><a href="#AdvancedTopics">Advanced Topics </a> 
@@ -62,6 +63,7 @@ Nini Configuration Data Management Library  (<a href="http://nini.sourceforge.ne
     <ul>
       <li><a href="#XMLConfiguration">XML Configuration</a></li>
       <li><a href="#WindowsRegistryConfiguration">Windows Registry Configuration</a></li>
+      <li><a href="#ArgvConfiguration">Command Line (Argv) Configuration</a></li>
     </ul>
   </li>
 </ul>
@@ -71,62 +73,62 @@ Nini Configuration Data Management Library  (<a href="http://nini.sourceforge.ne
 <h3><b>What is Application Configuration Data?</b></h3>
 
 <p>As a developer you deal with application configuration data all of the time.  
-  Common examples of this are INI files, <a
+  Common examples of this are <a href="http://webopedia.com/TERM/_/_INI_file.html">INI</a> 
+  files, <a href="http://webopedia.com/TERM/X/XML.html">XML</a> files, <a
 href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconconfigurationfiles.asp">.NET 
-  configuration files</a> (aka “.config”), the Windows registry, and several others.  
-  The advantages of configuration files are that they load quickly, do not take 
-  up a lot of space, and are easy to edit.  </p>
+  configuration files</a> (aka “.config”), the <a href="http://www.systweak.com/winreg/winreg.htm">Windows 
+  registry</a>, and several others.  The advantages of configuration files are 
+  that they load quickly, do not take up a lot of space, and are easy to edit.  
+</p>
 
 <a name="TheProblem" />
 <h3>The Problem</h3> 
-  There is nothing wrong with a configuration file itself.  Their job is to provide 
-very simple access to application data.  Most of these do this very well.  However, 
-there are several problems with the way that this data is most commonly organized 
-and accessed.  Attempts to create configuration file access schemes do not satisfy 
-the needs of either programmers or end-users.  </p> 
-<p>Just to give a real life scenario I worked for an organization that configured 
-  their original programs using the Windows registry API (Application Programming 
-  Interface).  Later on they developed their own ASP configuration class.  At 
-  about the same time another group developed an API that fetched the data from 
-  a database.   Then when ASP.NET came along they started to use Web.config.  
-  In a matter of several years the number of configuration data sources grew from 
-  one to four!  Needless to say getting configuration data often became a grueling 
-  task.  Here are the three major reasons that configuration retreival is poor:</p>
-
+  Attempts to create configuration file access schemes do not satisfy the needs 
+of either programmers or end-users.  To give a real life scenario I worked for 
+an organization that configured their original programs using the Windows registry 
+API (Application Programming Interface).  Later on they developed their own ASP 
+configuration class.  At about the same time another group developed an API that 
+fetched the data from a database.   Then when ASP.NET came along they started 
+to use Web.config.  In a matter of several years the number of configuration data 
+sources grew from one to four!  Needless to say getting configuration data often 
+became a grueling task.  Here are the three major reasons that configuration retreival 
+is poor:
+<p>
 <b>API<br>
-</b>Developers use a configuration file format that gets their application running 
-in the shortest time possible.   However the API for accessing this data is commonly 
-added as an afterthought resulting in an inflexible API.  In very small applications 
-this might not be a problem but as a program’s codebase grows the configuration 
-information will often find itself littered throughout the application code.  
-These APIs are different on each programming platform and often even to department 
-in a company. 
+  </b>Developers use a configuration file format that gets their application running 
+  in the shortest time possible.   However the API for accessing this data is 
+  commonly added as an afterthought resulting in an inflexible API.  In very small 
+  applications this might not be a problem but as a program’s codebase grows the 
+  configuration information will often find itself littered throughout the application 
+  code. </p>
 <p><b>End Users<br>
-  </b>Configuration files are usually not written for the end user in mind.  Often 
-  the options are so terse that only the bravest users dare to change them.  This 
-  leads to developers having to write complicated configuration file editors or 
-  worse, entirely redesigning their original APIs.  
+  </b>Configuration files are usually not written with the end user in mind.  
+  Often the configuration options are terse programming terms that only the bravest 
+  users dare to change them.  This leads to developers having to write complicated 
+  configuration file editors or worse, entirely redesigning their original APIs.  
 </p>
 
 <p>
 <b>Multiple Configuration Sources</b>
 <br/>
   As your software matures it is not uncommon for more application configuration 
-  types to be added.  This often occurs because of merging code from other projects, 
-  new improved formats, and moving to different programming platforms.    When 
-  this occurs programmers find themselves having to be knowledgeable in each API.  
-  The end result is code that is neither consistent nor friendly to new programmers.  
-  The old configuration files aren't replaced because programmers and their managers 
-  are not comfortable with altering mature code. Users that edit the files are 
-  resistant to this change because they would prefer not to learn a new file format.</p>
+  types to be added (such as the example I gave you earlier).  This often occurs 
+  because of merging code from other projects, new improved formats, and moving 
+  to different programming platforms.    This forces programmers to learn multiple 
+  APIs.  The end result is code that is neither consistent nor friendly to new 
+  programmers.  The old configuration files aren't replaced because programmers 
+  and their managers are not comfortable with altering mature code. Users that 
+  edit the files are resistant to this change because they would prefer not to 
+  learn a new file format.</p>
 
 <a name="IntroducingNini" />
 <h3>Introducing Nini</h3>
-<p>Nini provides a solution that attempts to eliminate the above problems.  It 
-  provides a simple, yet flexible, API that provides an abstraction over the underlying 
-  configuration sources.  It is easy to make the configuration files read more 
-  like English to users with the concept of aliases (see Value Aliases).  We’ll 
-  see how this is done in the examples below. </p>
+<p>Nini provides a solution that attempts to eliminate the above problems. It 
+  provides a large feature set that gives you functionality that you will use 
+  in every phase of your project, from concept to mature product.  This is accomplished 
+  through a simple, yet flexible, API that provides an abstraction over the underlying 
+  configuration sources.  It solves all of the problems that I described above.  
+  We’ll see how this is done in the examples below. </p>
   
   <a name="GettingStarted" />
 <h2>Getting Started</h2>
@@ -134,50 +136,56 @@ in a company.
 <a name="ASimpleExample" />
 <h3>A Simple Example</h3>
 <p>In order to show you how Nini solves these problems let’s go over an example.  
-  First, let’s take an example configuration file.  I will choose the INI format 
-  for this example.  Here is the text of MyApp.ini:</p>
+  First, let’s take an example configuration file.  I will choose the <a href="http://webopedia.com/TERM/X/XML.html">INI 
+  format</a> for this example. INI files are a tried and true configuration file 
+  type used in well known open source projects such as <a href="http://www.mysql.com/">MySQL</a>, 
+  <a href="http://www.php.net/">PHP</a>, and <a href="http://www.samba.org/">Samba</a>. 
+  They are very simple and easy to edit so they remain a very popular choice. 
+  Nini contains it's own INI parser class (<a href="http://nini.sourceforge.net/Reference/html/Nini.Ini.IniDocument.html">IniDocument</a>) 
+  which is written entirely in C# with no <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getprivateprofilestring.asp">Windows 
+  API</a> code so it's cross platform. Here is the text of MyApp.ini for this 
+  example:</p>
 
 <pre>
-# MyApp.ini
-[Logging]
+<span class="code-comment"># MyApp.ini</span>
+<span class="code-keyword">[Logging]</span>
 File Name = MyApp.log
 MessageColumns = 5
 MaxFileSize = 40000000000000
 </pre>
 
-<p>Here's an example piece of code that describes how to access the configuration 
-  data from the INI file: </p>
+<p>Below is an example piece of code that describes how to access the configuration 
+  data from the INI file from the file above: </p>
 
-<pre><span class="code-comment">// MyExample.cs</span>
-<span class="code-keyword">using</span> Nini.Config;
+<pre><span class="code-keyword">using</span> Nini.Config;
 
-<span class="code-comment">// Loads MyApp.ini into an IConfigSource.</span>
 IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;MyApp.ini&quot;);
 
-<span class="code-comment">// Sets the IConfig as the Logging section of the INI.</span>
-IConfig config = source.Configs[&quot;Logging&quot;];
-
-<span class="code-comment">// Sets the value of fileName to &quot;ExampleApp.log&quot;.</span>
-<span class="code-keyword">string</span> fileName = config.GetString (&quot;File Name&quot;);
-
-<span class="code-comment">// Sets the value of columns to 6.</span>
-<span class="code-keyword">int</span> columns = config.GetInt (&quot;MessageColumns&quot;);
-
-<span class="code-comment">// Sets the value of fileSize to 4000000000.</span>
-long fileSize = config.GetLong (&quot;MaxFileSize&quot;);
+<span class="code-keyword">string</span> fileName = config.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
+<span class="code-keyword">int</span> columns = config.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
+<span class="code-keyword">long</span> fileSize = config.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
 </pre>
-
-<p>Now let’s write some code. We load the INI file into an <a href="../Reference/html/Nini.Config.IConfigSource.html">IConfigSource</a> 
-  instance using the <a href="../Reference/html/Nini.Config.IniConfigSource.html">IniConfigsource</a> 
-  class, which uses Nini's own <a href="../Reference/html/Nini.Ini.IniDocument.html">IniDocument</a> 
-  INI parser class to load the file. Then from the IConfigSource we retreive the 
-  <strong>Logging</strong> <a href="../Reference/html/Nini.Config.IConfig.html">IConfig</a> 
-  from the <a href="../Reference/html/Nini.Config.IConfigSource.Configs.html">Configs</a> 
-  property. From there we use the <a href="../Reference/html/Nini.Config.IConfig.GetString_overloads.html">GetString</a>, 
+<p>Okay, that example threw a few things at you. First, we include Nini's configuration 
+  namespace to the imaginary app with <strong>using Nini.Config</strong>. Next 
+  we load up the INI file with the <a href="../Reference/html/Nini.Config.IniConfigSource.html">IniConfigSource</a> 
+  class. In Nini, each configuration file type has it's own &quot;Source&quot; 
+  class. This class knows how to load and save the file. Each of these classes 
+  implements the <a href="../Reference/html/Nini.Config.IConfigSource.html">IConfigSource</a> 
+  interface so that you abstractly work with multiple configuration types more 
+  easily. When a file is loaded all sections (in this case the [Logging] section) 
+  are converted to the interface <a href="../Reference/html/Nini.Config.IConfig.html">IConfig</a> 
+  and added to a collection on the Source class. The IConfig class provides very 
+  fast access to retrieve, add, or remove configuration keys (like &quot;File 
+  Name&quot; in the above INI file). The methods of the IConfig class include 
+  <a href="../Reference/html/Nini.Config.IConfig.Get_overloads.html">Get</a>, 
+  <a href="../Reference/html/Nini.Config.IConfig.GetString_overloads.html"> GetString</a>, 
   <a href="../Reference/html/Nini.Config.IConfig.GetInt_overloads.html">GetInt</a>, 
+  <a href="../Reference/html/Nini.Config.IConfig.GetFloat_overloads.html">GetFloat</a>, 
+  <a href="../Reference/html/Nini.Config.IConfig.GetDouble_overloads.html">GetDouble</a>, 
   and <a href="../Reference/html/Nini.Config.IConfig.GetLong_overloads.html">GetLong</a> 
-  methods. All of the methods prefixed with Get are overloaded to provide more 
-  data. The next couple sections describe how to use these overloads. </p>
+  methods. All of the methods prefixed with &quot;Get&quot; are overloaded to 
+  provide more data. The next couple sections describe how to use these overloads. 
+</p>
   
   <a name="DefaultValues" />
 <h3>Default Values</h3>
@@ -194,15 +202,57 @@ long fileSize = config.GetLong (&quot;MaxFileSize&quot;);
 </pre>
 
 <a name="SettingAndSaving" />
-<h3>Setting and Saving</h3>
+<h3>Setting, Saving, and Removing Keys</h3>
 <p>It is also possible to set and save new values into the configuration file. 
-  Here is an example:</p>
-<pre><span class="code-comment">// Set new key values</span>
+  Calling the Set method will change an existing value or if it does not exist 
+  add it. Here is an example:</p>
+<pre>
 config.Set (&quot;File Name&quot;, &quot;MyNewFile.log&quot;);
 config.Set (&quot;MessageColumns&quot;, 45);
+config.Remove (&quot;File Name&quot;);
 
-<span class="code-comment">// Save the results to the IConfigSource (the MyApp.ini file)</span>
 source.Save ();</pre>
+<p>It is necessary to call the Save method to save a file, h0wever, you can also 
+  set the AutoSave property on an IConfigSource and that will automatically save 
+  the file each time the Set method is called. If you want to save a document 
+  to a different path or a different object then you have additional methods:</p>
+  
+  
+<pre><span class="code-keyword">using</span> System.IO;
+StringWriter writer = <span class="code-keyword">new</span> StringWriter ();
+source.Save (writer); <span class="code-comment">// Save to StringWriter (TextWriter)</span>
+
+source.Save ("some/new/path.ini"); <span class="code-comment">// Save to new path</span>
+</pre>
+<a name="KeyValueReplacment"/>
+<h3>Key Value Replacement</h3>
+<p>In many cases you will find that your key values are dependent on the values 
+  of other keys. For instance you have a root path configuration value and several 
+  values for files that use this path like in this example:</p>
+  
+<pre>
+<span class="code-keyword">[File Path]</span>
+RootPath = C:\Program Files\My Program
+Logging = MyApp.log
+WebPage = index.html
+</pre>
+
+<p>Without Nini if you wanted to combine the value of &quot;RootPath&quot; with 
+  &quot;Logging&quot; and &quot;WebPage&quot; then you would have to perform ugly 
+  string concatenations to get &quot;C:\Program Files\My Program\index.html&quot;. 
+  In Nini you do not need to do this:</p>
+
+<pre>
+<span class="code-keyword">[File Path]</span>
+RootPath = C:\Program Files\My Program
+Logging = <strong>${RootPath}</strong>\MyApp.log
+WebPage = <strong>${RootPath}</strong>\index.html
+</pre>
+
+<p>This can save you a lot of trouble concatenating them yourself and make your 
+  code a lot cleaner. If you want to grab a value from a different section you 
+  can do the same above but add the section name followed by a bar (&quot;|&quot;) 
+  like so: <strong>${section|key}</strong>. </p>
 <p>That’s how easy it is to create your first Nini configured application.  The 
   following sections will explain some more advanced features of Nini. </p>
   
@@ -214,17 +264,26 @@ source.Save ();</pre>
 
 <p>Merging is a very powerful functionality that allows developers to combine 
   together the configuration data from multiple sources into a single object. 
-  Here is an example of how to combine an INI file with an XML file:</p>
+  You can potentially combine together an infinite number of different configuration 
+  types into a single IConfigSource! You could add multiple INI, XML, and Registry 
+  files into the same object. Pretty cool don't you think? Here is an example 
+  of how to combine an INI file with an XML file:</p>
 
-<pre><span class="code-comment">// Load up both IConfigSources and merge one into the other</span>
+<pre>
 IConfigSource mainSource = <span class="code-keyword">new</span> IniConfigSource ("MyApp.ini");
 IConfigSource xmlSource = <span class="code-keyword">new</span> XmlConfigSource ("MyApp.xml");
 mainSource.Merge (xmlSource);
 
-<span class="code-comment">// Now you can access any IConfig from either class with mainSource</span>
+<span class="code-comment">// Now you can access any IConfig from mainSource and xmlSource</span>
 <span class="code-keyword">string</span> xmlValue = mainSource.Configs["SomeXmlSection"].Get ("AnOption");
 </pre>
 
+<p>When the data is merged between files any IConfigs of the same name or containing 
+  the same keys the file being merged in will overwrite the previous ones. This 
+  is very important for those of you with clients that have different configuration 
+  needs. You can create your default configuration settings in one file and have 
+  a client specific file that will override the settings of the main file if needed. 
+  This will save you tons of work. It did for me. </p>
 <a name="ValueAliases" />
 <h3>Value Aliases</h3>
 <p>In order to make a configuration file easier for non-programmers to understand 
@@ -233,8 +292,8 @@ mainSource.Merge (xmlSource);
   that’s easy for humans to understand.  First, let’s start with the AliasExample.ini 
   file:</p>
 
-<pre># AliasExample.ini
-[Example Section]
+<pre><span class="code-comment"># AliasExample.ini</span>
+<span class="code-keyword">[Example Section]</span>
 BlockPopUps = ON
 </pre>
 
@@ -281,19 +340,18 @@ BlockPopUps = ON
 <p>The following code shows how to create an <a href="../Reference/html/Nini.Config.AliasText.html">AliasText</a> 
   object that defines the rules that I just defined in the previous paragraph:</p>
 
-<pre>AliasText alias = <span class="code-keyword">new</span> AliasText ();
+<pre>IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource ();
 
 <span class="code-comment">// Creates two Boolean aliases.</span>
-alias.AddAlias (&quot;On&quot;, <span class="code-keyword">true</span>);
-alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">false</span>);
+source.Alias.AddAlias (&quot;On&quot;, <span class="code-keyword">true</span>);
+source.Alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">false</span>);
 
 <span class="code-comment">// Sets two integer aliases.</span>
-alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100);
-alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200);
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100);
+source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200);
 
 <span class="code-comment">// Sets the FontSetting key to the integer aliases of the FontStyle enum.</span>
-alias.AddAlias (&quot;FontSetting&quot;, <span class="code-keyword">new</span> System.Drawing.FontStyle ());</pre>
-
+source.Alias.AddAlias (&quot;FontSetting&quot;, <span class="code-keyword">new</span> System.Drawing.FontStyle ());</pre>
 <p>The first two calls to AddAlias add Boolean values to the text “On” and “Off”.  
   The next two calls to this method add alias text to the “Error Level” configuration 
   with the text of “Warn” and “Error” along with the numeric values of 100 and 
@@ -315,15 +373,10 @@ config.Configs[&quot;AliasExample&quot;].Alias = alias;
 
 IConfig config = source.Configs[&quot;appSettings&quot;];
 
-<span class="code-comment">// Sets the value of blockPopUps to true.</span>
 <span class="code-keyword">bool</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;);
 
 config = source.Configs[&quot;AliasExample&quot;];
-
-<span class="code-comment">// Sets the value of errorCode to 100 (&quot;Warn&quot;).</span>
 <span class="code-keyword">int</span> errorCode = config.GetInt (&quot;Error Code&quot;, <span class="code-keyword">true</span>);
-
-<span class="code-comment">// Sets the value of style to FontStyle.Bold.</span>
 FontStyle style = (FontStyle)config.GetInt (&quot;FontStyle&quot;, <span class="code-keyword">true</span>);
 </pre>
 
@@ -390,11 +443,13 @@ source.AddMapping (Registry.LocalMachine, "Software\\MyApp\\Logging");
 <span class="code-comment">// Loads the registry tree and all nodes beneath it without </span>
 RegistryConfigSource source = <span class="code-keyword">new</span> RegistryConfigSource ();
 source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened);
-<span class="code-comment">// Retrieve a value from the MyApp key values</span>
+
 <span class="code-keyword">string</span> maxFileSize = source.Configs["MyApp"].GetString ("SomeConfig");
-<span class="code-comment">// Retrieve a value from the Logging key values</span>
 <span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
 </pre>
-That's it for this tutorial. I hope that you found it helpful! 
+<h3><a name="ArgvConfiguration" /></h3>
+<h3>Command Line (Argv) Configuration</h3>
+<p>&nbsp;</p>
+<p>That's it for this tutorial. I hope that you found it helpful! </p>
 </body>
 </html>
