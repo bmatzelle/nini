@@ -96,6 +96,7 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 			iniDocument.Save (writer);
 			savePath = null;
+			OnSaved (new EventArgs ());
 		}
 
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />

@@ -84,6 +84,7 @@ namespace Nini.Config
 			MergeConfigsIntoDocument ();
 			configDoc.Save (writer);
 			savePath = null;
+			OnSaved (new EventArgs ());
 		}
 
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
