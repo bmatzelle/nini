@@ -117,7 +117,7 @@ namespace Nini.Test.Ini
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[Nini]");
-			writer.WriteLine (" # a comment");
+			writer.WriteLine (" ; a comment");
 			writer.WriteLine (" my key = something");
 			writer.WriteLine (" dog = rover");
 			writer.WriteLine (" cat = muffy");
@@ -136,12 +136,12 @@ namespace Nini.Test.Ini
 		public void SaveDocumentWithComments ()
 		{
 			StringWriter writer = new StringWriter ();
-			writer.WriteLine ("# some comment");
+			writer.WriteLine ("; some comment");
 			writer.WriteLine (""); // empty line
 			writer.WriteLine ("[new section]");
 			writer.WriteLine (" dog = rover");
 			writer.WriteLine (""); // Empty line
-			writer.WriteLine ("# a comment");
+			writer.WriteLine ("; a comment");
 			writer.WriteLine (" cat = muffy");
 			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()));
 			
@@ -149,12 +149,12 @@ namespace Nini.Test.Ini
 			doc.Save (newWriter);
 
 			StringReader reader = new StringReader (newWriter.ToString ());
-			Assert.AreEqual ("# some comment", reader.ReadLine ());
+			Assert.AreEqual ("; some comment", reader.ReadLine ());
 			Assert.AreEqual ("", reader.ReadLine ());
 			Assert.AreEqual ("[new section]", reader.ReadLine ());
 			Assert.AreEqual ("dog = rover", reader.ReadLine ());
 			Assert.AreEqual ("", reader.ReadLine ());
-			Assert.AreEqual ("# a comment", reader.ReadLine ());
+			Assert.AreEqual ("; a comment", reader.ReadLine ());
 			Assert.AreEqual ("cat = muffy", reader.ReadLine ());
 			
 			writer.Close ();
