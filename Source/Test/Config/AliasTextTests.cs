@@ -41,7 +41,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (Exception))]
+		[ExpectedException (typeof (ArgumentException))]
 		public void NonExistantBooleanText ()
 		{
 			AliasText alias = new AliasText ();
@@ -69,7 +69,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (Exception))]
+		[ExpectedException (typeof (ArgumentException))]
 		public void GetIntNonExistantText ()
 		{
 			AliasText alias = new AliasText ();
@@ -79,7 +79,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (Exception))]
+		[ExpectedException (typeof (ArgumentException))]
 		public void GetIntNonExistantKey ()
 		{
 			AliasText alias = new AliasText ();
@@ -118,8 +118,8 @@ namespace Nini.Test.Config
 			IniConfigSource source = 
 					new IniConfigSource (new StringReader (writer.ToString ()));
 			
-			source.GlobalAlias.AddAlias ("true", true);
-			source.GlobalAlias.AddAlias ("ErrorCode", "warn", 35);
+			source.Alias.AddAlias ("true", true);
+			source.Alias.AddAlias ("ErrorCode", "warn", 35);
 			
 			IConfig config = source.Configs["Test"];
 			

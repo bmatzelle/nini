@@ -141,7 +141,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (Exception))]
+		[ExpectedException (typeof (ArgumentException))]
 		public void BooleanAliasNoDefault ()
 		{
 			StringWriter writer = new StringWriter ();
@@ -159,7 +159,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		[ExpectedException (typeof (Exception))]
+		[ExpectedException (typeof (ArgumentException))]
 		public void NonBooleanParameter ()
 		{
 			StringWriter writer = new StringWriter ();
