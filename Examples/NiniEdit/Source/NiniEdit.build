@@ -13,23 +13,36 @@
 	</target>
 	
 	<target name="build">
+		<call target="build-dotnet-1.0" />
+	</target>
+	
+	<target name="build-dotnet-1.0">
+		<property name="current.runtime.version" value="1.0" />
+		<call target="build-dotnet" />
+	</target>
+
+	<target name="build-dotnet-1.1">
+		<property name="current.runtime.version" value="1.1" />
 		<call target="build-dotnet" />
 	</target>
 
 	<target name="build-dotnet">
-		<copy file="..\..\..\Bin\DotNet\1.0\Release\Nini.dll" 
-			  tofile="..\Bin\DotNet\Release\Nini.dll" />
-		<property name="runtime-name" value="DotNet" />
 		<property name="current.runtime.config" value="net" />
+		<property name="runtime-name" value="DotNet" />
+		<property name="nant.settings.currentframework" 
+				value="${current.runtime.config}-${current.runtime.version}" />
+		<copy file="..\..\..\Bin\${runtime-name}\${current.runtime.version}\Release\Nini.dll" 
+			  tofile="..\Bin\${runtime-name}\Release\Nini.dll" />
+		
 		<call target="run-build" />		
 	</target>
 
 	<target name="build-mono">
-		<copy file="..\..\..\Bin\Mono\1.0\Release\Nini.dll" 
-			  tofile="..\Bin\Mono\Release\Nini.dll" />
-		<property name="runtime-name" value="Mono" />
 		<property name="current.runtime.config" value="mono" />
 		<property name="current.runtime.version" value="1.0" />
+		<property name="runtime-name" value="Mono" />
+		<copy file="..\..\..\Bin\${runtime-name}\${current.runtime.version}\Release\Nini.dll" 
+			  tofile="..\Bin\${runtime-name}\Release\Nini.dll" />
 		<call target="run-mono-build" />
 	</target>
 	
