@@ -8,35 +8,39 @@
 
 	<Constructor name="ConstructorPath">
 		<docs>
-			<summary>Gets the name of the current INI line.</summary>
+			<summary>Constructor.  Loads an INI file source.</summary>
 			<remarks>
-				For sections this is the name of the section. <br/>
-				For keys this is the name of the key.<br/>
-				For emtpy lines this is an empty string.
+				Loads this up from a file.
 			</remarks>
-			<param name="filePath">File path</param>
+			<param name="filePath">
+				Path to the file to load.
+			</param>
 		</docs>
 	</Constructor>
 	
 	<Constructor name="ConstructorTextReader">
 		<docs>
-			<summary>Returns a list of keys.</summary>
+			<summary>Constructor.  Loads an INI file source.</summary>
 			<remarks>
-				Does not return the keys necessarily in the order 
-				that they were loaded.
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
 			</remarks>
-			<param name="reader">TextReader</param>
+			<param name="reader">
+				TextReader to load.
+			</param>
 		</docs>
 	</Constructor>
 
 	<Constructor name="ConstructorStream">
 		<docs>
-			<summary>Returns true if the IniConfigSource is read only.</summary>
+			<summary>Constructor.  Loads an INI file source.</summary>
 			<remarks>
-				Does not return the keys necessarily in the order 
-				that they were loaded.
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
 			</remarks>
-			<param name="stream">Stream</param>
+			<param name="stream">
+				Stream to load.
+			</param>
 		</docs>
 	</Constructor>
 	
