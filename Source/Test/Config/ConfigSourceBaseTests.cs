@@ -40,7 +40,8 @@ namespace Nini.Test.Config
 			writer.WriteLine ("[People]");
 			writer.WriteLine (" woman = Jane");
 			writer.WriteLine (" man = John");
-			IniConfigSource iniSource = new IniConfigSource (new StringReader (writer.ToString ()));
+			IniConfigSource iniSource = 
+					new IniConfigSource (new StringReader (writer.ToString ()));
 			
 			xmlSource.Merge (iniSource);
 			
@@ -62,7 +63,8 @@ namespace Nini.Test.Config
 			writer.WriteLine ("[People]");
 			writer.WriteLine (" woman = Jane");
 			writer.WriteLine (" man = John");
-			IniConfigSource iniSource = new IniConfigSource (new StringReader (writer.ToString ()));
+			IniConfigSource iniSource = 
+					new IniConfigSource (new StringReader (writer.ToString ()));
 			
 			iniSource.Merge (iniSource); // exception
 		}
@@ -84,7 +86,8 @@ namespace Nini.Test.Config
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[People]");
 			writer.WriteLine (" woman = Jane");
-			IniConfigSource iniSource = new IniConfigSource (new StringReader (writer.ToString ()));
+			IniConfigSource iniSource = 
+					new IniConfigSource (new StringReader (writer.ToString ()));
 			
 			xmlSource.Merge (iniSource);
 			xmlSource.Merge (iniSource); // exception
@@ -207,7 +210,9 @@ namespace Nini.Test.Config
 			newConfig.Set ("Author", "Brent");
 			newConfig.Set ("Birthday", "February 8th");
 			
-			Assert.AreEqual (2, source.Configs.Count);
+			newConfig = source.AddConfig ("AnotherNew");
+			
+			Assert.AreEqual (3, source.Configs.Count);
 			config = source.Configs["NewTest"];
 			Assert.IsNotNull (config);
 			Assert.AreEqual (2, config.GetKeys ().Length);
