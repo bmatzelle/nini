@@ -5,7 +5,7 @@
 <style>
 <!--
 BODY {
-	font-family: verdana,arial,helvetica;
+	font-family: tahoma,verdana,arial,helvetica;
 	margin: 10;
 	background-color: #ffffff;
 	color: #000000;
@@ -149,15 +149,15 @@ can be improved:
   format</a> for most of the examples in this manual. INI files are a tried and 
   true configuration file type used in well known open source projects such as 
   <a href="http://www.mysql.com/">MySQL</a>, <a href="http://www.php.net/">PHP</a>, 
-  and <a href="http://www.samba.org/">Samba</a>. They are very simple and easy 
-  to edit so they remain a very popular choice. Nini contains it's own INI parser 
-  class (<a href="http://nini.sourceforge.net/Reference/html/Nini.Ini.IniDocument.html">IniDocument</a>) 
+  and <a href="http://www.samba.org/">Samba</a>. In fact, Nini has support for 
+  several INI file types. They are very simple and easy to edit so they remain 
+  a very popular choice. Nini contains it's own INI parser class (<a href="http://nini.sourceforge.net/Reference/html/Nini.Ini.IniDocument.html">IniDocument</a>) 
   which is written entirely in C# with no <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getprivateprofilestring.asp">Windows 
   API</a> code so it's cross platform. Here is the text of MyApp.ini for this 
   example:</p>
 
 <pre>
-<span class="code-comment"># MyApp.ini</span>
+<span class="code-comment">; MyApp.ini</span>
 <span class="code-keyword">[Logging]</span>
 File Name = MyApp.log
 MessageColumns = 5
@@ -324,7 +324,7 @@ mainSource.Merge (xmlSource);
   return a Boolean value by using a string value that’s easier for humans to understand.  
   First, let’s start with the AliasExample INI file:</p>
 
-<pre><span class="code-comment"># AliasExample.ini</span>
+<pre><span class="code-comment">; AliasExample.ini</span>
 <span class="code-keyword">[Web Browser]</span>
 Block Popups = ON
 Check For Default Browser = Off
