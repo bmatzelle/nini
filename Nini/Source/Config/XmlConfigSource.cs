@@ -9,11 +9,9 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Xml;
-using System.Reflection;
 using System.Collections;
-using System.Configuration;
-using System.Collections.Specialized;
 
 namespace Nini.Config
 {
@@ -34,6 +32,7 @@ namespace Nini.Config
 			XmlDocument document = new XmlDocument ();
 			document.Load (path);
 			PerformLoad (document);
+			isReadOnly = false;
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlDoc"]/docs/*' />
@@ -60,6 +59,35 @@ namespace Nini.Config
 				throw new Exception ("Source is read only");
 			}
 
+			MergeConfigsIntoDocument ();
+			
+			configDoc.Save (savePath);
+		}
+		
+		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		public void Save (string path)
+		{
+			isReadOnly = false;
+			this.savePath = path;
+			this.Save ();
+		}
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		public void Save (TextWriter writer)
+		{
+			isReadOnly = false;
+			MergeConfigsIntoDocument ();
+			configDoc.Save (writer);
+		}
+		#endregion
+
+		#region Private methods
+		/// <summary>
+		/// Merges all of the configs from the config collection into the 
+		/// XmlDocument.
+		/// </summary>
+		private void MergeConfigsIntoDocument ()
+		{
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -69,12 +97,8 @@ namespace Nini.Config
 					SetKey (config.Name, keys[i], config.Get (keys[i]));
 				}
 			}
-			
-			configDoc.Save (savePath);
 		}
-		#endregion
 
-		#region Private methods
 		/// <summary>
 		/// Loads all sections and keys.
 		/// </summary>

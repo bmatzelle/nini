@@ -9,6 +9,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Xml;
 using System.Reflection;
 using System.Collections;
@@ -24,6 +25,7 @@ namespace Nini.Config
 		string[] sections = null;
 		bool isReadOnly = false;
 		XmlDocument configDoc = new XmlDocument ();
+		string savePath = null;
 		#endregion
 
 		#region Constructors
@@ -38,7 +40,8 @@ namespace Nini.Config
 		/// <include file='DotNetConfigSource.xml' path='//Constructor[@name="ConstructorFile"]/docs/*' />
 		public DotNetConfigSource ()
 		{
-			configDoc.Load (ConfigFileName ());
+			savePath = ConfigFileName ();
+			configDoc.Load (savePath);
 			this.sections = SectionList (configDoc.DocumentElement);
 			isReadOnly = false;
 			Load ();
@@ -61,6 +64,37 @@ namespace Nini.Config
 				throw new Exception ("Source is read only");
 			}
 
+			MergeConfigsIntoDocument ();
+		
+			configDoc.Save (savePath);
+		}
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		public void Save (string path)
+		{
+			if (this.IsReadOnly) {
+				throw new Exception ("Source is read only");
+			}
+
+			savePath = path;
+			this.Save ();
+		}
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		public void Save (TextWriter writer)
+		{
+			MergeConfigsIntoDocument ();
+			configDoc.Save (writer);
+		}
+		#endregion
+
+		#region Private methods
+		/// <summary>
+		/// Merges all of the configs from the config collection into the 
+		/// XmlDocument.
+		/// </summary>
+		private void MergeConfigsIntoDocument ()
+		{
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -70,12 +104,8 @@ namespace Nini.Config
 					SetKey (config.Name, keys[i], config.Get (keys[i]));
 				}
 			}
-			
-			configDoc.Save (ConfigFileName ());
 		}
-		#endregion
 
-		#region Private methods
 		/// <summary>
 		/// Loads all collection classes.
 		/// </summary>

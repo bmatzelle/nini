@@ -21,13 +21,14 @@ namespace Nini.Config
 		#region Private variables
 		IniDocument iniDocument = null;
 		string filePath = null;
+		bool isReadOnly = true;
 		#endregion
 		
 		#region Public properties
 		/// <include file='IConfigSource.xml' path='//Property[@name="IsReadOnly"]/docs/*' />
 		public bool IsReadOnly
 		{
-			get { return (filePath == null); }
+			get { return isReadOnly; }
 		}
 		#endregion
 
@@ -37,6 +38,7 @@ namespace Nini.Config
 			: this (new StreamReader (filePath))
 		{
 			this.filePath = filePath;
+			isReadOnly = false;
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
@@ -44,6 +46,7 @@ namespace Nini.Config
 		{
 			this.Merge (this); // required for SaveAll
 			iniDocument = new IniDocument (reader);
+			isReadOnly = true;
 			Load ();
 		}
 		
@@ -62,6 +65,35 @@ namespace Nini.Config
 				throw new Exception ("Source is read only");
 			}
 
+			MergeConfigsIntoDocument ();
+			
+			iniDocument.Save (this.filePath);
+		}
+		
+		/// <include file='IniConfigSource.xml' path='//Method[@name="SavePath"]/docs/*' />
+		public void Save (string path)
+		{
+			isReadOnly = false;
+			this.filePath = path;
+			this.Save ();
+		}
+		
+		/// <include file='IConfigSource.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
+		public void Save (TextWriter writer)
+		{
+			isReadOnly = false;
+			MergeConfigsIntoDocument ();
+			iniDocument.Save (writer);
+		}
+		#endregion
+		
+		#region Private methods
+		/// <summary>
+		/// Merges all of the configs from the config collection into the 
+		/// IniDocument.
+		/// </summary>
+		private void MergeConfigsIntoDocument ()
+		{
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -76,12 +108,8 @@ namespace Nini.Config
 					iniDocument.Sections[config.Name].Set (keys[i], config.Get (keys[i]));
 				}
 			}
-			
-			iniDocument.Save (this.filePath);
 		}
-		#endregion
-		
-		#region Private methods
+
 		/// <summary>
 		/// Loads the configuration file.
 		/// </summary>
