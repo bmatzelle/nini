@@ -220,6 +220,16 @@ namespace Nini.Config
 			
 			return result;
 		}
+
+		/// <include file='IConfig.xml' path='//Method[@name="GetValues"]/docs/*' />
+		public string[] GetValues ()
+		{
+			string[] result = new string[keys.Values.Count];
+			
+			keys.Values.CopyTo (result, 0);
+			
+			return result;
+		}
 		
 		/// <include file='ConfigBase.xml' path='//Method[@name="Add"]/docs/*' />
 		public void Add (string key, string value)
@@ -252,7 +262,7 @@ namespace Nini.Config
 				throw new ArgumentNullException ("Key may not be null");
 			}
 			
-			if (keys.Contains (keys)) {
+			if (keys.Contains (key)) {
 				keys.Remove (key);
 			}
 		}
@@ -301,7 +311,13 @@ namespace Nini.Config
 			if (aliasText.ContainsBoolean (key)) {
 				result = aliasText.GetBoolean (key);
 			} else {
-				result = ConfigSource.Alias.GetBoolean (key);
+				if (ConfigSource.Alias.ContainsBoolean (key)) {
+					result = ConfigSource.Alias.GetBoolean (key);
+				} else {
+					throw new ArgumentException 
+								("Boolean alias value not found. Have you "
+								+ "added it to the Alias property?");
+				}
 			}	
 			
 			return result;
