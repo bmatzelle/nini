@@ -120,7 +120,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new ArgumentException ("Integer value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 
 			return Convert.ToInt32 (text, format);
@@ -136,7 +136,7 @@ namespace Nini.Config
 			string result = Get (key);
 			
 			if (result == null) {
-				throw new ArgumentException ("Integer value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 
 			return GetIntAlias (key, result);
@@ -147,7 +147,9 @@ namespace Nini.Config
 		{
 			string result = GetValue (key);
 			
-			return (result == null) ? defaultValue : Convert.ToInt32 (result, format);
+			return (result == null)
+					? defaultValue
+					: Convert.ToInt32 (result, format);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetIntDefaultAlias"]/docs/*' />
@@ -168,7 +170,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new ArgumentException ("Long value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 			
 			return Convert.ToInt64 (text, format);
@@ -179,7 +181,9 @@ namespace Nini.Config
 		{
 			string result = GetValue (key);
 			
-			return (result == null) ? defaultValue : Convert.ToInt64 (result, format);
+			return (result == null)
+					? defaultValue
+					: Convert.ToInt64 (result, format);
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetBoolean"]/docs/*' />
@@ -188,7 +192,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new ArgumentException ("Boolean value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 			
 			return GetBooleanAlias (text);
@@ -208,7 +212,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new ArgumentException ("Float value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 			
 			return Convert.ToSingle (text, format);
@@ -219,7 +223,9 @@ namespace Nini.Config
 		{
 			string result = GetValue (key);
 			
-			return (result == null) ? defaultValue : Convert.ToSingle (result, format);
+			return (result == null)
+					? defaultValue
+					: Convert.ToSingle (result, format);
 		}
 
 		/// <include file='IConfig.xml' path='//Method[@name="GetDouble"]/docs/*' />
@@ -228,7 +234,7 @@ namespace Nini.Config
 			string text = GetValue (key);
 			
 			if (text == null) {
-				throw new ArgumentException ("Double value not found");
+				throw new ArgumentException ("Value not found: " + key);
 			}
 			
 			return Convert.ToDouble (text, format);
@@ -239,7 +245,9 @@ namespace Nini.Config
 		{
 			string result = GetValue (key);
 			
-			return (result == null) ? defaultValue : Convert.ToDouble (result, format);
+			return (result == null)
+					? defaultValue
+					: Convert.ToDouble (result, format);
 		}
 
 		/// <include file='IConfig.xml' path='//Method[@name="GetKeys"]/docs/*' />
@@ -272,7 +280,7 @@ namespace Nini.Config
 		public void Set (string key, object value)
 		{
 			if (value == null) {
-				throw new ArgumentNullException ("Value may not be null");
+				throw new ArgumentNullException ("Value cannot be null");
 			}
 
 			if (!keys.Contains (key)) {
@@ -292,7 +300,7 @@ namespace Nini.Config
 		public void Remove (string key)
 		{
 			if (key == null) {
-				throw new ArgumentNullException ("Key may not be null");
+				throw new ArgumentNullException ("Key cannot be null");
 			}
 			
 			if (keys.Contains (key)) {
@@ -380,8 +388,8 @@ namespace Nini.Config
 					result = ConfigSource.Alias.GetBoolean (key);
 				} else {
 					throw new ArgumentException 
-								("Boolean alias value not found. Have you "
-								+ "added it to the Alias property?");
+								("Alias value not found: " + key
+								+ ". Add it to the Alias property.");
 				}
 			}	
 			
