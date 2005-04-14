@@ -415,6 +415,43 @@ namespace Nini.Test.Config
 			}
 		}
 
+		[Test]
+		public void ConfigBaseGetErrors ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine ("; No keys");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+			IConfig config = source.Configs["web"];
+
+			try {
+				config.GetInt ("not_there");
+			} catch (Exception ex) {
+				Assert.AreEqual ("Value not found: not_there", ex.Message);
+			}
+			try {
+				config.GetFloat ("not_there");
+			} catch (Exception ex) {
+				Assert.AreEqual ("Value not found: not_there", ex.Message);
+			}
+			try {
+				config.GetDouble ("not_there");
+			} catch (Exception ex) {
+				Assert.AreEqual ("Value not found: not_there", ex.Message);
+			}
+			try {
+				config.GetLong ("not_there");
+			} catch (Exception ex) {
+				Assert.AreEqual ("Value not found: not_there", ex.Message);
+			}
+			try {
+				config.GetBoolean ("not_there");
+			} catch (Exception ex) {
+				Assert.AreEqual ("Value not found: not_there", ex.Message);
+			}
+		}
+
 		[SetUp]
 		public void Setup ()
 		{
