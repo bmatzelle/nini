@@ -114,10 +114,9 @@ namespace Nini.Config
 							+ "the loaded the source from a file");
 			}
 
-			this.Configs.Clear ();
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc);
+			MergeDocumentIntoConfigs ();
 			base.Reload ();
 		}
 
@@ -148,17 +147,16 @@ namespace Nini.Config
 		/// </summary>
 		private void MergeConfigsIntoDocument ()
 		{
-			RemoveConfigs ();
+			RemoveSections ();
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
-				
-				XmlNode node = GetChildElement (configDoc.DocumentElement, 
-												config.Name);
+
+				RemoveKeys (config.Name);
+				XmlNode node = GetChildElement (config.Name);
 				if (node == null) {
 					node = SectionNode (config.Name);
 				}
-				RemoveKeys (config.Name);
 				
 				for (int i = 0; i < keys.Length; i++)
 				{
@@ -257,14 +255,11 @@ namespace Nini.Config
 		/// <summary>
 		/// Removes all XML sections that were removed as configs.
 		/// </summary>
-		private void RemoveConfigs ()
+		private void RemoveSections ()
 		{
 			XmlAttribute attr = null;
-			XmlNode sections = GetChildElement (configDoc.DocumentElement, 
-												"configSections");
+			XmlNode sections = GetChildElement ("configSections");
 			
-			// TODO, remove the other section node as well - /configuration/sectionname
-
 			foreach (XmlNode node in sections.ChildNodes)
 			{
 				if (node.NodeType == XmlNodeType.Element
@@ -272,7 +267,14 @@ namespace Nini.Config
 					attr = node.Attributes["name"];
 					if (attr != null) {
 						if (this.Configs[attr.Value] == null) {
+							// Removes the configSections section
 							node.ParentNode.RemoveChild (node);
+
+							// Removes the <SectionName> section
+							XmlNode dataNode = GetChildElement (attr.Value);
+							if (dataNode != null) {
+								configDoc.DocumentElement.RemoveChild (dataNode);
+							}
 						}
 					} else {
 						throw new ArgumentException ("Section name attribute not found");
@@ -286,15 +288,14 @@ namespace Nini.Config
 		/// </summary>
 		private void RemoveKeys (string sectionName)
 		{
-			XmlNode node = GetChildElement (configDoc.DocumentElement, 
-											sectionName);
+			XmlNode node = GetChildElement (sectionName);
 			XmlAttribute keyName = null;
 			
 			if (node != null) {
 				foreach (XmlNode key in node.ChildNodes)
 				{
-					if (node.NodeType == XmlNodeType.Element
-						&& node.Name == "add") {
+					if (key.NodeType == XmlNodeType.Element
+						&& key.Name == "add") {
 						keyName = key.Attributes["key"];
 						if (keyName != null) {
 							if (this.Configs[sectionName].Get (keyName.Value) == null) {
@@ -313,23 +314,33 @@ namespace Nini.Config
 		/// </summary>
 		private void SetKey (XmlNode sectionNode, string key, string value)
 		{
-			XmlNode keyNode = null;
-
-			foreach (XmlNode node in sectionNode.ChildNodes)
-			{
-				if (node.NodeType == XmlNodeType.Element
-					&& node.Name == "add"
-					&& node.Attributes["key"].Value == key) {
-					keyNode = node;
-					break;
-				}
-			}
+			XmlNode keyNode = GetKey (sectionNode, key);
 			
 			if (keyNode == null) {
 				CreateKey (sectionNode, key, value);
 			} else {
 				keyNode.Attributes["value"].Value = value;
 			}
+		}
+
+		/// <summary>
+		/// Gets an XML key by it's name. Returns null if it does not exist.
+		/// </summary>
+		private XmlNode GetKey (XmlNode sectionNode, string keyName)
+		{
+			XmlNode result = null;
+
+			foreach (XmlNode node in sectionNode.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "add"
+					&& node.Attributes["key"].Value == keyName) {
+					result = node;
+					break;
+				}
+			}
+			
+			return result;
 		}
 		
 		/// <summary>
@@ -385,8 +396,7 @@ namespace Nini.Config
 			attr.Value = "System.Configuration.NameValueSectionHandler";
 			node.Attributes.Append (attr);
 
-			XmlNode section = GetChildElement (configDoc.DocumentElement, 
-												"configSections");
+			XmlNode section = GetChildElement ("configSections");
 			section.AppendChild (node);
 		
 			// Add node for configuration node
@@ -422,6 +432,87 @@ namespace Nini.Config
 			}
 
 			return result;
+		}
+		
+		/// <summary>
+		/// Returns a child element from the XmlDocument.DocumentElement.
+		/// </summary>
+		private XmlNode GetChildElement (string name)
+		{
+			return GetChildElement (configDoc.DocumentElement, name);
+		}
+		
+		/// <summary>
+		/// Merges the XmlDocument into the Configs when the document is 
+		/// reloaded.  
+		/// </summary>
+		private void MergeDocumentIntoConfigs ()
+		{
+			// Remove all missing configs first
+			RemoveConfigs ();
+			
+			XmlNode sections = GetChildElement ("configSections");
+			
+			foreach (XmlNode node in sections.ChildNodes)
+			{
+				// Find all section nodes
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "section") {
+					
+					string sectionName = node.Attributes["name"].Value;
+					IConfig config = this.Configs[sectionName];
+					if (config == null) {
+						// The section is new so add it
+						config = new ConfigBase (sectionName, this);
+						this.Configs.Add (config);
+					}				
+					RemoveConfigKeys (config);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all configs that are not in the newly loaded XmlDocument.  
+		/// </summary>
+		private void RemoveConfigs ()
+		{
+			IConfig config = null;
+			for (int i = this.Configs.Count - 1; i > -1; i--)
+			{
+				config = this.Configs[i];
+				// If the section is not present in the XmlDocument
+				if (GetChildElement (config.Name) == null) {
+					this.Configs.Remove (config);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all XML keys that were removed as config keys.
+		/// </summary>
+		private void RemoveConfigKeys (IConfig config)
+		{
+			XmlNode section = GetChildElement (config.Name);
+			
+			// Remove old keys
+			string[] configKeys = config.GetKeys ();
+			foreach (string configKey in configKeys)
+			{
+				if (GetKey (section, configKey) == null) {
+					// Key doesn't exist, remove
+					config.Remove (configKey);
+				}
+			}
+
+			// Add or set all new keys
+			foreach (XmlNode node in section.ChildNodes)
+			{
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "add") {
+					config.Set (node.Attributes["key"].Value,
+								node.Attributes["value"].Value);
+				}
+			}
 		}
 		#endregion
 	}
