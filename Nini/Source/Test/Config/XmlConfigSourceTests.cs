@@ -431,24 +431,43 @@ namespace Nini.Test.Config
 			string filePath = "Reload.xml";
 			XmlConfigSource source = new XmlConfigSource ();
 
-			IConfig config = source.AddConfig ("Pets");
-			config.Set ("cat", "Muffy");
+			IConfig petConfig = source.AddConfig ("Pets");
+			petConfig.Set ("cat", "Muffy");
+			petConfig.Set ("dog", "Rover");
+			IConfig weatherConfig = source.AddConfig ("Weather");
+			weatherConfig.Set ("skies", "cloudy");
+			weatherConfig.Set ("precipitation", "rain");
 			source.Save (filePath);
 
-			Assert.AreEqual (1, config.GetKeys ().Length);
-			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			Assert.AreEqual (2, petConfig.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", petConfig.Get ("cat"));
+			Assert.AreEqual (2, source.Configs.Count);
 
 			XmlConfigSource newSource = new XmlConfigSource (filePath);
-			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
-			Assert.AreEqual ("Muffy", newSource.Configs["Pets"].Get ("cat"));
 
-			source = new XmlConfigSource (filePath);
+			IConfig compareConfig = newSource.Configs["Pets"];
+			Assert.AreEqual (2, compareConfig.GetKeys ().Length);
+			Assert.AreEqual ("Muffy", compareConfig.Get ("cat"));
+			Assert.IsTrue (compareConfig == newSource.Configs["Pets"],
+							"References before are not equal");
+
+			// Set the new values to source
 			source.Configs["Pets"].Set ("cat", "Misha");
+			source.Configs["Pets"].Set ("lizard", "Lizzy");
+			source.Configs["Pets"].Set ("hampster", "Surly");
+			source.Configs["Pets"].Remove ("dog");
+			source.Configs.Remove (weatherConfig);
 			source.Save (); // saves new value
 
+			// Reload the new source and check for changes
 			newSource.Reload ();
-			Assert.AreEqual (1, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.IsTrue (compareConfig == newSource.Configs["Pets"],
+							"References after are not equal");
+			Assert.AreEqual (1, newSource.Configs.Count);
+			Assert.AreEqual (3, newSource.Configs["Pets"].GetKeys ().Length);
+			Assert.AreEqual ("Lizzy", newSource.Configs["Pets"].Get ("lizard"));
 			Assert.AreEqual ("Misha", newSource.Configs["Pets"].Get ("cat"));
+			Assert.IsNull (newSource.Configs["Pets"].Get ("dog"));
 
 			File.Delete (filePath);
 		}

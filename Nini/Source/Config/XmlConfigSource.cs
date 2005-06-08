@@ -95,10 +95,9 @@ namespace Nini.Config
 							+ "the loaded the source from a file");
 			}
 
-			this.Configs.Clear ();
 			configDoc = new XmlDocument ();
 			configDoc.Load (savePath);
-			PerformLoad (configDoc);
+			MergeDocumentIntoConfigs ();
 			base.Reload ();
 		}
 
@@ -120,7 +119,7 @@ namespace Nini.Config
 		/// </summary>
 		private void MergeConfigsIntoDocument ()
 		{
-			RemoveConfigs ();
+			RemoveSections ();
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -142,7 +141,7 @@ namespace Nini.Config
 		/// <summary>
 		/// Removes all XML sections that were removed as configs.
 		/// </summary>
-		private void RemoveConfigs ()
+		private void RemoveSections ()
 		{
 			XmlAttribute attr = null;
 
@@ -328,6 +327,78 @@ namespace Nini.Config
 		{
 			return (this.savePath != null
 					&& configDoc != null);
+		}
+
+		/// <summary>
+		/// Merges the XmlDocument into the Configs when the document is 
+		/// reloaded.  
+		/// </summary>
+		private void MergeDocumentIntoConfigs ()
+		{
+			// Remove all missing configs first
+			RemoveConfigs ();
+
+			foreach (XmlNode node in configDoc.DocumentElement.ChildNodes)
+			{
+				// If node is a section node
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "Section") {
+
+					string sectionName = node.Attributes["Name"].Value;
+					IConfig config = this.Configs[sectionName];
+					if (config == null) {
+						// The section is new so add it
+						config = new ConfigBase (sectionName, this);
+						this.Configs.Add (config);
+					}				
+					RemoveConfigKeys (config);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all configs that are not in the newly loaded XmlDocument.  
+		/// </summary>
+		private void RemoveConfigs ()
+		{
+			IConfig config = null;
+			for (int i = this.Configs.Count - 1; i > -1; i--)
+			{
+				config = this.Configs[i];
+				// If the section is not present in the XmlDocument
+				if (GetSectionByName (config.Name) == null) {
+					this.Configs.Remove (config);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all XML keys that were removed as config keys.
+		/// </summary>
+		private void RemoveConfigKeys (IConfig config)
+		{
+			XmlNode section = GetSectionByName (config.Name);
+
+			// Remove old keys
+			string[] configKeys = config.GetKeys ();
+			foreach (string configKey in configKeys)
+			{
+				if (GetKeyByName (section, configKey) == null) {
+					// Key doesn't exist, remove
+					config.Remove (configKey);
+				}
+			}
+
+			// Add or set all new keys
+			foreach (XmlNode node in section.ChildNodes)
+			{
+				// Loop through all key nodes and add to config
+				if (node.NodeType == XmlNodeType.Element
+					&& node.Name == "Key") {
+					config.Set (node.Attributes["Name"].Value,
+								node.Attributes["Value"].Value);
+				}
+			}
 		}
 		#endregion
 	}
