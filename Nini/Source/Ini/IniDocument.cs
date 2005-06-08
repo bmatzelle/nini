@@ -148,35 +148,40 @@ namespace Nini.Ini
 			bool sectionFound = false;
 			IniSection section = null;
 			
-			while (reader.Read ())
-			{
-				switch (reader.Type)
+			try {
+				while (reader.Read ())
 				{
-				case IniType.Empty:
-					if (!sectionFound) {
-						initialComment.Add (reader.Comment);
-					} else {
-						section.Set (reader.Comment);
-					}
+					switch (reader.Type)
+					{
+					case IniType.Empty:
+						if (!sectionFound) {
+							initialComment.Add (reader.Comment);
+						} else {
+							section.Set (reader.Comment);
+						}
 
-					break;
-				case IniType.Section:
-					sectionFound = true;
-					// If section already exists then overwrite it
-					if (sections[reader.Name] != null) {
-						sections.Remove (reader.Name);
-					}
-					section = new IniSection (reader.Name, reader.Comment);
-					sections.Add (section);
+						break;
+					case IniType.Section:
+						sectionFound = true;
+						// If section already exists then overwrite it
+						if (sections[reader.Name] != null) {
+							sections.Remove (reader.Name);
+						}
+						section = new IniSection (reader.Name, reader.Comment);
+						sections.Add (section);
 
-					break;
-				case IniType.Key:
-					section.Set (reader.Name, reader.Value, reader.Comment);
-					break;
+						break;
+					case IniType.Key:
+						section.Set (reader.Name, reader.Value, reader.Comment);
+						break;
+					}
 				}
+			} catch (Exception ex) {
+				throw ex;
+			} finally {
+				// Always close the file
+				reader.Close ();
 			}
-
-			reader.Close ();
 		}
 
 		/// <summary>
