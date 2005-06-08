@@ -586,5 +586,22 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void FileClosedOnParseError ()
+		{
+			string filePath = "Reload.ini";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			writer.WriteLine (" no section = boom!");
+			writer.Close ();
+
+			try {
+				IniConfigSource source = new IniConfigSource (filePath);
+			} catch {
+				// The file was still opened on a parse error
+				File.Delete (filePath);
+			}
+		}
 	}
 }
