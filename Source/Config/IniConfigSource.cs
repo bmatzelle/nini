@@ -107,10 +107,8 @@ namespace Nini.Config
 							+ "the loaded the source from a file");
 			}
 
-			this.Configs.Clear ();
-			this.Merge (this); // required for SaveAll
 			iniDocument = new IniDocument (savePath);
-			Load ();
+			MergeDocumentIntoConfigs ();
 			base.Reload ();
 		}
 
@@ -128,11 +126,11 @@ namespace Nini.Config
 		#region Private methods
 		/// <summary>
 		/// Merges all of the configs from the config collection into the 
-		/// IniDocument.
+		/// IniDocument before it is saved.  
 		/// </summary>
 		private void MergeConfigsIntoDocument ()
 		{
-			RemoveConfigs ();
+			RemoveSections ();
 			foreach (IConfig config in this.Configs)
 			{
 				string[] keys = config.GetKeys ();
@@ -150,11 +148,11 @@ namespace Nini.Config
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Removes all INI sections that were removed as configs.
 		/// </summary>
-		private void RemoveConfigs ()
+		private void RemoveSections ()
 		{
 			IniSection section = null;
 			for (int i = 0; i < iniDocument.Sections.Count; i++)
@@ -165,7 +163,7 @@ namespace Nini.Config
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Removes all INI keys that were removed as config keys.
 		/// </summary>
@@ -209,7 +207,73 @@ namespace Nini.Config
 				this.Configs.Add (config);
 			}
 		}
-		
+
+		/// <summary>
+		/// Merges the IniDocument into the Configs when the document is 
+		/// reloaded.  
+		/// </summary>
+		private void MergeDocumentIntoConfigs ()
+		{
+			// Remove all missing configs first
+			RemoveConfigs ();
+
+			IniSection section = null;
+			for (int i = 0; i < iniDocument.Sections.Count; i++)
+			{
+				section = iniDocument.Sections[i];
+
+				IConfig config = this.Configs[section.Name];
+				if (config == null) {
+					// The section is new so add it
+					config = new ConfigBase (section.Name, this);
+					this.Configs.Add (config);
+				}				
+				RemoveConfigKeys (config);
+			}
+		}
+
+		/// <summary>
+		/// Removes all configs that are not in the newly loaded INI doc.  
+		/// </summary>
+		private void RemoveConfigs ()
+		{
+			IConfig config = null;
+			for (int i = this.Configs.Count - 1; i > -1; i--)
+			{
+				config = this.Configs[i];
+				// If the section is not present in the INI doc
+				if (iniDocument.Sections[config.Name] == null) {
+					this.Configs.Remove (config);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Removes all INI keys that were removed as config keys.
+		/// </summary>
+		private void RemoveConfigKeys (IConfig config)
+		{
+			IniSection section = iniDocument.Sections[config.Name];
+
+			// Remove old keys
+			string[] configKeys = config.GetKeys ();
+			foreach (string configKey in configKeys)
+			{
+				if (!section.Contains (configKey)) {
+					// Key doesn't exist, remove
+					config.Remove (configKey);
+				}
+			}
+
+			// Add or set all new keys
+			string[] keys = section.GetKeys ();
+			for (int i = 0; i < keys.Length; i++)
+			{
+				string key = keys[i];
+				config.Set (key, section.GetItem (i).Value);
+			}
+		}
+
 		/// <summary>
 		/// Returns true if this instance is savable.
 		/// </summary>
