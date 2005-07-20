@@ -72,6 +72,11 @@ namespace Nini.Config
 		public string Name
 		{
 			get { return configName; }
+			set {
+				if (configName != value) {
+					Rename (value);
+				}
+			}
 		}
 		
 		/// <include file='IConfig.xml' path='//Property[@name="ConfigSource"]/docs/*' />
@@ -88,6 +93,12 @@ namespace Nini.Config
 		#endregion
 
 		#region Public methods
+		/// <include file='IConfig.xml' path='//Method[@name="Contains"]/docs/*' />
+		public bool Contains (string key)
+		{
+			return (GetValue (key) != null);
+		}
+
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
 		public string Get (string key)
 		{
@@ -342,6 +353,16 @@ namespace Nini.Config
 		#endregion
 
 		#region Private methods
+		/// <summary>
+		/// Renames the config to the new name. 
+		/// </summary>
+		private void Rename (string name)
+		{
+			this.ConfigSource.Configs.Remove (this);
+			configName = name;
+			this.ConfigSource.Configs.Add (this);
+		}
+
 		/// <summary>
 		/// Returns the value if the given key.
 		/// </summary>

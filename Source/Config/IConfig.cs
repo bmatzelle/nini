@@ -19,10 +19,13 @@ namespace Nini.Config
 		IConfigSource ConfigSource { get; }
 		
 		/// <include file='IConfig.xml' path='//Property[@name="Name"]/docs/*' />
-		string Name { get; }
+		string Name { get; set; }
 		
 		/// <include file='IConfig.xml' path='//Property[@name="Alias"]/docs/*' />
 		AliasText Alias { get; }
+
+		/// <include file='IConfig.xml' path='//Method[@name="Contains"]/docs/*' />
+		bool Contains (string key);
 
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
 		string Get (string key);
