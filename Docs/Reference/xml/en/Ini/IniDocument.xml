@@ -277,7 +277,14 @@ comedy = Dumb and Dumber
 	<Method name="SaveTextWriter">
 		<docs>
 			<summary>Writes the INI data to a writer.</summary>
-			<param name="textWriter">TextWriter instance.</param>
+			<param name="textWriter">TextWriter object</param>
+		</docs>
+	</Method>
+	
+	<Method name="SaveStream">
+		<docs>
+			<summary>Writes the INI data to a Stream.</summary>
+			<param name="stream">Stream object</param>
 		</docs>
 	</Method>
 </Class>

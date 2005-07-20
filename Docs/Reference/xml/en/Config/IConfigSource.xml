@@ -154,6 +154,29 @@ WebPage = ${RootPath}\index.html
 			</example>
 		</docs>
 	</Method>
+	
+	<Event name="Reloaded">
+		<docs>
+			<summary>
+				Occurs when the config source is reloaded.  
+			</summary>
+			<remarks>
+				This event occurs when the <see cref="Reload"/> 
+				method is called.  
+			</remarks>
+		</docs>
+	</Event>
+	
+	<Event name="Saved">
+		<docs>
+			<summary>
+				Occurs when the config soucre is saved.    
+			</summary>
+			<remarks>
+				This event occurs when a <see cref="Save"/> method is called.  
+			</remarks>
+		</docs>
+	</Event>
 </Interface>
 
 </NiniDocs>

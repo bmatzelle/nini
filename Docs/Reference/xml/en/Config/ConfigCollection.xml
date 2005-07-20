@@ -67,6 +67,13 @@
 			<param name="config">The IConfig to add.</param>
 		</docs>
 	</Method>
+
+	<Method name="AddName">
+		<docs>
+			<summary>Adds a new IConfig to the collection.</summary>
+			<param name="name">The name of the IConfig to add.</param>
+		</docs>
+	</Method>
 	
 	<Method name="Insert">
 		<docs>
@@ -142,6 +149,50 @@
 			<param name="index">Index of the array to start copying.</param>
 		</docs>
 	</Method>
+	
+	<Method name="OnConfigAdded">
+		<docs>
+			<summary>
+				Raises the <see cref="ConfigAdded"/> event.  
+			</summary>
+			<remarks>
+				Raising an event invokes the event handler through a delegate. 
+			</remarks>
+			<param name="e">
+				The EventArgs object that contains all event data. 
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="OnConfigRemoved">
+		<docs>
+			<summary>
+				Raises the <see cref="ConfigRemoved"/> event.  
+			</summary>
+			<remarks>
+				Raising an event invokes the event handler through a delegate. 
+			</remarks>
+			<param name="e">
+				The EventArgs object that contains all event data. 
+			</param>
+		</docs>
+	</Method>
+	
+	<Event name="ConfigAdded">
+		<docs>
+			<summary>
+				Occurs when a config is added. 
+			</summary>
+		</docs>
+	</Event>
+	
+	<Event name="ConfigRemoved">
+		<docs>
+			<summary>
+				Occurs when a config is removed. 
+			</summary>
+		</docs>
+	</Event>
 </Class>
 
 </NiniDocs>

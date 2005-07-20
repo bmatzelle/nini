@@ -131,6 +131,13 @@
 		</docs>
 	</Method>
 	
+	<Method name="SaveStream">
+		<docs>
+			<summary>Writes the XML data to a Stream.</summary>
+			<param name="stream">Stream object</param>
+		</docs>
+	</Method>
+	
 	<Method name="ToString">
 		<docs>
 			<summary>
