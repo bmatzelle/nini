@@ -471,6 +471,32 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void SaveToStream ()
+		{
+			string filePath = "SaveToStream.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			XmlConfigSource source = new XmlConfigSource ();
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("dog", "rover");
+			config.Set ("cat", "muffy");
+			source.Save (stream);
+			stream.Close ();
+
+			XmlConfigSource newSource = new XmlConfigSource (filePath);
+			config = newSource.Configs["Pets"];
+			Assert.IsNotNull (config);
+			Assert.AreEqual (2, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.GetString ("dog"));
+			Assert.AreEqual ("muffy", config.GetString ("cat"));
+			
+			stream.Close ();
+
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods
