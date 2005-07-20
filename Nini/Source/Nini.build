@@ -121,6 +121,7 @@
 			<arg value="-reference:System.dll"/>
 			<arg value="-reference:System.Xml.dll"/>
 			<arg value="-define:${build-version}"/>
+			<arg value="-define:${use-strong}"/>
 
 			<arg value="${project.src}\AssemblyInfo.cs" />
 			

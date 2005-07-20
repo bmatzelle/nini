@@ -341,6 +341,8 @@ namespace Nini.Test.Config
 			source.Reload ();
 			Assert.AreEqual (reloadedCount, 1);
 			Assert.IsTrue (source == eventSource);
+
+			File.Delete (filePath);
 		}
 
 		[Test]
