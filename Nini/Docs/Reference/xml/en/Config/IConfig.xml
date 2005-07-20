@@ -8,7 +8,10 @@
 
 	<Property name="Name">
 		<docs>
-			<summary>Returns the name of the IConfig instance.</summary>
+			<summary>
+				Gets or sets the IConfig name.  If set then it renames
+				this config with the parent source.  
+			</summary>
 		</docs>
 	</Property>
 	
@@ -25,6 +28,15 @@
 			</summary>
 		</docs>
 	</Property>
+	
+	<Method name="Contains">
+		<docs>
+			<summary>
+				Returns true if the configuration key is present.  
+			</summary>
+			<param name="key">Configuration key.</param>
+		</docs>
+	</Method>
 	
 	<Method name="Get">
 		<docs>
@@ -239,6 +251,28 @@
 			<summary>Returns an Array of all key values.</summary>
 		</docs>
 	</Method>
+	
+	<Event name="KeySet">
+		<docs>
+			<summary>
+				Occurs when a key is set.    
+			</summary>
+			<remarks>
+				This event occurs when the <see cref="Set"/> method is called.  
+			</remarks>
+		</docs>
+	</Event>
+	
+	<Event name="KeyRemoved">
+		<docs>
+			<summary>
+				Occurs when a key is removed.      
+			</summary>
+			<remarks>
+				This event occurs when the <see cref="Remove"/> method is called.  
+			</remarks>
+		</docs>
+	</Event>
 
 </Interface>
 

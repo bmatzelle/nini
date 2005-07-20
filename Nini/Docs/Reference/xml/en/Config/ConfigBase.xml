@@ -21,6 +21,34 @@
 		<param name="key">The IConfig key.</param>
 		<param name="value">The IConfig value.</param>
 	</Method>
+	
+	<Method name="OnKeySet">
+		<docs>
+			<summary>
+				Raises the KeySet event.  
+			</summary>
+			<remarks>
+				Raising an event invokes the event handler through a delegate. 
+			</remarks>
+			<param name="e">
+				The EventArgs object that contains all event data. 
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="OnKeyRemoved">
+		<docs>
+			<summary>
+				Raises the KeyRemoved event.  
+			</summary>
+			<remarks>
+				Raising an event invokes the event handler through a delegate. 
+			</remarks>
+			<param name="e">
+				The EventArgs object that contains all event data. 
+			</param>
+		</docs>
+	</Method>
 </Class>
 
 </NiniDocs>
