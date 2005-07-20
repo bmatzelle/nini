@@ -99,6 +99,15 @@ namespace Nini.Config
 			OnSaved (new EventArgs ());
 		}
 
+		/// <include file='IniConfigSource.xml' path='//Method[@name="SaveStream"]/docs/*' />
+		public void Save (Stream stream)
+		{
+			MergeConfigsIntoDocument ();
+			iniDocument.Save (stream);
+			savePath = null;
+			OnSaved (new EventArgs ());
+		}
+
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
 		public override void Reload ()
 		{

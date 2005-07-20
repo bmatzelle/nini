@@ -161,6 +161,34 @@ namespace Nini.Test.Ini
 		}
 
 		[Test]
+		public void SaveToStream ()
+		{
+			string filePath = "SaveToStream.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			IniDocument doc = new IniDocument ();
+			IniSection section = new IniSection ("Pets");
+			section.Set ("dog", "rover");
+			section.Set ("cat", "muffy");
+			doc.Sections.Add (section);
+			doc.Save (stream);
+			stream.Close ();
+
+			IniDocument newDoc = new IniDocument (new FileStream (filePath, 
+																  FileMode.Open));
+			section = newDoc.Sections["Pets"];
+			Assert.IsNotNull (section);
+			Assert.AreEqual (2, section.GetKeys ().Length);
+			Assert.AreEqual ("rover", section.GetValue ("dog"));
+			Assert.AreEqual ("muffy", section.GetValue ("cat"));
+			
+			stream.Close ();
+
+			File.Delete (filePath);
+		}
+
+		[Test]
 		public void SambaStyleDocument ()
 		{
 			StringWriter writer = new StringWriter ();

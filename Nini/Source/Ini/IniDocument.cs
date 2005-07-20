@@ -136,6 +136,12 @@ namespace Nini.Ini
 			Save (writer);
 			writer.Close ();
 		}
+
+		/// <include file='IniDocument.xml' path='//Method[@name="SaveStream"]/docs/*' />
+		public void Save (Stream stream)
+		{
+			Save (new StreamWriter (stream));
+		}
 		#endregion
 		
 		#region Private methods

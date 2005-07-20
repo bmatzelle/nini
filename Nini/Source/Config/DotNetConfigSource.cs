@@ -106,6 +106,19 @@ namespace Nini.Config
 			OnSaved (new EventArgs ());
 		}
 
+		/// <include file='DotNetConfigSource.xml' path='//Method[@name="SaveStream"]/docs/*' />
+		public void Save (Stream stream)
+		{
+			if (!IsSavable ()) {
+				throw new ArgumentException ("Source cannot be saved in this state");
+			}
+
+			MergeConfigsIntoDocument ();
+			configDoc.Save (stream);
+			savePath = null;
+			OnSaved (new EventArgs ());
+		}
+
 		/// <include file='IConfigSource.xml' path='//Method[@name="Reload"]/docs/*' />
 		public override void Reload ()
 		{
@@ -201,9 +214,16 @@ namespace Nini.Config
 		/// </summary>
 		private void LoadSections (XmlNode rootNode)
 		{
+			LoadOtherSection (rootNode, "appSettings");
+
 			XmlNode sections = GetChildElement (rootNode, "configSections");
+
+			if (sections == null) {
+				// There is no configSections node so exit
+				return;
+			}
+
 			ConfigBase config = null;
-			
 			foreach (XmlNode node in sections.ChildNodes)
 			{
 				if (node.NodeType == XmlNodeType.Element
@@ -215,7 +235,6 @@ namespace Nini.Config
 					LoadKeys (rootNode, config);
 				}
 			}
-			LoadOtherSection (rootNode, "appSettings");
 		}
 		
 		/// <summary>
@@ -259,6 +278,11 @@ namespace Nini.Config
 		{
 			XmlAttribute attr = null;
 			XmlNode sections = GetChildElement ("configSections");
+
+			if (sections == null) {
+				// There is no configSections node so exit
+				return;
+			}
 			
 			foreach (XmlNode node in sections.ChildNodes)
 			{
@@ -452,6 +476,11 @@ namespace Nini.Config
 			RemoveConfigs ();
 			
 			XmlNode sections = GetChildElement ("configSections");
+
+			if (sections == null) {
+				// There is no configSections node so exit
+				return;
+			}
 			
 			foreach (XmlNode node in sections.ChildNodes)
 			{

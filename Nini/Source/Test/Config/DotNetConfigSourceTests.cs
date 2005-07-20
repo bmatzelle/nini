@@ -386,6 +386,56 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void SaveToStream ()
+		{
+			string filePath = "SaveToStream.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			DotNetConfigSource source = new DotNetConfigSource ();
+			IConfig config = source.AddConfig ("Pets");
+			config.Set ("dog", "rover");
+			config.Set ("cat", "muffy");
+			source.Save (stream);
+			stream.Close ();
+
+			DotNetConfigSource newSource = new DotNetConfigSource (filePath);
+			config = newSource.Configs["Pets"];
+			Assert.IsNotNull (config);
+			Assert.AreEqual (2, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.GetString ("dog"));
+			Assert.AreEqual ("muffy", config.GetString ("cat"));
+			
+			stream.Close ();
+
+			File.Delete (filePath);
+		}
+
+		[Test]
+		public void NoConfigSectionsNode ()
+		{
+			string filePath = "AppSettings.xml";
+
+			// Create an XML document with no configSections node
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml ("<configuration></configuration>");
+
+			XmlNode node = doc.CreateElement ("appSettings");
+			doc.DocumentElement.AppendChild (node);
+			AddKey (doc, "appSettings", "Test", "Hello");
+			
+
+			doc.Save (filePath);
+
+			DotNetConfigSource source = new DotNetConfigSource (filePath);
+			
+			IConfig config = source.Configs["appSettings"];
+			Assert.AreEqual ("Hello", config.GetString ("Test"));
+
+			File.Delete (filePath);
+		}
 		#endregion
 
 		#region Private methods
