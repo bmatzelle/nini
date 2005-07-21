@@ -126,6 +126,7 @@ Table of contents:
       <li>3.1 <a href="#Merging">Merging</a></li>
       <li>3.2 <a href="#ValueAliases">Value Aliases</a></li>
       <li>3.3 <a href="#KeyValueLists">Key Value Lists</a></li>
+      <li>3.4 <a href="#Events">Events</a></li>
     </ul>
   </li>
   <li>4. <a href="#OtherConfigurationTypes">Other Configuration Types </a> 
@@ -155,8 +156,8 @@ Table of contents:
 
 <p>As a developer you deal with application configuration data all of the time.  
   Common examples of this are <a href="http://webopedia.com/TERM/_/_INI_file.html">INI</a> 
-  files, <a href="http://webopedia.com/TERM/X/XML.html">XML</a> files, <a
-href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconconfigurationfiles.asp">.NET 
+  files, <a href="http://webopedia.com/TERM/X/XML.html">XML</a> files, 
+  <a href="http://tinyurl.com/38sn4">.NET 
   configuration files</a> (aka “.config”), the <a href="http://www.systweak.com/winreg/winreg.htm">Windows 
   registry</a>, and command line (argv) arguments.  The advantages of configuration 
   files are that they load quickly, do not take up a lot of space, and are easy 
@@ -237,7 +238,7 @@ can be improved:
   a very popular choice. Nini contains it's own INI parser class (
   <a href="http://nini.sourceforge.net/Reference/html/Nini.Ini.IniDocument.html">IniDocument</a>) 
   which is written entirely in C# with no 
-  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getprivateprofilestring.asp">Windows 
+  <a href="http://tinyurl.com/3ruev">Windows 
   API</a> code so it's cross platform. Here is the text of MyApp.ini for this 
   example:</p>
 
@@ -262,11 +263,11 @@ Language:
 
 <pre><span class="code-keyword">using</span> Nini.Config;
 
-IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;MyApp.ini&quot;);
+IConfigSource source = <span class="code-keyword">new</span> IniConfigSource(&quot;MyApp.ini&quot;);
 
-<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
-<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
-<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
+<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get(&quot;File Name&quot;);
+<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt(&quot;MessageColumns&quot;);
+<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong(&quot;MaxFileSize&quot;);
 </pre>
 </div>
 
@@ -275,11 +276,11 @@ IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&q
 
 <pre><span class="code-keyword">Imports</span> Nini.Config
 
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource (&quot;MyApp.ini&quot;)
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource(&quot;MyApp.ini&quot;)
 
-<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;File Name&quot;)
-<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;MessageColumns&quot;)
-<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;MaxFileSize&quot;)
+<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get(&quot;File Name&quot;)
+<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt(&quot;MessageColumns&quot;)
+<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong(&quot;MaxFileSize&quot;)
 </pre>
 </div>
 
@@ -319,23 +320,25 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here’s an example in C#:
   
 <pre><span class="code-comment">// Sets missing to the default value, &quot;Default result&quot;.</span>
-<span class="code-keyword">string</span> missing = config.Get (&quot;Missing Config&quot;, &quot;Default result&quot;);
+<span class="code-keyword">string</span> missing = config.Get(&quot;Missing Config&quot;, &quot;Default result&quot;);
 
 <span class="code-comment">// Sets smallNumber to the default value, 50.</span>
-<span class="code-keyword">int</span> smallNumber = config.GetInt (&quot;Not Present&quot;, 50);
+<span class="code-keyword">int</span> smallNumber = config.GetInt(&quot;Not Present&quot;, 50);
 </pre>
+</div>
 
 <div class="vbdotnet">
 Here is the same example in VB:
 
 <pre><span class="code-comment">' Sets missing to the default value, &quot;Default result&quot;.</span>
-<span class="code-keyword">Dim</span> missing <span class="code-keyword">As String</span> = config.Get (&quot;Missing Config&quot;, &quot;Default result&quot;)
+<span class="code-keyword">Dim</span> missing <span class="code-keyword">As String</span> = config.Get(&quot;Missing Config&quot;, &quot;Default result&quot;)
 
 <span class="code-comment">' Sets smallNumber to the default value, 50.</span>
-<span class="code-keyword">Dim</span> smallNumber <span class="code-keyword">As Integer</span> = config.GetInt (&quot;Not Present&quot;, 50)
+<span class="code-keyword">Dim</span> smallNumber <span class="code-keyword">As Integer</span> = config.GetInt(&quot;Not Present&quot;, 50)
 </pre>
 </div>
 
@@ -345,11 +348,11 @@ Here is the same example in VB:
   Calling the Set method will change an existing value or if it does not exist 
   add it. Here is an example:</p>
 <pre>
-config.Set (&quot;File Name&quot;, &quot;MyNewFile.log&quot;);
-config.Set (&quot;MessageColumns&quot;, 45);
-config.Remove (&quot;File Name&quot;);
+config.Set(&quot;File Name&quot;, &quot;MyNewFile.log&quot;);
+config.Set(&quot;MessageColumns&quot;, 45);
+config.Remove(&quot;File Name&quot;);
 
-source.Save ();</pre>
+source.Save();</pre>
 
 <p>It is necessary to call the Save method to save a file, h0wever, you can also 
   set the AutoSave property on an IConfigSource and that will automatically save 
@@ -358,7 +361,7 @@ source.Save ();</pre>
   <a href="../Reference/html/Nini.Config.XmlConfigSource.html">XmlConfigSource</a>, 
   and <a href="../Reference/html/Nini.Config.DotNetConfigSource.html">DotNetConfigSource</a> 
   classes all save overloaded <strong>Save</strong> methods that allow you to 
-  save to either a new path or a <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemiotextwriterclasstopic.asp">TextWriter</a>:</p>
+  save to either a new path or a <a href="http://tinyurl.com/dnaew">TextWriter</a>:</p>
 
 <div class="control-panel">
 Language: 
@@ -367,16 +370,16 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here is an example in C#:
 
-<div class="csharp">
 <pre><span class="code-keyword">using</span> System.IO;
 
-IniConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;Test.ini&quot;);
-StringWriter writer = <span class="code-keyword">new</span> StringWriter ();
-source.Save (writer); <span class="code-comment">// Save to StringWriter (TextWriter)</span>
+IniConfigSource source = <span class="code-keyword">new</span> IniConfigSource(&quot;Test.ini&quot;);
+StringWriter writer = <span class="code-keyword">new</span> StringWriter();
+source.Save(writer); <span class="code-comment">// Save to StringWriter(TextWriter)</span>
 
-source.Save ("some/new/path.ini"); <span class="code-comment">// Save to new path</span>
+source.Save("some/new/path.ini"); <span class="code-comment">// Save to new path</span>
 </pre>
 </div>
 
@@ -385,11 +388,11 @@ Here is the example in VB:
 
 <pre><span class="code-keyword">Imports</span> System.IO
 
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As</span> IniConfigSource = <span class="code-keyword">new</span> IniConfigSource (&quot;Test.ini&quot;)
-<span class="code-keyword">Dim</span> writer <span class="code-keyword">As New</span> StringWriter ()
-source.Save (writer) <span class="code-comment">' Save to StringWriter (TextWriter)</span>
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As</span> IniConfigSource = <span class="code-keyword">new</span> IniConfigSource(&quot;Test.ini&quot;)
+<span class="code-keyword">Dim</span> writer <span class="code-keyword">As New</span> StringWriter()
+source.Save(writer) <span class="code-comment">' Save to StringWriter(TextWriter)</span>
 
-source.Save ("some/new/path.ini") <span class="code-comment">' Save to new path</span>
+source.Save("some/new/path.ini") <span class="code-comment">' Save to new path</span>
 </pre>
 </div>
 
@@ -408,13 +411,13 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
-Here is an example in C#:
-  
 <div class="csharp">
-<pre>
-IConfig newConfig = source.AddConfig ("NewConfig");
+Here is an example in C#:
 
-source.Configs.Remove (newConfig);
+<pre>
+IConfig newConfig = source.AddConfig("NewConfig");
+
+source.Configs.Remove(newConfig);
 </pre>
 </div>
 
@@ -422,9 +425,9 @@ source.Configs.Remove (newConfig);
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Dim</span> newConfig <span class="code-keyword">As</span> IConfig = source.AddConfig ("NewConfig")
+<span class="code-keyword">Dim</span> newConfig <span class="code-keyword">As</span> IConfig = source.AddConfig("NewConfig")
 
-source.Configs.Remove (newConfig)
+source.Configs.Remove(newConfig)
 </pre>
 </div>
 
@@ -466,12 +469,12 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here is an example in C#:
 
-<div class="csharp">
 <pre>
-IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;MyApp.ini&quot;);
-source.ReplaceKeyValues ();
+IConfigSource source = <span class="code-keyword">new</span> IniConfigSource(&quot;MyApp.ini&quot;);
+source.ReplaceKeyValues();
 </pre>
 </div>
 
@@ -479,8 +482,8 @@ source.ReplaceKeyValues ();
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IConfigSource (&quot;MyApp.ini&quot;)
-source.ReplaceKeyValues ()
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IConfigSource(&quot;MyApp.ini&quot;)
+source.ReplaceKeyValues()
 </pre>
 </div>
 
@@ -507,16 +510,16 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here is an example in C#:
 
-<div class="csharp">
 <pre>
-IConfigSource mainSource = <span class="code-keyword">new</span> IniConfigSource ("MyApp.ini");
-IConfigSource xmlSource = <span class="code-keyword">new</span> XmlConfigSource ("MyApp.xml");
-mainSource.Merge (xmlSource);
+IConfigSource mainSource = <span class="code-keyword">new</span> IniConfigSource("MyApp.ini");
+IConfigSource xmlSource = <span class="code-keyword">new</span> XmlConfigSource("MyApp.xml");
+mainSource.Merge(xmlSource);
 
 <span class="code-comment">// Now you can access any IConfig from mainSource and xmlSource</span>
-<span class="code-keyword">string</span> xmlValue = mainSource.Configs["SomeXmlSection"].Get ("AnOption");
+<span class="code-keyword">string</span> xmlValue = mainSource.Configs["SomeXmlSection"].Get("AnOption");
 </pre>
 </div>
 
@@ -524,12 +527,12 @@ mainSource.Merge (xmlSource);
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Dim</span> mainSource <span class="code-keyword">As New</span> IniConfigSource ("MyApp.ini")
-<span class="code-keyword">Dim</span> xmlSource <span class="code-keyword">As New</span> XmlConfigSource ("MyApp.xml")
-mainSource.Merge (xmlSource)
+<span class="code-keyword">Dim</span> mainSource <span class="code-keyword">As New</span> IniConfigSource("MyApp.ini")
+<span class="code-keyword">Dim</span> xmlSource <span class="code-keyword">As New</span> XmlConfigSource("MyApp.xml")
+mainSource.Merge(xmlSource)
 
 <span class="code-comment">' Now you can access any IConfig from mainSource and xmlSource</span>
-<span class="code-keyword">Dim</span> xmlValue <span class="code-keyword">As</a> String = mainSource.Configs ("SomeXmlSection").Get ("AnOption")
+<span class="code-keyword">Dim</span> xmlValue <span class="code-keyword">As</a> String = mainSource.Configs("SomeXmlSection").Get("AnOption")
 </pre>
 </div>
 
@@ -563,11 +566,11 @@ Error Level = warn</pre>
   make them remember what case to use as well! The problem with ignoring case 
   is that your code would look pretty ugly as in the following example: </p>
 
-<pre><span class="code-keyword">bool</span> blockPopUps = (config.Get (&quot;Block Popups&quot;).ToLower () == &quot;on&quot;);
+<pre><span class="code-keyword">bool</span> blockPopUps = (config.Get(&quot;Block Popups&quot;).ToLower() == &quot;on&quot;);
 </pre>
 
 <p>Let's define some rules to this file to make them We want the values of the 
-  <strong>BlockPopUps</strong> section to return a <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystembooleanclasstopic.asp">Boolean</a> 
+  <strong>BlockPopUps</strong> section to return a <a href="http://tinyurl.com/cg6ga">Boolean</a> 
   value of <strong>true</strong> when the value is set to &quot;On&quot; and a 
   value of <strong>false</strong> when the value is set to &quot;Off&quot;. Furthermore, 
   I'd like the <strong>Error Level</strong> to return the integer value of 100 
@@ -583,41 +586,41 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here is an example in C#:
 
-<div class="csharp">
-<pre>IConfigSource source = <span class="code-keyword">new</span> IniConfigSource (&quot;AliasExample.ini&quot;);
+<pre>IConfigSource source = <span class="code-keyword">new</span> IniConfigSource(&quot;AliasExample.ini&quot;);
 
 <span class="code-comment">// Creates two Boolean aliases.</span>
-source.Alias.AddAlias (&quot;On&quot;, <span class="code-keyword">true</span>);
-source.Alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">false</span>);
+source.Alias.AddAlias(&quot;On&quot;, <span class="code-keyword">true</span>);
+source.Alias.AddAlias(&quot;Off&quot;, <span class="code-keyword">false</span>);
 
 <span class="code-comment">// Sets two integer aliases.</span>
-source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100);
-source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200);
+source.Alias.AddAlias(&quot;Error Level&quot;, &quot;Warn&quot;,  100);
+source.Alias.AddAlias(&quot;Error Level&quot;, &quot;Error&quot;, 200);
 
 IConfig config = source.Configs[&quot;Web Browser&quot;];
-<span class="code-keyword">bool</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;);
-<span class="code-keyword">int</span> errorCode = config.GetInt (&quot;Error Code&quot;, <span class="code-keyword">true</span>);
+<span class="code-keyword">bool</span> blockPopUps = config.GetBoolean(&quot;BlockPopUps&quot;);
+<span class="code-keyword">int</span> errorCode = config.GetInt(&quot;Error Code&quot;, <span class="code-keyword">true</span>);
 </pre>
 </div>
 
 <div class="vbdotnet">
 Here is the example in VB:
 
-<pre><span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource (&quot;AliasExample.ini&quot;)
+<pre><span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> IniConfigSource(&quot;AliasExample.ini&quot;)
 
 <span class="code-comment">' Creates two Boolean aliases.</span>
-source.Alias.AddAlias (&quot;On&quot;, <span class="code-keyword">True</span>)
-source.Alias.AddAlias (&quot;Off&quot;, <span class="code-keyword">False</span>)
+source.Alias.AddAlias(&quot;On&quot;, <span class="code-keyword">True</span>)
+source.Alias.AddAlias(&quot;Off&quot;, <span class="code-keyword">False</span>)
 
 <span class="code-comment">' Sets two integer aliases.</span>
-source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Warn&quot;,  100)
-source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200)
+source.Alias.AddAlias(&quot;Error Level&quot;, &quot;Warn&quot;,  100)
+source.Alias.AddAlias(&quot;Error Level&quot;, &quot;Error&quot;, 200)
 
 <span class="code-keyword">Dim</span> config <span class="code-keyword">As</span> IConfig = source.Configs(&quot;Web Browser&quot;)
-<span class="code-keyword">Dim</span> blockPopUps = config.GetBoolean (&quot;BlockPopUps&quot;)
-<span class="code-keyword">int</span> errorCode = config.GetInt (&quot;Error Code&quot;, <span class="code-keyword">True</span>)
+<span class="code-keyword">Dim</span> blockPopUps = config.GetBoolean(&quot;BlockPopUps&quot;)
+<span class="code-keyword">int</span> errorCode = config.GetInt(&quot;Error Code&quot;, <span class="code-keyword">True</span>)
 </pre>
 </div>
 
@@ -628,13 +631,13 @@ source.Alias.AddAlias (&quot;Error Level&quot;, &quot;Error&quot;, 200)
   fetched the key data.  The GetInt method is overloaded so that if the parameter 
   is set to <strong>true</strong> then it loads the data as an alias rather than 
   as a literal integer value.</p>
-<a name="KeyValueLists"/>
 
+<a name="KeyValueLists"/>
 <h3>3.3 Key Value Lists</h3>
 
 <p>Nini does not have a specialized method for returning lists of information. 
   This is because there already is way to do this using a little trick with the 
-  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemstringclasstopic.asp">String.Split</a> 
+  <a href="http://tinyurl.com/4uz5z">String.Split</a> 
   method of the .NET Framework. Here is an INI file with a list of servers separated 
   by the vertical line ("|") delimeter: </p>
 <pre>
@@ -653,7 +656,7 @@ Now using the Split method we will return the list of servers as an array of str
 
 <div class="csharp">
 <pre>
-<span class="code-keyword">string</span>[] serverList = source.Configs["MailServers"].Get ("ServerList").Split ('|');
+<span class="code-keyword">string</span>[] serverList = source.Configs["MailServers"].Get("ServerList").Split('|');
 </pre>
 </div>
 
@@ -661,12 +664,69 @@ Now using the Split method we will return the list of servers as an array of str
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Dim serverList() As String</span> = source.Configs("MailServers").Get ("ServerList").Split ('|')
+<span class="code-keyword">Dim serverList() As String</span> = source.Configs("MailServers").Get("ServerList").Split('|')
 </pre>
 </div>
 
 You can use any number of delimeters with the Split method. Be creative.  Just pick a 
 delimeter that you will not be using as a key value.
+
+<a name="Events"/>
+<h3>3.4 Events</h3>
+
+<p>Nini makes things easy by allowing developers to perform operations in a
+disconnected fashion.  A first object can usually just use an IConfig without
+having to worry about how other objects are using it.  However, there are times
+when it is useful to know when the configuration data has been changed.  Nini
+has added many events to help deal with these situations. </p>
+
+<p>
+In the following scenario a class wants notification when an IConfigSource 
+has been saved.  
+</p>
+
+<div class="control-panel">
+Language: 
+<a href="javascript:showCSharp();">C# only</a> -
+<a href="javascript:showVbDotNet();"> VB only</a> - 
+<a href="javascript:showAllCode();">All</a>
+</div>
+
+<div class="csharp">
+Here is a C# example:
+
+<pre>
+<span class="code-keyword">void</span> SourceLoad()
+{
+  source = <span class="code-keyword">new</span> IniConfigSource();
+  source.Saved += <span class="code-keyword">new</span> EventHandler(this.source_Saved);
+}
+
+<span class="code-keyword">void</span> source_Saved(<span class="code-keyword">object</span> sender, EventArgs e)
+{
+  <span class="code-comment">// perform save actions here</span>
+}
+</pre>
+</div>
+
+<div class="vbdotnet">
+Here is a VB example:
+
+<pre>
+<span class="code-keyword">Sub</span> SourceLoad()
+{
+  source = New IniConfigSource()
+  source.Saved += New EventHandler(Me.source_Saved)
+}
+
+<span class="code-keyword">Sub</span> source_Saved(sender <span class="code-keyword">As</span> object, e <span class="code-keyword">As</span> EventArgs) Handles source.Saved
+{
+  <span class="code-comment">' perform save actions here</span>
+}
+</pre>
+</div>
+
+There are more events such as Load, KeySet, KeyRemoved, ConfigAdded, and ConfigRemoved.  
 
 <p><a name="OtherConfigurationTypes" /></p>
 <h2>4. Other Configuration Types</h2>
@@ -700,9 +760,9 @@ Language:
 <div class="csharp">
 <pre>
 <span class="code-comment">// Loads the XML file</span>
-XmlConfigSource source = <span class="code-keyword">new</span> XmlConfigSource ("MyApp.xml");
+XmlConfigSource source = <span class="code-keyword">new</span> XmlConfigSource("MyApp.xml");
 <span class="code-comment">// Retrieves a value</span>
-<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
+<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong("MaxFileSize");
 </pre>
 </div>
 
@@ -711,9 +771,9 @@ Here is the example in VB:
 
 <pre>
 <span class="code-comment">' Loads the XML file</span>
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> XmlConfigSource ("MyApp.xml")
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> XmlConfigSource("MyApp.xml")
 <span class="code-comment">' Retrieves a value</span>
-<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong("MaxFileSize")
 </pre>
 </div>
 
@@ -721,7 +781,7 @@ Here is the example in VB:
 <h3>4.2 Windows Registry Configuration</h3>
 
 If you are using one of the many Microsoft Windows operating systems then you 
-can access data from the <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfmicrosoftwin32registryclasstopic.asp">Windows 
+can access data from the <a href="http://tinyurl.com/c8tpz">Windows 
 Registry</a>. Here is an example key path for a registry item: 
 <pre>HKEY_LOCAL_MACHINE\Sofware\MyApp\Logging
     &quot;File Name&quot;       "MyApp.log"  REG_SZ
@@ -739,16 +799,16 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
+<div class="csharp">
 Here is an example in C#:
 
-<div class="csharp">
 <pre>
 <span class="code-keyword">using</span> Microsoft.Win32;
-RegistryConfigSource source = <span class="code-keyword">new</span> RegistryConfigSource ();
+RegistryConfigSource source = <span class="code-keyword">new</span> RegistryConfigSource();
 <span class="code-comment">// Loads the registry tree</span>
-source.AddMapping (Registry.LocalMachine, "Software\\MyApp\\Logging");
+source.AddMapping(Registry.LocalMachine, "Software\\MyApp\\Logging");
 <span class="code-comment">// Retrieves a value</span>
-<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
+<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong("MaxFileSize");
 </pre>
 </div>
 
@@ -757,11 +817,11 @@ Here is the example in VB:
 
 <pre>
 <span class="code-keyword">Imports</span> Microsoft.Win32
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource ()
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource()
 <span class="code-comment">' Loads the registry tree</span>
-source.AddMapping (Registry.LocalMachine, "Software\\MyApp\\Logging")
+source.AddMapping(Registry.LocalMachine, "Software\\MyApp\\Logging")
 <span class="code-comment">' Retrieves a value</span>
-<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong("MaxFileSize")
 </pre>
 </div>
 
@@ -781,11 +841,11 @@ If you want to get all subkeys underneath a key with a flat name you can do this
 <pre>
 <span class="code-keyword">using</span> Microsoft.Win32;
 <span class="code-comment">// Loads the registry tree and all nodes beneath it without </span>
-RegistryConfigSource source = <span class="code-keyword">new</span> RegistryConfigSource ();
-source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened);
+RegistryConfigSource source = <span class="code-keyword">new</span> RegistryConfigSource();
+source.AddMapping(Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened);
 
-<span class="code-keyword">string</span> maxFileSize = source.Configs["MyApp"].GetString ("SomeConfig");
-<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong ("MaxFileSize");
+<span class="code-keyword">string</span> maxFileSize = source.Configs["MyApp"].GetString("SomeConfig");
+<span class="code-keyword">long</span> maxFileSize = source.Configs["Logging"].GetLong("MaxFileSize");
 </pre>
 </div>
 
@@ -795,11 +855,11 @@ Here is the example in VB:
 <pre>
 <span class="code-keyword">Imports</span> Microsoft.Win32
 <span class="code-comment">' Loads the registry tree and all nodes beneath it without </span>
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource ()
-source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened)
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> RegistryConfigSource()
+source.AddMapping(Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flattened)
 
-<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> String = source.Configs("MyApp").GetString ("SomeConfig");
-<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong ("MaxFileSize")
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> String = source.Configs("MyApp").GetString("SomeConfig");
+<span class="code-keyword">Dim</span> maxFileSize <span class="code-keyword">As</span> Long = source.Configs("Logging").GetLong("MaxFileSize")
 </pre>
 </div>
 
@@ -807,7 +867,7 @@ source.AddMapping (Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Fla
 
 <h3>4.3 .NET Configuration Files</h3>
 <p>The .NET Framework has it's own configuration file mechanism that uses a specific 
-  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconconfigurationfiles.asp">XML 
+  <a href="http://tinyurl.com/38sn4">XML 
   format</a>. You may be familiar with them in ASP.NET as <strong>web.config</strong> 
   files. If you are using them with Windows Forms, console applications, or services 
   you will know them as <strong>[APP NAME].exe.config</strong> files. To support 
@@ -838,11 +898,11 @@ Accessing the data is very similar to loading an INI or XML file:
 
 <div class="csharp">
 <pre>
-IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ());
+IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource(DotNetConfigSource.GetFullConfigPath());
 
-<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;File Name&quot;);
-<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;MessageColumns&quot;);
-<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;MaxFileSize&quot;);
+<span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get(&quot;File Name&quot;);
+<span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt(&quot;MessageColumns&quot;);
+<span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong(&quot;MaxFileSize&quot;);
 </pre>
 </div>
 
@@ -850,11 +910,11 @@ IConfigSource source = <span class="code-keyword">new</span> DotNetConfigSource 
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> DotNetConfigSource (DotNetConfigSource.GetFullConfigPath ())
+<span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> DotNetConfigSource(DotNetConfigSource.GetFullConfigPath())
 
-<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;File Name&quot;)
-<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;MessageColumns&quot;)
-<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;MaxFileSize&quot;)
+<span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get(&quot;File Name&quot;)
+<span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt(&quot;MessageColumns&quot;)
+<span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong(&quot;MaxFileSize&quot;)
 </pre>
 </div>
 
@@ -864,12 +924,12 @@ Here is the example in VB:
   accept command line switches. These switches are simply strings passed into 
   the application when it is first started. The Windows program Xcopy has many 
   command line 
-  <a href="http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/xcopy.mspx">switches</a> 
+  <a href="http://tinyurl.com/a7e3q">switches</a> 
   and the excellent downloading application wget has it's own 
   <a href="http://linux.about.com/library/cmd/blcmdl1_wget.htm">switches</a> 
   as well. If you want to read a little more about how command line parameters 
   work in .NET 
-  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/csref/html/vcwlkcommandlineparameterstutorial.asp">click 
+  <a href="http://tinyurl.com/clmy4">click 
   here</a>. Our first example is very similar to the others you have seen so far. 
   The difference is that the 
   <a href="../Reference/html/Nini.Config.IConfig.AddSwitch_overloads.html">AddSwitch</a> 
@@ -883,23 +943,23 @@ Language:
 <a href="javascript:showAllCode();">All</a>
 </div>
 
-Here is an example in C#:
-    
 <div class="csharp">
+Here is an example in C#:
+
 <pre>
-<span class="code-keyword">public static int</span> Main (<span class="code-keyword">string</span>[] args)
+<span class="code-keyword">public static int</span> Main(<span class="code-keyword">string</span>[] args)
 {
-   ArgvConfigSource source = <span class="code-keyword">new</span> ArgvConfigSource (args);
+   ArgvConfigSource source = <span class="code-keyword">new</span> ArgvConfigSource(args);
 
-   source.AddSwitch ("Logging", "file-name", "f");
-   source.AddSwitch ("Logging", "columns", "c");
-   source.AddSwitch ("Logging", "max-file-size", "m");
+   source.AddSwitch("Logging", "file-name", "f");
+   source.AddSwitch("Logging", "columns", "c");
+   source.AddSwitch("Logging", "max-file-size", "m");
 
-   <span class="code-keyword">if</span> (args.Length > 0)
+   <span class="code-keyword">if</span>(args.Length > 0)
    {
-      <span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get (&quot;file-name&quot;);
-      <span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt (&quot;columns&quot;);
-      <span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong (&quot;max-file-size&quot;);
+      <span class="code-keyword">string</span> fileName = source.Configs[&quot;Logging&quot;].Get(&quot;file-name&quot;);
+      <span class="code-keyword">int</span> columns = source.Configs[&quot;Logging&quot;].GetInt(&quot;columns&quot;);
+      <span class="code-keyword">long</span> fileSize = source.Configs[&quot;Logging&quot;].GetLong(&quot;max-file-size&quot;);
    }
 }
 </pre>
@@ -909,17 +969,17 @@ Here is an example in C#:
 Here is the example in VB:
 
 <pre>
-<span class="code-keyword">Public Static Function</span> Main (args() <span class="code-keyword">As</span> String) <span class="code-keyword">As</span> Integer
-   <span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> ArgvConfigSource (args)
+<span class="code-keyword">Public Static Function</span> Main(args() <span class="code-keyword">As</span> String) <span class="code-keyword">As</span> Integer
+   <span class="code-keyword">Dim</span> source <span class="code-keyword">As New</span> ArgvConfigSource(args)
 
-   source.AddSwitch ("Logging", "file-name", "f")
-   source.AddSwitch ("Logging", "columns", "c")
-   source.AddSwitch ("Logging", "max-file-size", "m")
+   source.AddSwitch("Logging", "file-name", "f")
+   source.AddSwitch("Logging", "columns", "c")
+   source.AddSwitch("Logging", "max-file-size", "m")
 
    <span class="code-keyword">If</span> (args.Length > 0) <span class="code-keyword">Then</span>
-      <span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get (&quot;file-name&quot;)
-      <span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt (&quot;columns&quot;)
-      <span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong (&quot;max-file-size&quot;)
+      <span class="code-keyword">Dim</span> fileName <span class="code-keyword">As</span> String = source.Configs(&quot;Logging&quot;).Get(&quot;file-name&quot;)
+      <span class="code-keyword">Dim</span> columns <span class="code-keyword">As</span> Integer = source.Configs(&quot;Logging&quot;).GetInt(&quot;columns&quot;)
+      <span class="code-keyword">Dim</span> fileSize <span class="code-keyword">As</span> Long = source.Configs(&quot;Logging&quot;).GetLong(&quot;max-file-size&quot;)
    <span class="code-keyword">End If</span>
 <span class="code-keyword">End Function</span>
 </pre>
@@ -957,7 +1017,7 @@ You can get this path programatically with the following path:
 </p>
 
 <pre>
-<span class="code-keyword">string</span> folder = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
+<span class="code-keyword">string</span> folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 </pre>
 
 <a name="Database" />
@@ -989,18 +1049,18 @@ load a Nini configuration values like this:
 </p>
 
 <pre>
-<span class="code-keyword">string</span> userId = GetUserId (); // retrieve the user id somehow
+<span class="code-keyword">string</span> userId = GetUserId(); <span class="code-comment">// retrieve the user id somehow</span>
 
-SqlCommand command = <span class="code-keyword">new</span> SqlCommand ("SELECT Settings FROM UserSettings WHERE ID = "
+SqlCommand command = <span class="code-keyword">new</span> SqlCommand("SELECT Settings FROM UserSettings WHERE ID = "
                                      + userId, connection);
 
 connection.Open();
 
 SqlDataReader reader = command.ExecuteReader();
 
-<span class="code-keyword">if</span> (reader.HasRows) {
-    reader.Read ();
-    IConfigSource source = <span class="code-keyword">new</span> XmlConfigSource (<span class="code-keyword">new</span> StringReader (reader.GetString(0)));
+<span class="code-keyword">if</span>(reader.HasRows) {
+    reader.Read();
+    IConfigSource source = <span class="code-keyword">new</span> XmlConfigSource(<span class="code-keyword">new</span> StringReader(reader.GetString(0)));
 }
 
 reader.Close();
@@ -1097,16 +1157,16 @@ Here's how you would create it in code:
 </p>
 
 <pre>
-IniConfigSource source = <span class="code-keyword">new</span> IniConfigSource ();
+IniConfigSource source = <span class="code-keyword">new</span> IniConfigSource();
 
-IConfig config = source.AddConfig ("General");
-config.Set ("Debug", "false");
-config.Set ("Logging", "On");
+IConfig config = source.AddConfig("General");
+config.Set("Debug", "false");
+config.Set("Logging", "On");
 
-config = source.AddConfig ("Logging");
-config.Set ("FilePath", "C:\\temp\\MyApp.log");
+config = source.AddConfig("Logging");
+config.Set("FilePath", "C:\\temp\\MyApp.log");
 
-source.Save ("MyApp.ini");
+source.Save("MyApp.ini");
 </pre>
 
 </p>
@@ -1193,6 +1253,6 @@ yourself heard.
 </p>
 
 <hr noshade>
-Copyright &copy; 2004 Brent R. Matzelle. All rights reserved. 
+Copyright &copy; 2005 Brent R. Matzelle. All rights reserved. 
 </body>
 </html>
