@@ -89,17 +89,21 @@ function showAllCode()
 
 </head>
 <body bgcolor="#FFFFFF" link=blue vlink=purple class="Normal" lang=EN-US>
-<h1> Nini Manual</h1>
-Nini .NET Configuration Library (<a href="http://nini.sourceforge.net/">http://nini.sourceforge.net/</a>) 
-<br/>
-Copyright &copy; 2005 Brent R. Matzelle
+<h1>Nini Manual</h1>
 
 <p>
-<div class="control-panel">
-Table of contents:
-<a href="javascript:showTableOfContents(true);">Show</a> -
-<a href="javascript:showTableOfContents(false);">Hide</a>
-</div>
+  Nini .NET Configuration Library 
+  (<a href="http://nini.sourceforge.net/">http://nini.sourceforge.net/</a>) 
+  <br/>
+  Copyright &copy; 2005 Brent R. Matzelle
+</p>
+
+<p>
+  <div class="control-panel">
+  Table of contents:
+  <a href="javascript:showTableOfContents(true);">Show</a> -
+  <a href="javascript:showTableOfContents(false);">Hide</a>
+  </div>
 </p>
 
 <div class="toc">
@@ -149,9 +153,9 @@ Table of contents:
 </ul>
 </div>
 
-<a name="Introduction" />
+<a name="Introduction"></a>
 <h2>1. Introduction</h2>
-<a name="WhatIsApplicationConfigurationData" />
+<a name="WhatIsApplicationConfigurationData"></a>
 <h3>1.1 What is Application Configuration Data?</h3>
 
 <p>As a developer you deal with application configuration data all of the time.  
@@ -163,28 +167,31 @@ Table of contents:
   files are that they load quickly, do not take up a lot of space, and are easy 
   to edit.  </p>
 
-<a name="TheProblem" />
-<h3>1.2 The Problem</h3> 
-  Attempts to create configuration file access schemes do not satisfy the needs 
-of either programmers or end-users.  To give a real life scenario I worked for 
-an organization that configured their original programs using the Windows registry 
-API (Application Programming Interface).  Later on they developed their own ASP 
-configuration class.  At about the same time another group developed an API that 
-fetched the data from a database.   Then when ASP.NET came along they started 
-to use Web.config.  In a matter of several years the number of configuration data 
-sources grew from one to four!  Needless to say getting configuration data often 
-became a grueling task.  Here are the three major areas where configuration management 
-can be improved: 
+<a name="TheProblem"></a>
+<h3>1.2 The Problem</h3>
+
 <p>
+  Attempts to create configuration file access schemes do not satisfy the needs 
+  of either programmers or end-users.  To give a real life scenario I worked for 
+  an organization that configured their original programs using the Windows registry 
+  API (Application Programming Interface).  Later on they developed their own ASP 
+  configuration class.  At about the same time another group developed an API that 
+  fetched the data from a database.   Then when ASP.NET came along they started 
+  to use Web.config.  In a matter of several years the number of configuration data 
+  sources grew from one to four!  Needless to say getting configuration data often 
+  became a grueling task.  Here are the three major areas where configuration management 
+  can be improved: 
+</p>
 
 <ul>
-<li><b>API<br>
-  </b>Developers use a configuration file format that gets their application running 
-  in the shortest time possible.   However the API for accessing this data is 
-  commonly added as an afterthought resulting in an inflexible API.  In very small 
-  applications this might not be a problem but as a program’s codebase grows the 
-  configuration information will often find itself littered throughout the application 
-  code. </p>
+<li><p><b>API</b><br>
+    Developers use a configuration file format that gets their application running 
+    in the shortest time possible.   However the API for accessing this data is 
+    commonly added as an afterthought resulting in an inflexible API.  In very small 
+    applications this might not be a problem but as a program’s codebase grows the 
+    configuration information will often find itself littered throughout the application 
+    code.
+  </p>
  </li>
 <li><p><b>End Users<br>
   </b>Configuration files are usually not written with the end user in mind.  
@@ -211,22 +218,25 @@ can be improved:
 </li>
 </ul>
 
-<a name="IntroducingNini" />
+<a name="IntroducingNini"></a>
 <h3>1.3 Introducing Nini</h3>
-<p>Nini is the uncommonly powerful .NET configuration library. The goal of this 
-  project is to provide developers with a tool that makes it easy to write highly 
-  configurable applications in a short amount of time.  Nini provides a solution that 
+<p>
+  Nini is an uncommonly powerful 
+  <a href="http://msdn.microsoft.com/netframework/">.NET</a> configuration 
+  <a href="http://en.wikipedia.org/wiki/Code_library">library</a> designed 
+  to help build highly configurable applications quickly. Nini provides a solution that 
   attempts to eliminate the above problems. It provides a large feature set that 
   gives you functionality that you will use in every phase of your project, from 
   concept to mature product.  This is accomplished through a simple, yet flexible, 
   API that provides an abstraction over the underlying configuration sources.  
   It solves all of the problems that I described above.  We’ll see how this is 
-  done in the examples below. </p>
+  done in the examples below.
+</p>
   
-  <a name="GettingStarted" />
+<a name="GettingStarted"></a>
 <h2>2. Getting Started</h2>
 
-<a name="ASimpleExample" />
+<a name="ASimpleExample"></a>
 <h3>2.1 A Simple Example</h3>
 <p>In order to show you how Nini solves these problems let’s go over an example.  
   First, let’s take an example configuration file.  I will choose the <a href="http://webopedia.com/TERM/_/_INI_file.html">INI 
@@ -306,7 +316,7 @@ IConfigSource source = <span class="code-keyword">new</span> IniConfigSource(&qu
   provide more data. The next couple sections describe how to use these overloads. 
 </p>
   
-  <a name="DefaultValues" />
+<a name="DefaultValues"></a>
 <h3>2.2 Default Values</h3>
 <p>Sometimes an option will not be present in a configuration file.  This might 
   be because it hasn’t been added to the project’s main build or because it should 
@@ -342,7 +352,7 @@ Here is the same example in VB:
 </pre>
 </div>
 
-<a name="SettingSavingRemoving" />
+<a name="SettingSavingRemoving"></a>
 <h3>2.3 Setting, Saving, and Removing Keys</h3>
 <p>It is also possible to set and save new values into the configuration file. 
   Calling the Set method will change an existing value or if it does not exist 
@@ -396,7 +406,7 @@ source.Save("some/new/path.ini") <span class="code-comment">' Save to new path</
 </pre>
 </div>
 
-<a name="AddingRemovingConfigs"/>
+<a name="AddingRemovingConfigs"></a>
 
 <h3>2.4 Adding and Removing Configs</h3>
 
@@ -431,7 +441,7 @@ source.Configs.Remove(newConfig)
 </pre>
 </div>
 
-<p><a name="KeyValueReplacment"/></p>
+<a name="KeyValueReplacment"></a>
 <h3>2.5 Key Value Replacement</h3>
 <p>In many cases you will find that your key values are dependent on the values 
   of other keys. For instance you have a root path configuration value and several 
@@ -490,10 +500,10 @@ source.ReplaceKeyValues()
 <p>That’s how easy it is to create your first Nini configured application.  The 
   following sections will explain some more advanced features of Nini. </p>
   
-<a name="AdvancedTopics" />
+<a name="AdvancedTopics"></a>
 <h2>3. Advanced Topics</h2>
 
-<a name="Merging" />
+<a name="Merging"></a>
 <h3>3.1 Merging</h3>
 
 <p>Merging is a very powerful functionality that allows developers to combine 
@@ -542,7 +552,8 @@ mainSource.Merge(xmlSource)
   needs. You can create your default configuration settings in one file and have 
   a client specific file that will override the settings of the main file if needed. 
   This will save you tons of work. It did for me. </p>
-<a name="ValueAliases" />
+
+<a name="ValueAliases"></a>
 <h3>3.2 Value Aliases</h3>
 <p>Many configuration files have options that are clear to programmers but very 
   confusing to non-programmers. In order to help make a configuration file easier 
@@ -632,7 +643,7 @@ source.Alias.AddAlias(&quot;Error Level&quot;, &quot;Error&quot;, 200)
   is set to <strong>true</strong> then it loads the data as an alias rather than 
   as a literal integer value.</p>
 
-<a name="KeyValueLists"/>
+<a name="KeyValueLists"></a>
 <h3>3.3 Key Value Lists</h3>
 
 <p>Nini does not have a specialized method for returning lists of information. 
@@ -671,7 +682,7 @@ Here is the example in VB:
 You can use any number of delimeters with the Split method. Be creative.  Just pick a 
 delimeter that you will not be using as a key value.
 
-<a name="Events"/>
+<a name="Events"></a>
 <h3>3.4 Events</h3>
 
 <p>Nini makes things easy by allowing developers to perform operations in a
@@ -728,10 +739,10 @@ Here is a VB example:
 
 There are more events such as Load, KeySet, KeyRemoved, ConfigAdded, and ConfigRemoved.  
 
-<p><a name="OtherConfigurationTypes" /></p>
+<a name="OtherConfigurationTypes"></a>
 <h2>4. Other Configuration Types</h2>
 
-<a name="XMLConfiguration" id="XMLConfiguration" /> 
+<a name="XMLConfiguration" id="XMLConfiguration"></a>
 <h3>4.1 XML Configuration</h3>
 <p>Nini has it's own XML configuration file structure. It provides more flexibility 
   than does the .NET configuration file format. It's main advantages are that 
@@ -777,7 +788,7 @@ Here is the example in VB:
 </pre>
 </div>
 
-<a name="WindowsRegistryConfiguration" />
+<a name="WindowsRegistryConfiguration"></a>
 <h3>4.2 Windows Registry Configuration</h3>
 
 If you are using one of the many Microsoft Windows operating systems then you 
@@ -863,7 +874,7 @@ source.AddMapping(Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flat
 </pre>
 </div>
 
-<a name=".NETCOnfiguration"/>
+<a name=".NETCOnfiguration"></a>
 
 <h3>4.3 .NET Configuration Files</h3>
 <p>The .NET Framework has it's own configuration file mechanism that uses a specific 
@@ -918,7 +929,8 @@ Here is the example in VB:
 </pre>
 </div>
 
-<p><a name="ArgvConfiguration" /></p>
+<a name="ArgvConfiguration"></a>
+
 <h3>4.4 Command Line (Argv) Configuration</h3>
 <p>Since the beginning of programming applications have had the capability to 
   accept command line switches. These switches are simply strings passed into 
@@ -985,10 +997,10 @@ Here is the example in VB:
 </pre>
 </div>
 
-<p><a name="UsingNiniEffectively" /></p>
+<a name="UsingNiniEffectively"></a>
 <h2>5. Using Nini Effictively</h2>
 
-<a name="MultipleUsers" />
+<a name="MultipleUsers"></a>
 <h3>5.1 Handling configuration for multiple users</h3>
 
 <p>
@@ -1020,7 +1032,7 @@ You can get this path programatically with the following path:
 <span class="code-keyword">string</span> folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 </pre>
 
-<a name="Database" />
+<a name="Database"></a>
 <h3>5.2 Storing configuration data in a database</h3>
 
 <p>
@@ -1068,7 +1080,7 @@ connection.Close();
 </pre>
 </p>
 
-<a name="AutomatingWithNiniEdit" />
+<a name="AutomatingWithNiniEdit"></a>
 <h3>5.3 Automating configuration file creation</h3>
 
 <p>
@@ -1131,7 +1143,7 @@ else then use NiniEdit as an example of how to write your own
 command-line applications with Nini.
 </p>
 
-<a name="Progammatically" />
+<a name="Progammatically"></a>
 <h3>5.4 Creating configuration files programmatically</h3>
 
 <p>
@@ -1171,7 +1183,7 @@ source.Save("MyApp.ini");
 
 </p>
 
-<a name="Choosing" />
+<a name="Choosing"></a>
 <h3>5.5 Choosing the right configuration file type for your application</h3>
 
 <p>
