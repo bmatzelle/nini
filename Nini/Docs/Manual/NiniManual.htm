@@ -1,94 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
+
 <head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<title>Nini Manual - .NET Configuration Library</title>
-<style type="text/css">
-<!--
-BODY {
-  font-family: tahoma,verdana,arial,helvetica;
-  margin: 10;
-  background-color: #ffffff;
-  color: #000000;
-  font-size: 10pt;
-}
-PRE {
-  background: #EEEEEE;
-  margin-top: 1em; margin-bottom:1em; margin-left:0px;
-  padding: 5pt;
-  border-style: dotted;
-  border-width: 1;
-  font-size: 10pt;
-}
-.code-keyword {
-  color: #333399;
-  font-weight: bold;
-}
-.code-comment {
-    color: #339900;
-}
-div.csharp {
-    display: block;
-}
-div.vbdotnet {
-    display: block;
-}
-.control-panel {
-    margin-left: 75%;
-    font-size: 10px;
-    color: #999;
-    border: 1px solid #ccc;
-    padding: 3px;
-    text-align: center;
-}
--->
-</style>
-<script type="text/javascript">
-<!--
-// Turns on and off viewable source code
-function showBlock(className, show)
-{
-	var x = document.getElementsByTagName('div');
-	
-	var displayType = (show) ? 'block' : 'none';
-	for (var i = 0; i < x.length; i++)
-	{
-		if (x[i].className == className) {
-			x[i].style.display = displayType
-		}
-	}
-}
+  <meta http-equiv="content-type" content="text/html;charset=iso-8859-1"/>
+  <title>Nini Manual - .NET Configuration Library</title>
 
-// Hides or displays the table of contents
-function showTableOfContents(show)
-{
-    showBlock("toc", show);
-}
+  <style type="text/css">
+  <!--
+  BODY {
+    font-family: tahoma,verdana,arial,helvetica;
+    margin: 10;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 10pt;
+  }
+  PRE {
+    background: #EEEEEE;
+    margin-top: 1em; margin-bottom:1em; margin-left:0px;
+    padding: 5pt;
+    border-style: dotted;
+    border-width: 1;
+    font-size: 10pt;
+  }
+  .code-keyword {
+    color: #333399;
+    font-weight: bold;
+  }
+  .code-comment {
+      color: #339900;
+  }
+  div.csharp {
+      display: block;
+  }
+  div.vbdotnet {
+      display: block;
+  }
+  .control-panel {
+      margin-left: 75%;
+      font-size: 10px;
+      color: #999;
+      border: 1px solid #ccc;
+      padding: 3px;
+      text-align: center;
+  }
+  -->
+  </style>
+  <script type="text/javascript">
+  <!--
+  // Turns on and off viewable source code
+  function showBlock(className, show)
+  {
+  	var x = document.getElementsByTagName('div');
+  	
+  	var displayType = (show) ? 'block' : 'none';
+  	for (var i = 0; i < x.length; i++)
+  	{
+  		if (x[i].className == className) {
+  			x[i].style.display = displayType
+  		}
+  	}
+  }
+  
+  // Hides or displays the table of contents
+  function showTableOfContents(show)
+  {
+      showBlock("toc", show);
+  }
+  
+  // Shows only C# code
+  function showCSharp()
+  {
+      showBlock("vbdotnet", false);
+      showBlock("csharp", true);
+  }
+  
+  // Shows only VB.NET code
+  function showVbDotNet()
+  {
+      showBlock("vbdotnet", true);
+      showBlock("csharp", false);
+  }
+  
+  // Shows all code
+  function showAllCode()
+  {
+      showBlock("vbdotnet", true);
+      showBlock("csharp", true);
+  }
+  -->
+  </script>
 
-// Shows only C# code
-function showCSharp()
-{
-    showBlock("vbdotnet", false);
-    showBlock("csharp", true);
-}
-
-// Shows only VB.NET code
-function showVbDotNet()
-{
-    showBlock("vbdotnet", true);
-    showBlock("csharp", false);
-}
-
-// Shows all code
-function showAllCode()
-{
-    showBlock("vbdotnet", true);
-    showBlock("csharp", true);
-}
--->
-</script>
-
-</head>
-<body bgcolor="#FFFFFF" link=blue vlink=purple class="Normal" lang=EN-US>
 <h1>Nini Manual</h1>
 
 <p>
@@ -98,13 +99,11 @@ function showAllCode()
   Copyright &copy; 2005 Brent R. Matzelle
 </p>
 
-<p>
-  <div class="control-panel">
+<div class="control-panel">
   Table of contents:
   <a href="javascript:showTableOfContents(true);">Show</a> -
   <a href="javascript:showTableOfContents(false);">Hide</a>
-  </div>
-</p>
+</div>
 
 <div class="toc">
 <ul>
@@ -137,7 +136,7 @@ function showAllCode()
     <ul>
       <li>4.1 <a href="#XMLConfiguration">XML Configuration</a></li>
       <li>4.2 <a href="#WindowsRegistryConfiguration">Windows Registry Configuration</a></li>
-      <li>4.3 <a href="#.NETCOnfiguration">.NET Configuration Files</a></li>
+      <li>4.3 <a href="#NETCOnfiguration">.NET Configuration Files</a></li>
       <li>4.4 <a href="#ArgvConfiguration">Command Line (Argv) Configuration</a></li>
     </ul>
   </li>
@@ -184,7 +183,7 @@ function showAllCode()
 </p>
 
 <ul>
-<li><p><b>API</b><br>
+<li><p><b>API</b><br/>
     Developers use a configuration file format that gets their application running 
     in the shortest time possible.   However the API for accessing this data is 
     commonly added as an afterthought resulting in an inflexible API.  In very small 
@@ -193,7 +192,7 @@ function showAllCode()
     code.
   </p>
  </li>
-<li><p><b>End Users<br>
+<li><p><b>End Users<br/>
   </b>Configuration files are usually not written with the end user in mind.  
   Often the configuration options are terse programming terms that only the bravest 
   users dare to change them.  This leads to developers having to write complicated 
@@ -542,7 +541,7 @@ Here is the example in VB:
 mainSource.Merge(xmlSource)
 
 <span class="code-comment">' Now you can access any IConfig from mainSource and xmlSource</span>
-<span class="code-keyword">Dim</span> xmlValue <span class="code-keyword">As</a> String = mainSource.Configs("SomeXmlSection").Get("AnOption")
+<span class="code-keyword">Dim</span> xmlValue <span class="code-keyword">As</span> String = mainSource.Configs("SomeXmlSection").Get("AnOption")
 </pre>
 </div>
 
@@ -874,7 +873,7 @@ source.AddMapping(Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flat
 </pre>
 </div>
 
-<a name=".NETCOnfiguration"></a>
+<a name="NETCOnfiguration"></a>
 
 <h3>4.3 .NET Configuration Files</h3>
 <p>The .NET Framework has it's own configuration file mechanism that uses a specific 
@@ -1078,7 +1077,6 @@ SqlDataReader reader = command.ExecuteReader();
 reader.Close();
 connection.Close();
 </pre>
-</p>
 
 <a name="AutomatingWithNiniEdit"></a>
 <h3>5.3 Automating configuration file creation</h3>
@@ -1181,8 +1179,6 @@ config.Set("FilePath", "C:\\temp\\MyApp.log");
 source.Save("MyApp.ini");
 </pre>
 
-</p>
-
 <a name="Choosing"></a>
 <h3>5.5 Choosing the right configuration file type for your application</h3>
 
@@ -1192,7 +1188,6 @@ citizens.  This is because each configuration file type has it's own
 strengths and weaknesses.  The list below contains some basic guidelines:
 </p>
 
-<p>
 INI
 <ul>
 <li>Speed - The file type is parsed very quickly so it is likely to load 
@@ -1204,9 +1199,7 @@ file manually then I greatly recommend this format.
 (Wise, NSIS, to name a couple).  If you need your build to edit these 
 files than this is definitely the way to go.
 </ul>
-</p>
 
-<p>
 XML
 <ul>
 <li>Speed - The XML parser has a lot of information to load so this is 
@@ -1217,9 +1210,7 @@ applications are accessing data then this is a good type.
 <li>Installers - Since there is no standard XML format for configuration 
 files this is not often supported by installers.  
 </ul>
-</p>
 
-<p>
 .NET Configuration File
 <ul>
 <li>Speed - The XML parser has a lot of information to load so this is 
@@ -1229,9 +1220,7 @@ probably the slowest.
 other configurations.  I would recommend not using it if it mixes up .NET 
 configurations and your own application configuration options. 
 </ul>
-</p>
 
-<p>
 Windows Registry
 <ul>
 <li>Speed - Retrieves configuration data quickly.  The retrieval speed 
@@ -1247,7 +1236,6 @@ configuration file editor is pretty well known and mature.
 <li>Installers - Most installers support reading and editing registry keys 
 so this is a good choice.  
 </ul>
-</p>
 
 <p>
 There is no perfect configuration type because each one has it's own benefits.  
