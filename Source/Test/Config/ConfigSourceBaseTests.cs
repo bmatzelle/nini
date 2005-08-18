@@ -418,6 +418,24 @@ namespace Nini.Test.Config
 		}
 
 		[Test]
+		public void ReplaceKeyInfiniteRecursion ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[replace]");
+			writer.WriteLine ("test = ${test} broken");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			try {
+				source.ReplaceKeyValues ();
+			}
+			catch (ArgumentException ex) {
+				Assert.AreEqual 
+					("Key cannot have a replace value of itself: test", ex.Message);
+			}
+		}
+
+		[Test]
 		public void ConfigBaseGetErrors ()
 		{
 			StringWriter writer = new StringWriter ();

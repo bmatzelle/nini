@@ -146,6 +146,12 @@ namespace Nini.Config
 					string search = text.Substring (startIndex + 2, 
 													endIndex - (startIndex + 2));
 
+					if (search == key) {
+						// Prevent infinite recursion
+						throw new ArgumentException 
+							("Key cannot have a replace value of itself: " + key);
+					}
+
 					string replace = ReplaceValue (config, search);
 
 					// Assemble the result string
