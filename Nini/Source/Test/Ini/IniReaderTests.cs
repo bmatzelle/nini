@@ -259,6 +259,18 @@ namespace Nini.Test.Ini
 			Assert.IsTrue (true);
 		}
 
+		[Test]
+		public void CommentCharInString ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("Value = \"WEB;www.google.com|WEB;www.yahoo.com\"");
+			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
+			
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("Value", reader.Name);
+			Assert.AreEqual ("WEB;www.google.com|WEB;www.yahoo.com", reader.Value);
+		}
+
 		#region No end of line tests
 		[Test]
 		public void NoEndOfLineComment ()

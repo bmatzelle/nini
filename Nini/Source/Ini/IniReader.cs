@@ -458,7 +458,8 @@ namespace Nini.Ini
 				}
 
 				// If accepting comments then don't consume as key value
-				if ((acceptCommentAfterKey && IsComment (ch)) || EndOfLine (ch)) {
+				if ((acceptCommentAfterKey && IsComment (ch) && !foundQuote)
+					 || EndOfLine (ch)) {
 					break;
 				}
 
