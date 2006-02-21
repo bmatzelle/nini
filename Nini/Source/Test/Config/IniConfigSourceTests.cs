@@ -389,5 +389,24 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void CaseInsensitive()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine ("cat = Becky"); // overwrite
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			source.CaseSensitive = false;
+			Assert.AreEqual("Becky", source.Configs["Pets"].Get("CAT"));
+
+			source.Configs["Pets"].Set("cAT", "New Name");
+			Assert.AreEqual("New Name", source.Configs["Pets"].Get("CAt"));
+
+			source.Configs["Pets"].Remove("CAT");
+			Assert.IsNull(source.Configs["Pets"].Get("CaT"));
+		}
 	}
 }

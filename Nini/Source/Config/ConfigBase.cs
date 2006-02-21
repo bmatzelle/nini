@@ -51,10 +51,13 @@ namespace Nini.Config
 	{
 		#region Private variables
 		string configName = null;
-		OrderedList keys = new OrderedList ();
 		IConfigSource configSource = null;
 		AliasText aliasText = null;
 		IFormatProvider format = NumberFormatInfo.CurrentInfo;
+		#endregion
+
+		#region Protected variables
+		protected OrderedList keys = new OrderedList ();
 		#endregion
 		
 		#region Constructors
@@ -96,13 +99,19 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="Contains"]/docs/*' />
 		public bool Contains (string key)
 		{
-			return (GetValue (key) != null);
+			return (Get (key) != null);
 		}
 
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
-		public string Get (string key)
+		public virtual string Get (string key)
 		{
-			return GetValue (key);
+			string result = null;
+			
+			if (keys.Contains (key)) {
+				result = keys[key].ToString ();
+			}
+
+			return result;
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetDefault"]/docs/*' />
@@ -128,7 +137,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetInt"]/docs/*' />
 		public int GetInt (string key)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			if (text == null) {
 				throw new ArgumentException ("Value not found: " + key);
@@ -156,7 +165,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetIntDefault"]/docs/*' />
 		public int GetInt (string key, int defaultValue)
 		{
-			string result = GetValue (key);
+			string result = Get (key);
 			
 			return (result == null)
 					? defaultValue
@@ -170,7 +179,7 @@ namespace Nini.Config
 				return GetInt (key, defaultValue);
 			}
 
-			string result = GetValue (key);
+			string result = Get (key);
 			
 			return (result == null) ? defaultValue : GetIntAlias (key, result);
 		}
@@ -178,7 +187,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetLong"]/docs/*' />
 		public long GetLong (string key)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			if (text == null) {
 				throw new ArgumentException ("Value not found: " + key);
@@ -190,7 +199,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetLongDefault"]/docs/*' />
 		public long GetLong (string key, long defaultValue)
 		{
-			string result = GetValue (key);
+			string result = Get (key);
 			
 			return (result == null)
 					? defaultValue
@@ -200,7 +209,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetBoolean"]/docs/*' />
 		public bool GetBoolean (string key)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			if (text == null) {
 				throw new ArgumentException ("Value not found: " + key);
@@ -212,7 +221,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetBooleanDefault"]/docs/*' />
 		public bool GetBoolean (string key, bool defaultValue)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			return (text == null) ? defaultValue : GetBooleanAlias (text);
 		}
@@ -220,7 +229,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetFloat"]/docs/*' />
 		public float GetFloat (string key)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			if (text == null) {
 				throw new ArgumentException ("Value not found: " + key);
@@ -232,7 +241,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetFloatDefault"]/docs/*' />
 		public float GetFloat (string key, float defaultValue)
 		{
-			string result = GetValue (key);
+			string result = Get (key);
 			
 			return (result == null)
 					? defaultValue
@@ -242,7 +251,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetDouble"]/docs/*' />
 		public double GetDouble (string key)
 		{
-			string text = GetValue (key);
+			string text = Get (key);
 			
 			if (text == null) {
 				throw new ArgumentException ("Value not found: " + key);
@@ -254,7 +263,7 @@ namespace Nini.Config
 		/// <include file='IConfig.xml' path='//Method[@name="GetDoubleDefault"]/docs/*' />
 		public double GetDouble (string key, double defaultValue)
 		{
-			string result = GetValue (key);
+			string result = Get (key);
 			
 			return (result == null)
 					? defaultValue
@@ -288,14 +297,14 @@ namespace Nini.Config
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Set"]/docs/*' />
-		public void Set (string key, object value)
+		public virtual void Set (string key, object value)
 		{
 			if (value == null) {
 				throw new ArgumentNullException ("Value cannot be null");
 			}
 
-			if (!keys.Contains (key)) {
-				keys.Add (key, value.ToString ());
+			if (Get (key) == null) {
+				this.Add (key, value.ToString ());
 			} else {
 				keys[key] = value.ToString ();
 			}
@@ -308,13 +317,13 @@ namespace Nini.Config
 		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Remove"]/docs/*' />
-		public void Remove (string key)
+		public virtual void Remove (string key)
 		{
 			if (key == null) {
 				throw new ArgumentNullException ("Key cannot be null");
 			}
 			
-			if (keys.Contains (key)) {
+			if (Get (key) != null) {
 				string keyValue = null;
 				if (KeySet != null) {
 					keyValue = Get (key);
@@ -361,20 +370,6 @@ namespace Nini.Config
 			this.ConfigSource.Configs.Remove (this);
 			configName = name;
 			this.ConfigSource.Configs.Add (this);
-		}
-
-		/// <summary>
-		/// Returns the value if the given key.
-		/// </summary>
-		private string GetValue (string key)
-		{
-			string result = null;
-			
-			if (keys.Contains (key)) {
-				result = keys[key].ToString ();
-			}
-
-			return result;
 		}
 		
 		/// <summary>
