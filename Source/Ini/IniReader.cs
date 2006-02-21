@@ -62,6 +62,7 @@ namespace Nini.Ini
 		bool disposed = false;
 		bool lineContinuation = false;
 		bool acceptCommentAfterKey = true;
+		bool consumeAllKeyText = false;
 		char[] commentDelimiters = new char[] { ';' };
 		char[] assignDelimiters = new char[] { '=' };
 		#endregion
@@ -128,6 +129,13 @@ namespace Nini.Ini
 		{
 			get { return acceptCommentAfterKey; }
 			set { acceptCommentAfterKey = value; }
+		}
+
+		/// <include file='IniReader.xml' path='//Property[@name="ConsumeAllKeyText"]/docs/*' />
+		public bool ConsumeAllKeyText
+		{
+			get { return consumeAllKeyText; }
+			set { consumeAllKeyText = value; }
 		}
 		#endregion
 		
@@ -417,7 +425,7 @@ namespace Nini.Ini
 					characters++;
 				}
 				
-				if (ch == '"') {
+				if (!this.ConsumeAllKeyText && ch == '"') {
 					ReadChar ();
 
 					if (!foundQuote && characters == 1) {				
@@ -457,9 +465,15 @@ namespace Nini.Ini
 					}
 				}
 
-				// If accepting comments then don't consume as key value
-				if ((acceptCommentAfterKey && IsComment (ch) && !foundQuote)
-					 || EndOfLine (ch)) {
+				if (!this.ConsumeAllKeyText) {
+					// If accepting comments then don't consume as key value
+					if (acceptCommentAfterKey && IsComment (ch) && !foundQuote) {
+						break;
+					}
+				}
+
+				// Always break at end of line
+				if (EndOfLine (ch)) {
 					break;
 				}
 

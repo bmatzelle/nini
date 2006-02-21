@@ -21,6 +21,7 @@ namespace Nini.Config
 		#region Private variables
 		IniDocument iniDocument = null;
 		string savePath = null;
+		bool caseSensitive = true;
 		#endregion
 		
 		#region Public properties
@@ -62,6 +63,13 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public properties
+		/// <include file='IniConfigSource.xml' path='//Property[@name="CaseSensitive"]/docs/*' />
+		public bool CaseSensitive
+		{
+			get { return caseSensitive; }
+			set { caseSensitive = value; }
+		}
+
 		/// <include file='IniConfigSource.xml' path='//Property[@name="SavePath"]/docs/*' />
 		public string SavePath
 		{
@@ -195,14 +203,14 @@ namespace Nini.Config
 		/// </summary>
 		private void Load ()
 		{
-			ConfigBase config = null;
+			IniConfig config = null;
 			IniSection section = null;
 			IniItem item = null;
 
 			for (int j = 0; j < iniDocument.Sections.Count; j++)
 			{
 				section = iniDocument.Sections[j];
-				config = new ConfigBase (section.Name, this);
+				config = new IniConfig (section.Name, this);
 
 				for (int i = 0; i < section.ItemCount; i++)
 				{

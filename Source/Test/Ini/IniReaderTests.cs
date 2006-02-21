@@ -18,6 +18,7 @@ namespace Nini.Test.Ini
 	[TestFixture]
 	public class IniReaderTests
 	{
+		#region General Tests
 		[Test]
 		public void NormalComment ()
 		{
@@ -270,6 +271,20 @@ namespace Nini.Test.Ini
 			Assert.AreEqual ("Value", reader.Name);
 			Assert.AreEqual ("WEB;www.google.com|WEB;www.yahoo.com", reader.Value);
 		}
+
+		[Test]
+		public void ConsumeAllKeyText ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("email = \"John Smith\"; <jsmith@something.com>");
+			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
+			reader.ConsumeAllKeyText = true;
+			
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("email", reader.Name);
+			Assert.AreEqual ("\"John Smith\"; <jsmith@something.com>", reader.Value);
+		}
+		#endregion
 
 		#region No end of line tests
 		[Test]

@@ -178,7 +178,9 @@ namespace Nini.Ini
 
 						break;
 					case IniType.Key:
-						section.Set (reader.Name, reader.Value, reader.Comment);
+						if (section.GetValue (reader.Name) == null) { 
+							section.Set (reader.Name, reader.Value, reader.Comment); 
+						} 
 						break;
 					}
 				}

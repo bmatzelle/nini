@@ -260,7 +260,7 @@ namespace Nini.Test.Ini
 			Assert.AreEqual (1, doc.Sections.Count);
 			Assert.AreEqual (1, doc.Sections["Test"].ItemCount);
 			Assert.IsNotNull (doc.Sections["Test"].GetValue ("a value"));
-			Assert.AreEqual ("something 2", doc.Sections["Test"].GetValue ("a value"));
+			Assert.AreEqual ("something 0", doc.Sections["Test"].GetValue ("a value"));
 		}
 	}
 }
