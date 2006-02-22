@@ -46,6 +46,38 @@
 		</Value>
 	</Enum>
 	
+	<Property name="DefaultKey">
+		<docs>
+			<summary>
+				Gets or sets the default RegistryKey to use if the AddConfig
+				method is called.
+			</summary>
+			<remarks>
+			</remarks>
+		</docs>
+	</Property>
+	
+	<Method name="AddConfig">
+		<docs>
+			<summary>
+				Adds a config and will map itself to the DefaultKey property. 
+			</summary>
+			<param name="name">
+				Name of the config. 
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="AddConfigKey">
+		<docs>
+			<summary>
+				Adds a config and will map itself to the given registry key. 
+			</summary>
+			<param name="name">Name of the config. </param>
+			<param name="key">RegistryKey to map to. </param>
+		</docs>
+	</Method>
+	
 	<Method name="AddMapping">
 		<docs>
 			<summary>

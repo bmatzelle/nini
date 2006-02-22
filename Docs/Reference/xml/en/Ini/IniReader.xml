@@ -166,6 +166,20 @@ reader.Close ();
 		</docs>
 	</Property>
 	
+	<Property name="ConsumeAllKeyText">
+		<docs>
+			<summary>
+				Gets or sets whether or not all key text should be consumed.  This means
+				that even double quotes (") and commments (;) will be consumed from 
+				keys.  
+			</summary>
+			<remarks>
+				This was added to similate the behavior of the Win32 API 
+				GetProfileString method.
+			</remarks>
+		</docs>
+	</Property>
+	
 	<Method name="GetCommentDelimiters">
 		<docs>
 			<summary>Returns the comment delimiters.</summary>

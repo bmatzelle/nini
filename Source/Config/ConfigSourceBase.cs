@@ -68,7 +68,7 @@ namespace Nini.Config
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
-		public IConfig AddConfig (string name)
+		public virtual IConfig AddConfig (string name)
 		{
 			return configList.Add (name);
 		}
