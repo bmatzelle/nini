@@ -33,15 +33,44 @@ namespace Nini.Config
 	public class RegistryConfigSource : ConfigSourceBase
 	{
 		#region Private variables
+		RegistryKey defaultKey = null;
 		#endregion
 		
 		#region Public properties
+		/// <include file='RegistryConfigSource.xml' path='//Property[@name="DefaultKey"]/docs/*' />
+		public RegistryKey DefaultKey
+		{
+			get { return defaultKey; }
+			set { defaultKey = value; }
+		}
 		#endregion
 
 		#region Constructors
 		#endregion
 		
 		#region Public methods
+		/// <include file='RegistryConfigSource.xml' path='//Method[@name="AddConfig"]/docs/*' />
+		public override IConfig AddConfig (string name)
+		{
+			if (this.DefaultKey == null) {
+				throw new ApplicationException ("You must set DefaultKey");
+			}
+
+			return AddConfig (name, this.DefaultKey);
+		}
+
+		/// <include file='RegistryConfigSource.xml' path='//Method[@name="AddConfigKey"]/docs/*' />
+		public IConfig AddConfig (string name, RegistryKey key)
+		{
+			RegistryConfig result = new RegistryConfig (name, this);
+			result.Key = key;
+			result.ParentKey = true;
+
+			this.Configs.Add (result);
+
+			return result;
+		}
+
 		/// <include file='RegistryConfigSource.xml' path='//Method[@name="AddMapping"]/docs/*' />
 		public void AddMapping (RegistryKey registryKey, string path)
 		{
@@ -92,6 +121,8 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public override void Save ()
 		{
+			MergeConfigsIntoDocument ();
+
 			for (int i = 0; i < this.Configs.Count; i++)
 			{
 				// New merged configs are not RegistryConfigs
@@ -120,16 +151,42 @@ namespace Nini.Config
 		/// </summary>
 		private void LoadKeyValues (RegistryKey key, string keyName)
 		{
-			string[] values = key.GetValueNames ();
-
 			RegistryConfig config = new RegistryConfig (keyName, this);
 			config.Key = key;
 
+			string[] values = key.GetValueNames ();
 			foreach (string value in values)
 			{
 				config.Add (value, key.GetValue (value).ToString ());
 			}
 			this.Configs.Add (config);
+		}
+
+		/// <summary>
+		/// Merges all of the configs from the config collection into the 
+		/// registry.
+		/// </summary>
+		private void MergeConfigsIntoDocument ()
+		{
+			foreach (IConfig config in this.Configs)
+			{
+				if (config is RegistryConfig) {
+					RegistryConfig registryConfig = (RegistryConfig)config;
+
+					if (registryConfig.ParentKey) {
+						registryConfig.Key = 
+							registryConfig.Key.CreateSubKey (registryConfig.Name);
+					}
+					RemoveKeys (registryConfig);
+
+					string[] keys = config.GetKeys ();
+					for (int i = 0; i < keys.Length; i++)
+					{
+						registryConfig.Key.SetValue (keys[i], config.Get (keys[i]));
+					}
+					registryConfig.Key.Flush ();
+				}
+			}
 		}
 
 		/// <summary>
@@ -150,6 +207,19 @@ namespace Nini.Config
 				LoadKeyValues (keys[i], ShortKeyName (keys[i]));
 			}
 		}
+
+		/// <summary>
+		/// Removes all keys not present in the current config.  
+		/// </summary>
+		private void RemoveKeys (RegistryConfig config)
+		{
+			foreach (string valueName in config.Key.GetValueNames ())
+			{
+				if (!config.Contains (valueName)) {
+					config.Key.DeleteValue (valueName);
+				}
+			}
+		}
 		
 		/// <summary>
 		/// Returns the key name without the fully qualified path.
@@ -162,13 +232,18 @@ namespace Nini.Config
 			return (index == -1) ? key.Name : key.Name.Substring (index + 1);
 		}
 		
+		#region RegistryConfig class
 		/// <summary>
 		/// Registry Config class.
 		/// </summary>
 		private class RegistryConfig : ConfigBase
 		{
+			#region Private variables
 			RegistryKey key = null;
-			
+			bool parentKey = false;
+			#endregion
+
+			#region Constructor
 			/// <summary>
 			/// Constructor.
 			/// </summary>
@@ -176,7 +251,18 @@ namespace Nini.Config
 				: base (name, source)
 			{
 			}
-			
+			#endregion
+
+			#region Public properties
+			/// <summary>
+			/// Gets or sets whether the key is a parent key. 
+			/// </summary>
+			public bool ParentKey
+			{
+				get { return parentKey; }
+				set { parentKey = value; }
+			}
+
 			/// <summary>
 			/// Registry key for the Config.
 			/// </summary>
@@ -185,7 +271,10 @@ namespace Nini.Config
 				get { return key; }
 				set { key = value; }
 			}
+			#endregion
 		}
+		#endregion
+
 		#endregion
 	}
 }

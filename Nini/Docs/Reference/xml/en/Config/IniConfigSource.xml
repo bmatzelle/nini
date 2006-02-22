@@ -68,6 +68,14 @@
 		</docs>
 	</Constructor>
 	
+	<Property name="CaseSensitive">
+		<docs>
+			<summary>
+				Gets or sets whether key values will be accessed ignoring case.  
+			</summary>
+		</docs>
+	</Property>
+	
 	<Property name="SavePath">
 		<docs>
 			<summary>

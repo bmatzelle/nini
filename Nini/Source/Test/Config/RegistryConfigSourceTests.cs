@@ -227,7 +227,97 @@ namespace Nini.Test.Config
 			Assert.AreEqual (3, newSource.Configs["Pets"].GetKeys ().Length);
 			Assert.AreEqual ("Misha", newSource.Configs["Pets"].Get ("cat"));
 		}
-		
+
+		[Test]
+		public void AddConfig ()
+		{
+			RegistryConfigSource source = new RegistryConfigSource ();
+			RegistryKey key = 
+				Registry.LocalMachine.OpenSubKey("Software\\NiniTestApp", true);
+
+			IConfig config = source.AddConfig ("People", key);
+			config.Set ("woman", "Tara");
+			config.Set ("man", "Quentin");
+
+			source.Save ();
+
+			source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\People");
+			
+			Assert.AreEqual (1, source.Configs.Count);
+			config = source.Configs["People"];
+			Assert.AreEqual (2, config.GetKeys ().Length);
+			Assert.AreEqual ("Tara", config.Get ("woman"));
+			Assert.AreEqual ("Quentin", config.Get ("man"));
+		}
+
+		[Test]
+		public void AddConfigDefaultKey ()
+		{
+			RegistryConfigSource source = new RegistryConfigSource ();
+			source.DefaultKey = 
+				Registry.LocalMachine.OpenSubKey("Software\\NiniTestApp", true);
+
+			IConfig config = source.AddConfig ("People");
+			config.Set ("woman", "Tara");
+			config.Set ("man", "Quentin");
+
+			source.Save ();
+
+			source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\People");
+			
+			Assert.AreEqual (1, source.Configs.Count);
+			config = source.Configs["People"];
+			Assert.AreEqual (2, config.GetKeys ().Length);
+			Assert.AreEqual ("Tara", config.Get ("woman"));
+			Assert.AreEqual ("Quentin", config.Get ("man"));
+		}
+
+		[Test]
+		[ExpectedException (typeof (ApplicationException))]
+		public void AddConfigNoDefaultKey ()
+		{
+			RegistryConfigSource source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+			
+			IConfig config = source.AddConfig ("People");
+		}
+
+		[Test]
+		public void RemoveKey ()
+		{
+			RegistryConfigSource source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual ("Pets", config.Name);
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual (source, config.ConfigSource);
+
+			Assert.AreEqual ("Chi-chi", config.Get ("cat"));
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual (5,  config.GetInt ("count"));
+
+			config.Remove ("dog");
+
+			source.Save ();
+
+			source = new RegistryConfigSource ();
+			source.AddMapping (Registry.LocalMachine, "Software\\NiniTestApp\\Pets");
+
+			config = source.Configs["Pets"];
+			Assert.AreEqual ("Pets", config.Name);
+			Assert.AreEqual (2, config.GetKeys ().Length);
+			Assert.AreEqual (source, config.ConfigSource);
+
+			Assert.AreEqual ("Chi-chi", config.Get ("cat"));
+			Assert.IsNull (config.Get ("dog"));
+			Assert.AreEqual (5,  config.GetInt ("count"));
+		}
+		#endregion
+
+		#region Setup/tearDown
 		[SetUp]
 		public void Setup ()
 		{
