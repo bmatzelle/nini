@@ -156,7 +156,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		public void ReplaceText ()
+		public void ExpandText ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[Test]");
@@ -170,7 +170,7 @@ namespace Nini.Test.Config
 			writer.WriteLine (" protocol = http");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			source.ReplaceKeyValues ();
+			source.ExpandKeyValues ();
 
 			IConfig config = source.Configs["Test"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -183,7 +183,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		public void ReplaceTextOtherSection ()
+		public void ExpandTextOtherSection ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[web]");
@@ -193,7 +193,7 @@ namespace Nini.Test.Config
 			writer.WriteLine (" domain = ${web|protocol}://nini.sf.net/");
 			IniConfigSource source = new IniConfigSource 
 									(new StringReader (writer.ToString ()));
-			source.ReplaceKeyValues ();
+			source.ExpandKeyValues ();
 
 			IConfig config = source.Configs["web"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -203,7 +203,7 @@ namespace Nini.Test.Config
 		}
 		
 		[Test]
-		public void ReplaceKeyValuesMerge ()
+		public void ExpandKeyValuesMerge ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[web]");
@@ -221,7 +221,7 @@ namespace Nini.Test.Config
 			IniConfigSource newSource = new IniConfigSource 
 									(new StringReader (newWriter.ToString ()));
 			source.Merge (newSource);
-			source.ReplaceKeyValues ();
+			source.ExpandKeyValues ();
 
 			IConfig config = source.Configs["web"];
 			Assert.AreEqual ("http", config.Get ("protocol"));
@@ -382,7 +382,7 @@ namespace Nini.Test.Config
 		}
 
 		[Test]
-		public void ReplaceKeyValuesConfigError ()
+		public void ExpandKeyValuesConfigError ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[server]");
@@ -391,15 +391,15 @@ namespace Nini.Test.Config
 									(new StringReader (writer.ToString ()));
 
 			try {
-				source.ReplaceKeyValues ();
+				source.ExpandKeyValues ();
 			}
 			catch (Exception ex) {
-				Assert.AreEqual ("Replace config not found: web", ex.Message);
+				Assert.AreEqual ("Expand config not found: web", ex.Message);
 			}
 		}
 
 		[Test]
-		public void ReplaceKeyValuesKeyError ()
+		public void ExpandKeyValuesKeyError ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[web]");
@@ -410,15 +410,15 @@ namespace Nini.Test.Config
 									(new StringReader (writer.ToString ()));
 
 			try {
-				source.ReplaceKeyValues ();
+				source.ExpandKeyValues ();
 			}
 			catch (Exception ex) {
-				Assert.AreEqual ("Replace key not found: protocol", ex.Message);
+				Assert.AreEqual ("Expand key not found: protocol", ex.Message);
 			}
 		}
 
 		[Test]
-		public void ReplaceKeyInfiniteRecursion ()
+		public void ExpandKeyInfiniteRecursion ()
 		{
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("[replace]");
@@ -427,11 +427,11 @@ namespace Nini.Test.Config
 									(new StringReader (writer.ToString ()));
 
 			try {
-				source.ReplaceKeyValues ();
+				source.ExpandKeyValues ();
 			}
 			catch (ArgumentException ex) {
 				Assert.AreEqual 
-					("Key cannot have a replace value of itself: test", ex.Message);
+					("Key cannot have a expand value of itself: test", ex.Message);
 			}
 		}
 

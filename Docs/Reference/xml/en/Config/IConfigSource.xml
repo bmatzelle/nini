@@ -116,13 +116,13 @@
 		</docs>
 	</Method>
 	
-	<Method name="ReplaceKeyValues">
+	<Method name="ExpandKeyValues">
 		<docs>
 			<summary>
-				Replaces all key values.  
+				Expands all key values.  
 			</summary>
 			<remarks>
-				Calling this method replaces all key values with the values
+				Calling this method expands all key values with the values
 				of other keys.  See the example below for more information.
 			</remarks>
 			<example>
@@ -152,6 +152,15 @@ WebPage = ${RootPath}\index.html
 				from a different section you can do the same above but add the 
 				section name followed by a bar ("|") like so: ${section|key}.
 			</example>
+		</docs>
+	</Method>
+	
+	<Method name="ReplaceKeyValues">
+		<docs>
+			<summary>
+				This method is deprecated.  Use <see cref="ExpandKeyValues"/>
+				from now on. 
+			</summary>
 		</docs>
 	</Method>
 	

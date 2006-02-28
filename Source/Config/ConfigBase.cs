@@ -121,6 +121,12 @@ namespace Nini.Config
 			
 			return (result == null) ? defaultValue : result;
 		}
+
+		/// <include file='IConfig.xml' path='//Method[@name="GetExpanded"]/docs/*' />
+		public string GetExpanded (string key)
+		{
+			return this.ConfigSource.GetExpanded(this, key);
+		}
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
 		public string GetString (string key)
