@@ -24,7 +24,9 @@ namespace Nini.Ini
 		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="PythonStyle"]/docs/*' />
 		PythonStyle,
 		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="SambaStyle"]/docs/*' />
-		SambaStyle
+		SambaStyle,
+		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="MysqlStyle"]/docs/*' />
+		MysqlStyle
 	}
 	#endregion
 
@@ -213,6 +215,12 @@ namespace Nini.Ini
 				result.AcceptCommentAfterKey = false;
 				result.SetCommentDelimiters (new char[] { ';', '#' });
 				result.LineContinuation = true;
+				break;
+			case IniFileType.MysqlStyle:
+				result.AcceptCommentAfterKey = false;
+				result.AcceptNoAssignmentOperator = true;
+				result.SetCommentDelimiters (new char[] { '#' });
+				result.SetAssignDelimiters (new char[] { ':', '=' });
 				break;
 			}
 

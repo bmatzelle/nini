@@ -166,6 +166,16 @@ reader.Close ();
 		</docs>
 	</Property>
 	
+	<Property name="AcceptNoAssignmentOperator">
+		<docs>
+			<summary>
+				Gets or sets whether to accept no assignment operator after a key. 
+			</summary>
+			<remarks>
+			</remarks>
+		</docs>
+	</Property>
+	
 	<Property name="ConsumeAllKeyText">
 		<docs>
 			<summary>

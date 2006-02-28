@@ -262,5 +262,24 @@ namespace Nini.Test.Ini
 			Assert.IsNotNull (doc.Sections["Test"].GetValue ("a value"));
 			Assert.AreEqual ("something 0", doc.Sections["Test"].GetValue ("a value"));
 		}
+
+		[Test]
+		public void MysqlStyleDocument ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("# another comment"); // empty line
+			writer.WriteLine ("[test]");
+			writer.WriteLine (" quick ");
+			writer.WriteLine (" cat = cats are not tall animals ");
+			writer.WriteLine (" dog : dogs bark");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()),
+												IniFileType.MysqlStyle);
+
+			Assert.IsTrue (doc.Sections["test"].Contains ("quick"));
+			Assert.AreEqual ("", doc.Sections["test"].GetValue ("quick"));
+			Assert.AreEqual ("cats are not tall animals",
+							doc.Sections["test"].GetValue ("cat"));
+			Assert.AreEqual ("dogs bark", doc.Sections["test"].GetValue ("dog"));
+		}
 	}
 }
