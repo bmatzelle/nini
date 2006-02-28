@@ -51,6 +51,21 @@
 				</ul>
 				</remarks>
 			</docs>
+		<Value name="MysqlStyle">
+			<docs>
+				<summary>MySQL program INI type.</summary>
+				<remarks>
+				This refers to the 
+				<a href=http://dev.mysql.com/doc/refman/5.0/en/mysql-cluster-config-example.html">MySQL server configuration</a>
+				file type.  It has the following properties:
+				<ul>
+					<li>Accepts '#' as comment delimiters.</li>
+					<li>Accepts ';' and '=' as assign operators.</li>
+					<li>Accepts keys with no values.</li>
+					<li>Does not accept comments after keys.</li>
+				</ul>
+				</remarks>
+			</docs>
 		</Value>
 	</Enum>
 

@@ -148,7 +148,7 @@ namespace Nini.Config
 		/// <include file='DotNetConfigSource.xml' path='//Method[@name="GetFullConfigPath"]/docs/*' />
 		public static string GetFullConfigPath ()
 		{
-			return (Assembly.GetEntryAssembly().Location + ".config");
+			return (Assembly.GetCallingAssembly().Location + ".config");
 		}
 #endif
 		#endregion

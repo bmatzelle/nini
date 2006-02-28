@@ -62,6 +62,7 @@ namespace Nini.Ini
 		bool disposed = false;
 		bool lineContinuation = false;
 		bool acceptCommentAfterKey = true;
+		bool acceptNoAssignmentOperator = false;
 		bool consumeAllKeyText = false;
 		char[] commentDelimiters = new char[] { ';' };
 		char[] assignDelimiters = new char[] { '=' };
@@ -129,6 +130,13 @@ namespace Nini.Ini
 		{
 			get { return acceptCommentAfterKey; }
 			set { acceptCommentAfterKey = value; }
+		}
+
+		/// <include file='IniReader.xml' path='//Property[@name="AcceptNoAssignmentOperator"]/docs/*' />
+		public bool AcceptNoAssignmentOperator
+		{
+			get { return acceptNoAssignmentOperator; }
+			set { acceptNoAssignmentOperator = value; }
 		}
 
 		/// <include file='IniReader.xml' path='//Property[@name="ConsumeAllKeyText"]/docs/*' />
@@ -394,6 +402,9 @@ namespace Nini.Ini
 				}
 				
 				if (EndOfLine (ch)) {
+					if (acceptNoAssignmentOperator) {
+						break;
+					}
 					throw new IniException (this, 
 						String.Format ("Expected assignment operator ({0})", 
 										assignDelimiters[0]));

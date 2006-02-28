@@ -284,6 +284,23 @@ namespace Nini.Test.Ini
 			Assert.AreEqual ("email", reader.Name);
 			Assert.AreEqual ("\"John Smith\"; <jsmith@something.com>", reader.Value);
 		}
+
+		[Test]
+		public void AcceptNoKeyEndings ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Mysql]");
+			writer.WriteLine ("quick");
+			writer.WriteLine (" my key = new key");
+			IniReader reader = new IniReader (new StringReader (writer.ToString ()));
+
+			reader.AcceptNoAssignmentOperator = true;
+			
+			Assert.IsTrue (reader.Read ());
+			Assert.IsTrue (reader.Read ());
+			Assert.AreEqual ("quick", reader.Name);
+			Assert.AreEqual ("", reader.Value);
+		}
 		#endregion
 
 		#region No end of line tests
