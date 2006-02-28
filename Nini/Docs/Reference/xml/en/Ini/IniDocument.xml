@@ -51,12 +51,13 @@
 				</ul>
 				</remarks>
 			</docs>
+		</Value>
+
 		<Value name="MysqlStyle">
 			<docs>
 				<summary>MySQL program INI type.</summary>
 				<remarks>
-				This refers to the 
-				<a href=http://dev.mysql.com/doc/refman/5.0/en/mysql-cluster-config-example.html">MySQL server configuration</a>
+				This refers to the MySQL server configuration
 				file type.  It has the following properties:
 				<ul>
 					<li>Accepts '#' as comment delimiters.</li>
@@ -112,6 +113,16 @@ comedy = Dumb and Dumber
 		</code>
 		</example>
 	</docs>
+	
+	<Property name="FileType">
+		<docs>
+			<summary>
+				Gets or sets the INI file type
+			</summary>
+			<remarks>
+			</remarks>
+		</docs>
+	</Property>
 
 	<Constructor name="Constructor">
 		<docs>
@@ -279,6 +290,40 @@ comedy = Dumb and Dumber
 			<exception cref="ArgumentException">
 				The section or key does not exist.
 			</exception>
+		</docs>
+	</Method>
+	
+	<Method name="LoadPath">
+		<docs>
+			<summary>Loads the instance with the supplied file.</summary>
+			<param name="filePath">The path to the INI file.</param>
+		</docs>
+	</Method>
+	
+	<Method name="LoadTextReader">
+		<docs>
+			<summary>
+				Loads the instance using a TextReader.
+			</summary>
+			<param name="reader">The TextReader.</param>
+		</docs>
+	</Method>
+	
+	<Method name="LoadStream">
+		<docs>
+			<summary>
+				Loads the instance using a Stream.
+			</summary>
+			<param name="stream">The Stream.</param>
+		</docs>
+	</Method>
+	
+	<Method name="LoadIniReader">
+		<docs>
+			<summary>
+				Loads the instance using an IniReader.
+			</summary>
+			<param name="reader">The IniReader.</param>
 		</docs>
 	</Method>
 	

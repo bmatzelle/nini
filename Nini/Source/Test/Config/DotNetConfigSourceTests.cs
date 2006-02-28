@@ -436,6 +436,32 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void LoadReader ()
+		{
+			XmlDocument doc = NiniDoc ();
+			AddSection (doc, "Pets");
+			AddKey (doc, "Pets", "cat", "muffy");
+			AddKey (doc, "Pets", "dog", "rover");
+			AddKey (doc, "Pets", "bird", "tweety");
+
+			DotNetConfigSource source = 
+							new DotNetConfigSource (DocumentToReader (doc));
+			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.Get ("dog"));
+
+			config.Set ("dog", "new name");
+			config.Remove ("bird");
+
+			source.Load (DocumentToReader (doc));
+
+			config = source.Configs["Pets"];
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.Get ("dog"));
+		}
 		#endregion
 
 		#region Private methods

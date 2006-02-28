@@ -36,29 +36,26 @@ namespace Nini.Config
 
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public IniConfigSource (string filePath)
-			: this (new StreamReader (filePath))
 		{
-			this.savePath = filePath;
+			Load (filePath);
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
 		public IniConfigSource (TextReader reader)
-			: this (new IniDocument (reader))
 		{
+			Load (reader);
 		}
 
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorIniDocument"]/docs/*' />
 		public IniConfigSource (IniDocument document)
 		{
-			this.Merge (this); // required for SaveAll
-			iniDocument = document;
-			Load ();
+			Load (document);
 		}
 		
 		/// <include file='IniConfigSource.xml' path='//Constructor[@name="ConstructorStream"]/docs/*' />
 		public IniConfigSource (Stream stream)
-			: this (new StreamReader (stream))
 		{
+			Load (stream);
 		}
 		#endregion
 		
@@ -78,6 +75,35 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public methods
+		/// <include file='IniConfigSource.xml' path='//Method[@name="LoadPath"]/docs/*' />
+		public void Load (string filePath)
+		{
+			Load (new StreamReader (filePath));
+			this.savePath = filePath;
+		}
+		
+		/// <include file='IniConfigSource.xml' path='//Method[@name="LoadTextReader"]/docs/*' />
+		public void Load (TextReader reader)
+		{
+			Load (new IniDocument (reader));
+		}
+
+		/// <include file='IniConfigSource.xml' path='//Method[@name="LoadIniDocument"]/docs/*' />
+		public void Load (IniDocument document)
+		{
+			this.Configs.Clear ();
+
+			this.Merge (this); // required for SaveAll
+			iniDocument = document;
+			Load ();
+		}
+		
+		/// <include file='IniConfigSource.xml' path='//Method[@name="LoadStream"]/docs/*' />
+		public void Load (Stream stream)
+		{
+			Load (new StreamReader (stream));
+		}
+
 		/// <include file='IniConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public override void Save ()
 		{

@@ -497,6 +497,37 @@ namespace Nini.Test.Config
 
 			File.Delete (filePath);
 		}
+
+		[Test]
+		public void LoadReader ()
+		{
+			StringWriter textWriter = new StringWriter ();
+			XmlTextWriter writer = NiniWriter (textWriter);
+			WriteSection (writer, "Pets");
+			WriteKey (writer, "cat", "muffy");
+			WriteKey (writer, "dog", "rover");
+			WriteKey (writer, "bird", "tweety");
+			writer.WriteEndDocument ();
+			
+			StringReader reader = new StringReader (textWriter.ToString ());
+			XmlTextReader xmlReader = new XmlTextReader (reader);
+			XmlConfigSource source = new XmlConfigSource (xmlReader);
+			
+			IConfig config = source.Configs["Pets"];
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.Get ("dog"));
+
+			config.Set ("dog", "new name");
+			config.Remove ("bird");
+
+			reader = new StringReader (textWriter.ToString ());
+			xmlReader = new XmlTextReader (reader);
+			source.Load (xmlReader);
+
+			config = source.Configs["Pets"];
+			Assert.AreEqual (3, config.GetKeys ().Length);
+			Assert.AreEqual ("rover", config.Get ("dog"));
+		}
 		#endregion
 
 		#region Private methods

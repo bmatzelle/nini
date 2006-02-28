@@ -90,6 +90,57 @@
 		</docs>
 	</Property>
 	
+	<Method name="LoadPath">
+		<docs>
+			<summary>Loads an INI file source.</summary>
+			<remarks>
+				Loads this up from a file.
+			</remarks>
+			<param name="filePath">
+				Path to the file to load.
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="LoadTextReader">
+		<docs>
+			<summary>Loads an INI file source.</summary>
+			<remarks>
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
+			</remarks>
+			<param name="reader">
+				TextReader to load.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="LoadStream">
+		<docs>
+			<summary>Loads an INI file source.</summary>
+			<remarks>
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
+			</remarks>
+			<param name="stream">
+				Stream to load.
+			</param>
+		</docs>
+	</Method>
+	
+	<Method name="LoadIniDocument">
+		<docs>
+			<summary>Loads an INI file source.</summary>
+			<remarks>
+				This is a non-savable source unless you call one of the
+				overloaded <see cref="Save"/> methods.
+			</remarks>
+			<param name="document">
+				The IniDocument.
+			</param>
+		</docs>
+	</Method>
+	
 	<Method name="Save">
 		<docs>
 			<summary>
