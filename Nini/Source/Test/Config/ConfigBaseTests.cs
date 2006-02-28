@@ -294,5 +294,27 @@ namespace Nini.Test.Config
 			Assert.IsFalse (config.Contains ("cat"));
 			Assert.IsTrue (config.Contains ("dog"));
 		}
+
+		[Test]
+		public void ExpandString ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine (" apache = Apache implements ${protocol}");
+			writer.WriteLine (" protocol = http");
+			writer.WriteLine ("[server]");
+			writer.WriteLine (" domain = ${web|protocol}://nini.sf.net/");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			IConfig config = source.Configs["web"];
+			Assert.AreEqual ("http", config.Get ("protocol"));
+			Assert.AreEqual ("Apache implements ${protocol}", config.Get ("apache"));
+			Assert.AreEqual ("Apache implements http", config.GetExpanded ("apache"));
+			Assert.AreEqual ("Apache implements ${protocol}", config.Get ("apache"));
+			config = source.Configs["server"];
+			Assert.AreEqual ("http://nini.sf.net/", config.GetExpanded ("domain"));
+			Assert.AreEqual ("${web|protocol}://nini.sf.net/", config.Get ("domain"));
+		}
 	}
 }

@@ -32,6 +32,9 @@ namespace Nini.Config
 		
 		/// <include file='IConfig.xml' path='//Method[@name="GetDefault"]/docs/*' />
 		string Get (string key, string defaultValue);
+
+		/// <include file='IConfig.xml' path='//Method[@name="GetExpanded"]/docs/*' />
+		string GetExpanded (string key);
 		
 		/// <include file='IConfig.xml' path='//Method[@name="Get"]/docs/*' />
 		string GetString (string key);

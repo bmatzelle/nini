@@ -72,6 +72,12 @@ namespace Nini.Config
 		{
 			return configList.Add (name);
 		}
+
+		/// <include file='IConfigSource.xml' path='//Method[@name="GetExpanded"]/docs/*' />
+		public string GetExpanded (IConfig config, string key)
+		{
+			return Expand(config, key, false);
+		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public virtual void Save ()
@@ -85,8 +91,8 @@ namespace Nini.Config
 			OnReloaded (new EventArgs ());
 		}
 		
-		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
-		public void ReplaceKeyValues ()
+		/// <include file='IConfigSource.xml' path='//Method[@name="ExpandKeyValues"]/docs/*' />
+		public void ExpandKeyValues ()
 		{
 			string[] keys = null;
 
@@ -95,9 +101,15 @@ namespace Nini.Config
 				keys = config.GetKeys ();
 				for (int i = 0; i < keys.Length; i++)
 				{
-					Replace (config, keys[i]);
+					Expand (config, keys[i], true);
 				}
 			}
+		}
+
+		/// <include file='IConfigSource.xml' path='//Method[@name="ReplaceKeyValues"]/docs/*' />
+		public void ReplaceKeyValues ()
+		{
+			ExpandKeyValues ();
 		}
 		#endregion
 
@@ -127,55 +139,52 @@ namespace Nini.Config
 		}
 		#endregion
 
-		#region Private methods		
+		#region Private methods	
 		/// <summary>
 		/// Recursively replaces text.
 		/// </summary>
-		private void Replace (IConfig config, string key)
+		private string Expand (IConfig config, string key, bool setValue)
 		{
-			string text = config.Get (key);
-			if (text == null) {
+			string result = config.Get (key);
+			if (result == null) {
 				throw new ArgumentException (String.Format ("[{0}] not found in [{1}]",
 										key, config.Name));
 			}
-			int startIndex = text.IndexOf ("${", 0);
 
-			if (startIndex != -1) {
-				int endIndex = text.IndexOf ("}");
-				if (endIndex != -1) {
-					string search = text.Substring (startIndex + 2, 
-													endIndex - (startIndex + 2));
+			while (true)
+			{
+				int startIndex = result.IndexOf ("${", 0);
+				int endIndex = result.IndexOf ("}");
 
-					if (search == key) {
-						// Prevent infinite recursion
-						throw new ArgumentException 
-							("Key cannot have a replace value of itself: " + key);
-					}
-
-					string replace = ReplaceValue (config, search);
-
-					// Assemble the result string
-					StringBuilder builder = new StringBuilder ();
-					for (int i = 0; i < startIndex; i++)
-					{
-						builder.Append (text[i]);
-					}
-					builder.Append (replace);
-					for (int i = endIndex + 1; i < text.Length; i++)
-					{
-						builder.Append (text[i]);
-					}
-					
-					config.Set (key, builder.ToString ());
-					Replace (config, key); // recurse
+				if (startIndex == -1 || endIndex == -1) {
+					break;
 				}
+
+				string search = result.Substring (startIndex + 2, 
+												  endIndex - (startIndex + 2));
+
+				if (search == key) {
+					// Prevent infinite recursion
+					throw new ArgumentException 
+						("Key cannot have a expand value of itself: " + key);
+				}
+
+				string replace = ExpandValue (config, search);
+
+				result = result.Replace("${" + search + "}", replace);
 			}
+
+			if (setValue) {
+				config.Set(key, result);
+			}
+
+			return result;
 		}
 		
 		/// <summary>
 		/// Returns the replacement value of a config.
 		/// </summary>
-		private string ReplaceValue (IConfig config, string search)
+		private string ExpandValue (IConfig config, string search)
 		{
 			string result = null;
 			
@@ -184,12 +193,12 @@ namespace Nini.Config
 			if (replaces.Length > 1) {
 				IConfig newConfig = this.Configs[replaces[0]];
 				if (newConfig == null) {
-					throw new ArgumentException ("Replace config not found: "
+					throw new ArgumentException ("Expand config not found: "
 												 + replaces[0]);
 				}
 				result = newConfig.Get (replaces[1]);
 				if (result == null) {
-					throw new ArgumentException ("Replace key not found: "
+					throw new ArgumentException ("Expand key not found: "
 												 + replaces[1]);
 				}
 			} else {
