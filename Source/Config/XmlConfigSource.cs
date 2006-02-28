@@ -35,18 +35,13 @@ namespace Nini.Config
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
 		public XmlConfigSource (string path)
 		{
-			savePath = path;
-			configDoc = new XmlDocument ();
-			configDoc.Load (path);
-			PerformLoad (configDoc);
+			Load (path);
 		}
 
 		/// <include file='XmlConfigSource.xml' path='//Constructor[@name="ConstructorXmlReader"]/docs/*' />
 		public XmlConfigSource (XmlReader reader)
 		{
-			configDoc = new XmlDocument ();
-			configDoc.Load (reader);
-			PerformLoad (configDoc);
+			Load (reader);
 		}
 		#endregion
 		
@@ -59,6 +54,23 @@ namespace Nini.Config
 		#endregion
 		
 		#region Public methods
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="LoadPath"]/docs/*' />
+		public void Load (string path)
+		{
+			savePath = path;
+			configDoc = new XmlDocument ();
+			configDoc.Load (path);
+			PerformLoad (configDoc);
+		}
+
+		/// <include file='XmlConfigSource.xml' path='//Method[@name="LoadXmlReader"]/docs/*' />
+		public void Load (XmlReader reader)
+		{
+			configDoc = new XmlDocument ();
+			configDoc.Load (reader);
+			PerformLoad (configDoc);
+		}
+
 		/// <include file='XmlConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
 		public override void Save ()
 		{
@@ -203,6 +215,8 @@ namespace Nini.Config
 		/// </summary>
 		private void PerformLoad (XmlDocument document)
 		{
+			this.Configs.Clear ();
+
 			this.Merge (this); // required for SaveAll
 			
 			if (document.DocumentElement.Name != "Nini") {

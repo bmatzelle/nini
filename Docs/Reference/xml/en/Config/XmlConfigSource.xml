@@ -82,6 +82,34 @@
 		</docs>
 	</Property>
 	
+	<Method name="LoadPath">
+		<docs>
+			<summary>
+				Loads a new object from the specified XML file.
+			</summary>
+			<remarks>
+				This instance type is not read only.  
+			</remarks>
+			<param name="path">
+				Path to the XML file.
+			</param>
+		</docs>
+	</Method>
+
+	<Method name="LoadXmlReader">
+		<docs>
+			<summary>
+				Loads a new instance of the XML configuration source.
+			</summary>
+			<remarks>
+				This instance type is read only.
+			</remarks>
+			<param name="reader">
+				An XmlReader instance.
+			</param>
+		</docs>
+	</Method>
+	
 	<Method name="Save">
 		<docs>
 			<summary>

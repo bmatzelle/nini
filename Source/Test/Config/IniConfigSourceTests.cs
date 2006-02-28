@@ -408,5 +408,37 @@ namespace Nini.Test.Config
 			source.Configs["Pets"].Remove("CAT");
 			Assert.IsNull(source.Configs["Pets"].Get("CaT"));
 		}
+
+		[Test]
+		public void LoadPath ()
+		{
+			string filePath = "Test.ini";
+
+			StreamWriter writer = new StreamWriter (filePath);
+			writer.WriteLine ("; some comment");
+			writer.WriteLine ("[new section]");
+			writer.WriteLine (" dog = Rover");
+			writer.WriteLine (""); // empty line
+			writer.WriteLine ("; a comment");
+			writer.WriteLine (" cat = Muffy");
+			writer.Close ();
+			
+			IniConfigSource source = new IniConfigSource (filePath);
+			IConfig config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			config.Set ("dog", "Spots");
+			config.Set ("cat", "Misha");
+			config.Set ("DoesNotExist", "SomeValue");
+			
+			source.Load (filePath);
+
+			config = config = source.Configs["new section"];
+			Assert.AreEqual ("Rover", config.Get ("dog"));
+			Assert.AreEqual ("Muffy", config.Get ("cat"));
+			
+			File.Delete (filePath);
+		}
 	}
 }
