@@ -1,8 +1,8 @@
 <VisualStudioProject>
     <VisualBasic
         ProjectType = "Local"
-        ProductVersion = "7.0.9466"
-        SchemaVersion = "1.0"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
         ProjectGuid = "{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}"
     >
         <Build>

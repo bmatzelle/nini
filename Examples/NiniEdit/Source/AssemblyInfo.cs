@@ -1,7 +1,7 @@
 #region Copyright
 //
 // Nini Configuration Project.
-// Copyright (C) 2004 Brent R. Matzelle.  All rights reserved.
+// Copyright (C) 2006 Brent R. Matzelle.  All rights reserved.
 //
 // This software is published under the terms of the MIT X11 license, a copy of 
 // which has been included with this distribution in the LICENSE.txt file.
@@ -20,8 +20,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brent R. Matzelle")]
 [assembly: AssemblyProduct("Nini Editor")]
-[assembly: AssemblyCopyright("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
-[assembly: AssemblyTrademark("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyCopyright("Copyright (c) 2006 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyTrademark("Copyright (c) 2006 Brent R. Matzelle. All Rights Reserved.")]
 [assembly: AssemblyDefaultAlias("Nini Editor")]
 [assembly: AssemblyCulture("")]
 
