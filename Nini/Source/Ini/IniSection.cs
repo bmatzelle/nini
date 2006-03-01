@@ -123,16 +123,7 @@ namespace Nini.Ini
 		/// <include file='IniSection.xml' path='//Method[@name="SetKey"]/docs/*' />
 		public void Set (string key, string value)
 		{
-			IniItem item = null;
-
-			if (Contains (key)) {
-				item = (IniItem)configList[key];
-				item.Value = value;
-				item.Comment = comment;
-			} else {
-				item = new IniItem (key, value, IniType.Key, null);
-				configList.Add (key, item);
-			}
+			Set (key, value, null);
 		}
 		
 		/// <include file='IniSection.xml' path='//Method[@name="SetComment"]/docs/*' />

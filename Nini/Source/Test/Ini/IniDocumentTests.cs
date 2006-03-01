@@ -281,5 +281,105 @@ namespace Nini.Test.Ini
 							doc.Sections["test"].GetValue ("cat"));
 			Assert.AreEqual ("dogs bark", doc.Sections["test"].GetValue ("dog"));
 		}
+
+		[Test]
+		public void WindowsStyleDocument ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("; another comment"); // empty line
+			writer.WriteLine ("[test]");
+			writer.WriteLine (" cat = cats are not ; tall ");
+			writer.WriteLine (" dog = dogs \"bark\"");
+			IniDocument doc = new IniDocument (new StringReader (writer.ToString ()),
+												IniFileType.WindowsStyle);
+
+			IniSection section = doc.Sections["test"];
+			Assert.AreEqual ("cats are not ; tall", section.GetValue ("cat"));
+			Assert.AreEqual ("dogs \"bark\"", section.GetValue ("dog"));
+		}
+
+		[Test]
+		public void SaveAsPythonStyle ()
+		{
+			string filePath = "Save.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			IniDocument doc = new IniDocument ();
+			doc.FileType = IniFileType.PythonStyle;
+			IniSection section = new IniSection ("Pets");
+			section.Set ("my comment");
+			section.Set ("dog", "rover");
+			doc.Sections.Add (section);
+			doc.Save (stream);
+			stream.Close ();
+
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine ("# my comment");
+			writer.WriteLine ("dog : rover");
+
+			StreamReader reader = new StreamReader (filePath);
+			Assert.AreEqual (writer.ToString (), reader.ReadToEnd ());
+			reader.Close ();
+
+			File.Delete (filePath);
+		}
+
+		[Test]
+		public void SaveAsMysqlStyle ()
+		{
+			string filePath = "Save.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			IniDocument doc = new IniDocument ();
+			doc.FileType = IniFileType.MysqlStyle;
+			IniSection section = new IniSection ("Pets");
+			section.Set ("my comment");
+			section.Set ("dog", "rover");
+			doc.Sections.Add (section);
+			doc.Save (stream);
+			stream.Close ();
+
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[Pets]");
+			writer.WriteLine ("# my comment");
+			writer.WriteLine ("dog = rover");
+
+			StreamReader reader = new StreamReader (filePath);
+			Assert.AreEqual (writer.ToString (), reader.ReadToEnd ());
+			reader.Close ();
+
+			IniDocument iniDoc = new IniDocument ();
+			iniDoc.FileType = IniFileType.MysqlStyle;
+			iniDoc.Load (filePath);
+
+			File.Delete (filePath);
+		}
+
+		[Test]
+		[ExpectedException (typeof (IniException))]
+		public void SambaLoadAsStandard ()
+		{
+			string filePath = "Save.ini";
+			FileStream stream = new FileStream (filePath, FileMode.Create);
+
+			// Create a new document and save to stream
+			IniDocument doc = new IniDocument ();
+			doc.FileType = IniFileType.SambaStyle;
+			IniSection section = new IniSection ("Pets");
+			section.Set ("my comment");
+			section.Set ("dog", "rover");
+			doc.Sections.Add (section);
+			doc.Save (stream);
+			stream.Close ();
+
+			IniDocument iniDoc = new IniDocument ();
+			iniDoc.FileType = IniFileType.Standard;
+			iniDoc.Load (filePath);
+
+			File.Delete (filePath);
+		}
 	}
 }

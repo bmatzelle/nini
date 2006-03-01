@@ -11,6 +11,7 @@
 	<property name="xml-doc-path" value="" />
 	<property name="lang" value="en"/>
 	<property name="use-strong" value="NOSTRONG"/>
+	<property name="nunit-version" value="2.2.7"/>
 
 	<target name="clean">
 		<delete dir="${project.bin}\DotNet" failonerror="false" />
@@ -21,8 +22,8 @@
 		<call target="clean" />
 		<delete>
 			<fileset>
-				<includes name="${project.doc}\chm\*.chm" />
-				<includes name="${project.doc}\html\*.*" />
+				<include name="${project.doc}\chm\*.chm" />
+				<include name="${project.doc}\html\*.*" />
 			</fileset>
 		</delete>
 	</target>
@@ -40,30 +41,29 @@
 	</target>
 	
 	<target name="build-documentation">
-		<property name="xml-doc-path" value="Nini.xml" />
 		<copy todir=".">
 			<fileset basedir="${project.doc}\xml\${lang}\Config">
-				<includes name="*.xml" />
+				<include name="*.xml" />
 			</fileset>
 		</copy>
 		<copy todir=".">
 			<fileset basedir="${project.doc}\xml\${lang}\Ini">
-				<includes name="*.xml" />
+				<include name="*.xml" />
 			</fileset>
 		</copy>
 		<copy todir=".">
 			<fileset basedir="${project.doc}\xml\${lang}\Util">
-				<includes name="*.xml" />
+				<include name="*.xml" />
 			</fileset>
 		</copy>
 		<call target="build-dotnet-1.1" />
 		<move file="Nini.xml" tofile="${build.bin}\Nini.xml" />
 		<ndoc>
 			<assemblies basedir="${build.bin}">
-				<includes name="Nini.dll" />
+				<include name="Nini.dll" />
 			</assemblies>
 			<summaries basedir=".">
-				<includes name="Nini.xml" />
+				<include name="Nini.xml" />
 			</summaries>
 			<documenters>
 				<documenter name="MSDN">
@@ -74,7 +74,7 @@
 					<property name="Title" 
 						value="Nini Library API Reference - http://nini.sourceforge.net/" />
 					<property name="CopyrightText" 
-							  value="Copyright (c) 2004 Brent R. Matzelle" />
+							  value="Copyright (c) 2006 Brent R. Matzelle" />
 				</documenter>
 			</documenters>
 		</ndoc>
@@ -82,7 +82,7 @@
 			  tofile="${project.doc}\chm\NiniReference.chm" />
 		<delete>
 			<fileset>
-				<includes name="*.xml" />
+				<include name="*.xml" />
 			</fileset>
 		</delete>
 	</target>
@@ -104,16 +104,16 @@
 	</target>
 
 	<target name="build-mono">
-		<property name="build-version" value="MONO_1_0" />
+		<property name="build-version" value="MONO_1_1" />
 		<property name="runtime-name" value="Mono" />
 		<property name="current.runtime.config" value="mono" />
-		<property name="current.runtime.version" value="1.0" />
+		<property name="current.runtime.version" value="1.1" />
 		<call target="run-mono-build" />
 	</target>
 	
 	<target name="run-mono-build">
-		<mkdir dir="${project.bin}\Mono\1.0\Release" />
-		<property name="build.bin" value="${project.bin}\Mono\1.0\Release" />
+		<mkdir dir="${project.bin}\Mono\1.1\Release" />
+		<property name="build.bin" value="${project.bin}\Mono\1.1\Release" />
 
 		<exec program="mcs.bat">
 			<arg value="-target:library"/>
@@ -142,6 +142,7 @@
 			<arg value="${project.src}\Config\AliasText.cs" />
 			<arg value="${project.src}\Config\IConfig.cs" />
 			<arg value="${project.src}\Config\IConfigSource.cs" />
+			<arg value="${project.src}\Config\IniConfig.cs" />
 			<arg value="${project.src}\Config\ConfigCollection.cs" />
 			
 			<arg value="${project.src}\Util\ArgvParser.cs" />
@@ -165,18 +166,18 @@
 	</target>
 	
 	<target name="build-version" description="Compiles the project DLL">
-		<csc target="library" doc="${xml-doc-path}" 
+		<csc target="library" doc="Nini.xml"
 			define="${build-version} ${use-strong}"
 			output="${build.bin}\${project.name}.dll" debug="${debug}">
 			<sources>
-				<includes name="${project.src}\*.cs" />
-				<includes name="${project.src}\Ini\*.cs" />
-				<includes name="${project.src}\Config\*.cs" />
-				<includes name="${project.src}\Util\*.cs" />
+				<include name="${project.src}\*.cs" />
+				<include name="${project.src}\Ini\*.cs" />
+				<include name="${project.src}\Config\*.cs" />
+				<include name="${project.src}\Util\*.cs" />
 			</sources>
 			<references>
-				<includes asis="true" name="System.dll"/>
-				<includes asis="true" name="System.Xml.dll"/>
+				<include asis="true" name="System.dll"/>
+				<include asis="true" name="System.Xml.dll"/>
 			</references>
 		</csc>
 	</target>
@@ -184,25 +185,25 @@
 	<target name="build-test-version" description="Builds unit tests">
 		<csc target="library" output="${build.bin}\${project.name}Tests.dll" debug="${debug}">
 			<sources>
-				<includes name="${project.test}\Ini\*.cs" />
-				<includes name="${project.test}\Config\*.cs" />
-				<includes name="${project.test}\Util\*.cs" />
+				<include name="${project.test}\Ini\*.cs" />
+				<include name="${project.test}\Config\*.cs" />
+				<include name="${project.test}\Util\*.cs" />
 			</sources>
 			<references>
-				<includes asis="true" name="System.dll"/>
-				<includes asis="true" name="System.Xml.dll"/>
-				<includes asis="true" name="${build.bin}\${project.name}.dll"/>
-				<includes asis="true" name="\Program Files\NUnit V2.1\bin\Nunit.Framework.dll"/>
+				<include asis="true" name="System.dll"/>
+				<include asis="true" name="System.Xml.dll"/>
+				<include asis="true" name="${build.bin}\${project.name}.dll"/>
+				<include asis="true" name="\Program Files\NUnit ${nunit-version}\bin\Nunit.Framework.dll"/>
 			</references>
 		</csc>
 		<csc target="exe" output="${build.bin}\DotNetConsoleTests.exe" debug="${debug}">
 			<sources>
-				<includes name="${project.test}\Config\DotNetConsoleTests.cs" />
+				<include name="${project.test}\Config\DotNetConsoleTests.cs" />
 			</sources>
 			<references>
-				<includes asis="true" name="System.dll"/>
-				<includes asis="true" name="System.Xml.dll"/>
-				<includes name="${build.bin}\${project.name}.dll"/>
+				<include asis="true" name="System.dll"/>
+				<include asis="true" name="System.Xml.dll"/>
+				<include name="${build.bin}\${project.name}.dll"/>
 			</references>
 		</csc>
 		<copy file="${project.test}\Config\DotNetConsoleTests.exe.config" 

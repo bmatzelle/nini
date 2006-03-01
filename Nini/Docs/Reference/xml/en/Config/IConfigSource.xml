@@ -42,6 +42,17 @@
 		</docs>
 	</Property>
 	
+	<Method name="GetExpanded">
+		<docs>
+			<summary>
+				Returns the expanded string value.  This method does not replace 
+				the other key values in the IConfigSource. 
+			</summary>
+			<param name="config">Config to load the expanded value.</param>
+			<param name="key">Configuration key.</param>
+		</docs>
+	</Method>
+	
 	<Method name="Save">
 		<docs>
 			<summary>
