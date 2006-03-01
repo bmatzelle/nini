@@ -63,5 +63,5 @@ Set or add a key in a chosen config:
 
 
 -------------------------------------
-Copyright (c) 2004 Brent R. Matzelle
+Copyright (c) 2006 Brent R. Matzelle
 -------------------------------------

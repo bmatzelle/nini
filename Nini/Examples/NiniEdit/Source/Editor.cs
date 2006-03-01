@@ -1,7 +1,7 @@
 #region Copyright
 //
 // Nini Configuration Project.
-// Copyright (C) 2004 Brent R. Matzelle.  All rights reserved.
+// Copyright (C) 2006 Brent R. Matzelle.  All rights reserved.
 //
 // This software is published under the terms of the MIT X11 license, a copy of 
 // which has been included with this distribution in the LICENSE.txt file.
@@ -448,7 +448,7 @@ namespace NiniEdit
 			StringWriter writer = new StringWriter ();
 			writer.WriteLine ("Nini Editor " + GetProductVersion ());
 			writer.WriteLine ("");
-			writer.WriteLine ("Copyright 2004 Brent R. Matzelle");
+			writer.WriteLine ("Copyright 2006 Brent R. Matzelle");
 			writer.WriteLine ("This program is distributed under the MIT/X11 license:");
 			writer.WriteLine ("http://www.opensource.org/licenses/mit-license.php");
 			
