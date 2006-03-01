@@ -34,8 +34,7 @@ namespace Nini.Ini
 		/// <include file='IniException.xml' path='//Property[@name="LinePosition"]/docs/*' />
 		public int LinePosition
 		{
-			get
-			{
+			get	{
 				return (iniReader == null) ? 0 : iniReader.LinePosition;
 			}
 		}
@@ -43,8 +42,7 @@ namespace Nini.Ini
 		/// <include file='IniException.xml' path='//Property[@name="LineNumber"]/docs/*' />
 		public int LineNumber
 		{
-			get
-			{
+			get {
 				return (iniReader == null) ? 0 : iniReader.LineNumber;
 			}
 		}
@@ -52,14 +50,13 @@ namespace Nini.Ini
 		/// <include file='IniException.xml' path='//Property[@name="Message"]/docs/*' />
 		public override string Message
 		{
-			get
-			{
+			get {
 				if (iniReader == null) {
 					return base.Message;
 				}
 
 				return String.Format (CultureInfo.InvariantCulture, "{0} - Line: {1}, Position: {2}.",
-										base.Message, this.LineNumber, this.LinePosition);
+										message, this.LineNumber, this.LinePosition);
 			}
 		}
 		#endregion

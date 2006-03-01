@@ -16,11 +16,11 @@ INSTALL
 
   * Bin\DotNet\1.0 - DLL built with the MS .NET Framework 1.0
 
-  * Bin\DotNet\1.1 - DLL built with the MS .NET Framework 1.0
+  * Bin\DotNet\1.1 - DLL built with the MS .NET Framework 1.1
   
   * Bin\DotNetCompact\1.0 - DLL built for the MS .NET Compact Framework 1.0
 
-  * Bin\Mono\1.0 - DLL built with Mono 1.0
+  * Bin\Mono\1.1 - DLL built with Mono 1.1
   
 * Add the DLL as a reference in your project.  In Visual Studio right-click on 
   the References item in the project menu, click on the Browse button and 
@@ -66,7 +66,7 @@ same directory structure as found in the INSTALL section above.
   To build MS .NET Compact Framework 1.0
   *** There is no way to do this with NAnt at this time ***
   
-  To build Mono 1.0
+  To build Mono 1.1
   $> nant build-mono
 
 * Note: If you would like to run the unit test then download and install 
@@ -118,5 +118,5 @@ bmatzelle [at] yahoo [dot] com.
 Thank you for trying Nini!
 
 -------------------------------------
-Copyright (c) 2005 Brent R. Matzelle
+Copyright (c) 2006 Brent R. Matzelle
 -------------------------------------

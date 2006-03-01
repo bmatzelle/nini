@@ -68,6 +68,21 @@
 				</remarks>
 			</docs>
 		</Value>
+		
+		<Value name="WindowsStyle">
+			<docs>
+				<summary>Windows INI type.</summary>
+				<remarks>
+				This refers to the Windows INI format like that used by 
+				the GetPrivateProfileString Win32 API function.  
+				<ul>
+					<li>Accepts ';' as comment delimiter.</li>
+					<li>Accepts '=' as assign operator.</li>
+					<li>Reads quotes and comments in key values as normal text.</li>
+				</ul>
+				</remarks>
+			</docs>
+		</Value>
 	</Enum>
 
 	<docs>

@@ -18,8 +18,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Nini for .NET Framework 1.0")]
 #elif (NET_1_1)
 [assembly: AssemblyTitle("Nini for .NET Framework 1.1")]
-#elif (MONO_1_0)
-[assembly: AssemblyTitle("Nini for Mono 1.0")]
+#elif (MONO_1_1)
+[assembly: AssemblyTitle("Nini for Mono 1.1")]
 #elif (NET_COMPACT_1_0)
 [assembly: AssemblyTitle("Nini for .NET Compact Framework 1.0")]
 #else
@@ -30,8 +30,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brent R. Matzelle")]
 [assembly: AssemblyProduct("Nini")]
-[assembly: AssemblyCopyright("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
-[assembly: AssemblyTrademark("Copyright (c) 2004 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyCopyright("Copyright (c) 2006 Brent R. Matzelle. All Rights Reserved.")]
+[assembly: AssemblyTrademark("Copyright (c) 2006 Brent R. Matzelle. All Rights Reserved.")]
 [assembly: AssemblyDefaultAlias("Nini")]
 [assembly: AssemblyCulture("")]
 

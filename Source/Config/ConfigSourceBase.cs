@@ -76,7 +76,7 @@ namespace Nini.Config
 		/// <include file='IConfigSource.xml' path='//Method[@name="GetExpanded"]/docs/*' />
 		public string GetExpanded (IConfig config, string key)
 		{
-			return Expand(config, key, false);
+			return Expand (config, key, false);
 		}
 		
 		/// <include file='IConfigSource.xml' path='//Method[@name="Save"]/docs/*' />
@@ -141,7 +141,7 @@ namespace Nini.Config
 
 		#region Private methods	
 		/// <summary>
-		/// Recursively replaces text.
+		/// Expands key values from the given IConfig.
 		/// </summary>
 		private string Expand (IConfig config, string key, bool setValue)
 		{
@@ -154,9 +154,12 @@ namespace Nini.Config
 			while (true)
 			{
 				int startIndex = result.IndexOf ("${", 0);
-				int endIndex = result.IndexOf ("}");
+				if (startIndex == -1) {
+					break;
+				}
 
-				if (startIndex == -1 || endIndex == -1) {
+				int endIndex = result.IndexOf ("}", startIndex + 2);
+				if (endIndex == -1) {
 					break;
 				}
 

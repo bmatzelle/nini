@@ -316,5 +316,34 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("http://nini.sf.net/", config.GetExpanded ("domain"));
 			Assert.AreEqual ("${web|protocol}://nini.sf.net/", config.Get ("domain"));
 		}
+
+		[Test]
+		public void ExpandWithEndBracket ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine (" apache = } Apache implements ${protocol}");
+			writer.WriteLine (" protocol = http");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			IConfig config = source.Configs["web"];
+			Assert.AreEqual ("} Apache implements http", config.GetExpanded ("apache"));
+		}
+
+		[Test]
+		public void ExpandBackToBack ()
+		{
+			StringWriter writer = new StringWriter ();
+			writer.WriteLine ("[web]");
+			writer.WriteLine (" apache = Protocol: ${protocol}${version}");
+			writer.WriteLine (" protocol = http");
+			writer.WriteLine (" version = 1.1");
+			IniConfigSource source = new IniConfigSource 
+									(new StringReader (writer.ToString ()));
+
+			IConfig config = source.Configs["web"];
+			Assert.AreEqual ("Protocol: http1.1", config.GetExpanded ("apache"));
+		}
 	}
 }

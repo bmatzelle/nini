@@ -26,7 +26,9 @@ namespace Nini.Ini
 		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="SambaStyle"]/docs/*' />
 		SambaStyle,
 		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="MysqlStyle"]/docs/*' />
-		MysqlStyle
+		MysqlStyle,
+		/// <include file='IniDocument.xml' path='//Enum[@name="IniFileType"]/Value[@name="WindowsStyle"]/docs/*' />
+		WindowsStyle
 	}
 	#endregion
 
@@ -138,7 +140,7 @@ namespace Nini.Ini
 		/// <include file='IniDocument.xml' path='//Method[@name="SaveTextWriter"]/docs/*' />
 		public void Save (TextWriter textWriter)
 		{
-			IniWriter writer = new IniWriter (textWriter);
+			IniWriter writer = GetIniWriter (textWriter, fileType);
 			IniItem item = null;
 			IniSection section = null;
 			
@@ -259,6 +261,36 @@ namespace Nini.Ini
 				result.AcceptNoAssignmentOperator = true;
 				result.SetCommentDelimiters (new char[] { '#' });
 				result.SetAssignDelimiters (new char[] { ':', '=' });
+				break;
+			case IniFileType.WindowsStyle:
+				result.ConsumeAllKeyText = true;
+				break;
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Returns a proper IniWriter depending upon the type parameter.
+		/// </summary>
+		private IniWriter GetIniWriter (TextWriter reader, IniFileType type)
+		{
+			IniWriter result = new IniWriter (reader);
+
+			switch (type)
+			{
+			case IniFileType.Standard:
+			case IniFileType.WindowsStyle:
+				// do nothing
+				break;
+			case IniFileType.PythonStyle:
+				result.AssignDelimiter = ':';
+				result.CommentDelimiter = '#';
+				break;
+			case IniFileType.SambaStyle:
+			case IniFileType.MysqlStyle:
+				result.AssignDelimiter = '=';
+				result.CommentDelimiter = '#';
 				break;
 			}
 
