@@ -55,7 +55,7 @@ namespace Nini.Test.Config
 
 			IConfig config = source.Configs["Base"];
 			Assert.IsNull (config.Get ("nothere"));
-			Assert.IsNull (config.Get ("help"));
+			Assert.AreEqual ("", config.Get ("help"));
 			Assert.IsNotNull (config.Get ("heat"));
 		}
 		
@@ -77,6 +77,18 @@ namespace Nini.Test.Config
 			Assert.AreEqual ("-d", args[1]);
 			Assert.AreEqual ("doc.xml", args[2]);
 			Assert.AreEqual ("/pet:cat", args[3]);
+		}
+
+		[Test] 
+		public void GetStringWithColon() 
+		{ 
+			string[] arguments = new string[] {"-c", "\"D:\\test directory\""}; 
+
+			ArgvConfigSource source = new ArgvConfigSource (arguments); 
+			source.AddSwitch ("Base", "colon", "c"); 
+
+			Assert.AreEqual ("D:\\test directory", 
+							 source.Configs["Base"].GetString("colon")); 
 		}
 		#endregion
 

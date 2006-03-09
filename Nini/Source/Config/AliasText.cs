@@ -27,6 +27,7 @@ namespace Nini.Config
 		{
 			intAlias = InsensitiveHashtable ();
 			booleanAlias = InsensitiveHashtable ();
+			DefaultAliasLoad ();
 		}
 		#endregion
 		
@@ -36,8 +37,6 @@ namespace Nini.Config
 		{
 			if (intAlias.Contains (key)) {
 				Hashtable keys = (Hashtable)intAlias[key];
-				if (keys.Contains (alias))
-					throw new ArgumentException ("Alias text already exists");
 				
 				keys[alias] = value;
 			} else {
@@ -50,7 +49,7 @@ namespace Nini.Config
 		/// <include file='AliasText.xml' path='//Method[@name="AddAliasBoolean"]/docs/*' />
 		public void AddAlias (string alias, bool value)
 		{
-			booleanAlias.Add (alias, value);
+			booleanAlias[alias] = value;
 		}
 		
 #if (NET_COMPACT_1_0)
@@ -110,6 +109,15 @@ namespace Nini.Config
 		#endregion
 		
 		#region Private methods
+		/// <summary>
+		/// Loads the default alias values.
+		/// </summary>
+		private void DefaultAliasLoad ()
+		{
+			AddAlias("true", true);
+			AddAlias("false", false);
+		}
+
 #if (NET_COMPACT_1_0)
 #else
 		/// <summary>

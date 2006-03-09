@@ -23,21 +23,28 @@ namespace Nini.Test.Config
 		{
 			AliasText alias = new AliasText ();
 			
-			Assert.IsFalse (alias.ContainsBoolean ("true"));
-			Assert.IsFalse (alias.ContainsBoolean ("false"));
-			alias.AddAlias ("true", true);
-			alias.AddAlias ("faLSe", false);
+			Assert.IsFalse (alias.ContainsBoolean ("on"));
+			Assert.IsFalse (alias.ContainsBoolean ("off"));
 			alias.AddAlias ("oN", true);
 			alias.AddAlias ("oFF", false);
 			
+			Assert.IsTrue (alias.ContainsBoolean ("oN"));
+			Assert.IsTrue (alias.ContainsBoolean ("off"));
+			
+			Assert.IsTrue (alias.GetBoolean ("oN"));
+			Assert.IsFalse (alias.GetBoolean ("OfF"));
+		}
+
+		[Test]
+		public void GetDefaultAliases ()
+		{
+			AliasText alias = new AliasText ();
+			
 			Assert.IsTrue (alias.ContainsBoolean ("true"));
 			Assert.IsTrue (alias.ContainsBoolean ("false"));
-			
+		
 			Assert.IsTrue (alias.GetBoolean ("tRUe"));
-			Assert.IsTrue (alias.GetBoolean ("oN"));
-			
-			Assert.IsFalse (alias.GetBoolean ("Off"));
-			Assert.IsFalse (alias.GetBoolean ("False"));
+			Assert.IsFalse (alias.GetBoolean ("FaLse"));
 		}
 		
 		[Test]

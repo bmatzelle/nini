@@ -21,82 +21,76 @@ namespace Nini.Util
 	public class ArgvParser
 	{
 		#region Private variables
-		Hashtable parameters;
+		StringDictionary parameters;
 		#endregion
-
+		
 		#region Constructors
 		/// <include file='ArgvParser.xml' path='//Constructor[@name="Constructor"]/docs/*' />
+		public ArgvParser(string args)
+		{
+
+			Regex Extractor = new Regex(@"(['""][^""]+['""])\s*|([^\s]+)\s*",
+										RegexOptions.Compiled);
+			MatchCollection matches;
+			string[] parts;
+			
+			// Get matches (first string ignored because 
+			// Environment.CommandLine starts with program filename)
+			matches = Extractor.Matches (args);
+			parts = new string[matches.Count - 1];
+
+			for (int i = 1; i < matches.Count; i++)
+			{
+				parts[i-1] = matches[i].Value.Trim ();
+			}
+		}
+		
+		/// <include file='ArgvParser.xml' path='//Constructor[@name="ConstructorArray"]/docs/*' />
 		public ArgvParser (string[] args)
 		{
-			parameters = new Hashtable ();
-			Regex splitter = new Regex (@"^-{1,2}|^/|=|:", RegexOptions.Compiled);
-			Regex remover = new Regex (@"^['""]?(.*?)['""]?$", RegexOptions.Compiled);
-			string parameter = null;
-			string[] parts;
-
-			// Valid parameters forms:
-			// {-,/,--}param{ ,=,:}((",')value(",'))
-			// Examples: -param1 value1 --param2 /param3:"Test-:-work" /param4=happy -param5 '--=nice=--'
-			foreach (string text in args)
-			{
-				// Look for new parameters (-,/ or --) and a possible enclosed value (=,:)
-				parts = splitter.Split (text, 3);
-				switch (parts.Length)
-				{
-				// Found a value (for the last parameter found (space separator))
-				case 1:
-					if (parameter != null) {
-						if (!parameters.Contains (parameter)) {
-							parts[0] = remover.Replace (parts[0], "$1");
-							parameters.Add (parameter, parts[0]);
-						}
-						parameter = null;
-					}
-					// else Error: no parameter waiting for a value (skipped)
-					break;
-				// Found just a parameter
-				case 2:
-					// The last parameter is still waiting. With no value, set it to true.
-					if (parameter != null) {
-						if (!parameters.Contains (parameter)) {
-							parameters.Add (parameter, "true");
-						}
-					}
-					parameter = parts[1];
-					break;
-				// parameter with enclosed value
-				case 3:
-					// The last parameter is still waiting. With no value, set it to true.
-					if (parameter != null) {
-						if (!parameters.Contains (parameter)) {
-							parameters.Add (parameter, "true");
-						}
-					}
-					parameter = parts[1];
-					// Remove possible enclosing characters  (",')
-					if (!parameters.Contains (parameter)) {
-						parts[2] = remover.Replace (parts[2], "$1");
-						parameters.Add (parameter, parts[2]);
-					}
-					parameter = null;
-					break;
-				}
-			}
-
-			// In case a parameter is still waiting
-			if (parameter !=  null) {
-				if (!parameters.Contains (parameter)) {
-					parameters.Add (parameter, "true");
-				}
+			Extract (args);
+		}
+		#endregion
+		
+		#region Public properties
+		/// <include file='ArgvParser.xml' path='//Property[@name="this"]/docs/*' />
+		public string this [string param]
+		{
+			get {
+				return parameters[param];
 			}
 		}
 		#endregion
 
-		#region Public properties
-		/// <include file='ArgvParser.xml' path='//Property[@name="this"]/docs/*' />
-		public string this [string Param]
+		#region Private methods
+		// Extract command line parameters and values stored in a string array
+		private void Extract(string[] args)
 		{
-			get { return (string)parameters[Param]; }
+			parameters = new StringDictionary();
+			Regex splitter = new Regex (@"^([/-]|--){1}(?<name>\w+)([:=])?(?<value>.+)?$",
+										RegexOptions.Compiled);
+			char[] trimChars = {'"','\''};
+			string parameter = null;
+			Match part;
+
+			// Valid parameters forms: {-,/,--}param{ , = ,:}((",')value(",'))
+			// Examples: -param1 value1 --param2 /param3:"Test-:-work" 
+			// /param4 = happy -param5 '-- = nice = --'
+			foreach(string arg in args)
+			{
+				part = splitter.Match(arg);
+				if (!part.Success) {
+					// Found a value (for the last parameter found (space separator))
+					if (parameter != null) {
+						parameters[parameter] = arg.Trim (trimChars);
+					}
+				} else {
+					// Matched a name, optionally with inline value
+					parameter = part.Groups["name"].Value;
+					parameters.Add (parameter, 
+									part.Groups["value"].Value.Trim (trimChars));
+				}
+			}
 		}
 		#endregion
 	}
