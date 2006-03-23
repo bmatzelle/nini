@@ -6,7 +6,7 @@
 
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
-	<title>Other Configuration Types - Nini Manual</title>
+	<title>Configuration Types - Nini Manual</title>
 	<link rel="stylesheet" href="styles.css" type="text/css" media="screen" />
 	<meta name="description" content="" />
 </head>
@@ -27,10 +27,42 @@
   
   <div id="content">
 
-    <h2>4. Other Configuration Types</h2>
+    <h2>4. Configuration Types</h2>
     
-    <a name="XMLConfiguration" id="XMLConfiguration"></a>
-    <h3>4.1 XML Configuration</h3>
+    <a name="IniFiles" id="IniFiles"></a>
+    <h3>4.1 Ini Files</h3>
+    <p>Nini has a built in INI parser written in 100% C#.  This means that unlike
+      other INI parsers it will run on any .NET platform, not just those running
+      Windows.  In addition the parser is written for flexibility, that is why
+      it has support for multiple INI file types.  The currently supported
+      file types are as follows:
+      
+      <ul>
+        <li><a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getprivateprofilestring.asp">Windows style</a> (Win32 API GetPrivateProfileString)</li>
+        <li><a href="http://dev.mysql.com/doc/refman/5.0/en/mysql-cluster-config-example.html">MySQL style</a></li>
+        <li><a href="http://www.python.org/doc/current/lib/module-ConfigParser.html">Python Style</a></li>
+        <li><a href="http://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html">Samba style</a></li>
+        <li>Nini standard</li>
+      </ul>
+    </p>
+    
+    <h4>Case Sensitivity</h4>
+    <p>The IniConfigSource class has a property that allows values to be 
+      case insensitive.  This might be desirable for people upgrading their
+      software from systems using the old Win32 API GetPrivateProfileString
+      function which was not case sensitive.  Here is an example of how to use it:
+    </p>
+    
+    <pre>
+; Note the Load method is just an alternative to passing the file name
+; to the constructor. 
+IConfigSource source = <b>new</b> IniConfigSource();
+source.Load(&quot;MyApp.ini&quot;);
+source.CaseSensitive = <b>false</b>;</pre>
+    </div>
+    
+    <a name="XmlFiles" id="XmlConfiguration"></a>
+    <h3>4.2 XML Files</h3>
     <p>Nini has it's own XML configuration file structure. It provides more flexibility 
       than does the .NET configuration file format. It's main advantages are that 
       you can have more than one XML configuration file and that the format is much 
@@ -68,7 +100,7 @@ XmlConfigSource source = <b>new</b> XmlConfigSource("MyApp.xml");
     </div>
     
     <a name="WindowsRegistryConfiguration"></a>
-    <h3>4.2 Windows Registry Configuration</h3>
+    <h3>4.3 Windows Registry Configuration</h3>
     
     If you are using one of the many Microsoft Windows operating systems then you 
     can access data from the <a href="http://tinyurl.com/c8tpz">Windows 
@@ -142,7 +174,7 @@ source.AddMapping(Registry.LocalMachine, "Software\\MyApp", RegistryRecurse.Flat
     
     <a name="NETCOnfiguration"></a>
     
-    <h3>4.3 .NET Configuration Files</h3>
+    <h3>4.4 .NET Configuration Files</h3>
     <p>
       The .NET Framework has it's own configuration file mechanism that uses a specific 
       <a href="http://tinyurl.com/38sn4">XML 
@@ -191,7 +223,7 @@ IConfigSource source = <b>new</b> DotNetConfigSource(DotNetConfigSource.GetFullC
     
     <a name="ArgvConfiguration"></a>
     
-    <h3>4.4 Command Line (Argv) Configuration</h3>
+    <h3>4.5 Command Line (Argv) Configuration</h3>
     <p>
       Since the beginning of programming applications have had the capability to 
       accept command line switches. These switches are simply strings passed into 

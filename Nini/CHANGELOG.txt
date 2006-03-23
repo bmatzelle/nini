@@ -4,6 +4,20 @@ Nini Project ChangeLog
 
 This contains a listing of all changes between versions of Nini.
 
+Version 1.1.0 (Wed, Mar 22 2006)
+--------------------------------
+* Very much improved INI load and save support
+* Added Load methods to all INI and XML based classes
+* Added MySQL INI support
+* Added Windows INI (Win32 API GetPrivateProfileString) support
+* Added GetExpanded method to expand key values without replacing
+* Added Registry config saving and key remove support
+* Added a CaseSensitive property for the IniConfigSource class
+* Fixed multiple long-standing bugs
+* Split up the manual into a table of contents and 5 chapters
+* Updated build with .NET 2.0 support
+* Updated all projects files to Visual Studio 2003
+
 Version 1.0.0 (Mon, Jul 25 2005)
 --------------------------------
 * Added event delegates for Saved, Reloaded, KeySet, KeyRemoved, etc
