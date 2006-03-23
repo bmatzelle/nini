@@ -18,6 +18,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Nini for .NET Framework 1.0")]
 #elif (NET_1_1)
 [assembly: AssemblyTitle("Nini for .NET Framework 1.1")]
+#elif (NET_2_0)
+[assembly: AssemblyTitle("Nini for .NET Framework 2.0")]
 #elif (MONO_1_1)
 [assembly: AssemblyTitle("Nini for Mono 1.1")]
 #elif (NET_COMPACT_1_0)
@@ -37,19 +39,8 @@ using System.Runtime.CompilerServices;
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"..\..\Nini.snk")]
+[assembly: AssemblyKeyFile(@"..\..\Nini.key")]
 #endif
-
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
 
 [assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
 
