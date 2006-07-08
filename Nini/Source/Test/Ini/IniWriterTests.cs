@@ -19,6 +19,15 @@ namespace Nini.Test.Ini
 	public class IniWriterTests
 	{
 		[Test]
+		public void DisposeStringWriterNullReference ()
+		{
+			StringWriter writer = new StringWriter ();
+			IniWriter iniWriter = new IniWriter (writer);
+			iniWriter.WriteSection ("Test");
+			iniWriter.Dispose ();
+		}
+
+		[Test]
 		public void EmptyWithComment ()
 		{
 			StringWriter writer = new StringWriter ();

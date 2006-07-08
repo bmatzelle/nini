@@ -205,14 +205,16 @@ namespace Nini.Ini
 		/// <include file='IniWriter.xml' path='//Method[@name="DisposeBoolean"]/docs/*' />
 		protected virtual void Dispose (bool disposing)
 		{
-			if (!disposed) 
-			{
-				textWriter.Close ();
-				baseStream.Close ();
+			if (!disposed) {
+				if (textWriter != null) {
+					textWriter.Close ();
+				}
+				if (baseStream != null) {
+					baseStream.Close ();
+				}
 				disposed = true;
 
-				if (disposing) 
-				{
+				if (disposing) {
 					GC.SuppressFinalize (this);
 				}
 			}
