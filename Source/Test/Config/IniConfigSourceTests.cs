@@ -434,7 +434,7 @@ namespace Nini.Test.Config
             
             source.Load (filePath);
 
-            config = config = source.Configs["new section"];
+            config = source.Configs["new section"];
             Assert.AreEqual ("Rover", config.Get ("dog"));
             Assert.AreEqual ("Muffy", config.Get ("cat"));
             
