@@ -45,6 +45,10 @@ same directory structure as found in the INSTALL section above.
       the compact project file (NiniCompact.csdproj).  Build the solution
       in the same way as documented above.
 
+- MonoDevelop / Xamarin Studio
+  MonoDevelop IDE can also be used to build Nini for Mono on Linux (.NET 2.0 profile and more recent), 
+  and it's Windows equivalent Xamarin Studio - to build Nini for .NET (or also Mono).
+
 - NAnt (http://nant.sourceforge.net)
   In the Source directory there is a Cyrus.build NAnt file.  Here is how to 
   build for each runtime from the command line:
