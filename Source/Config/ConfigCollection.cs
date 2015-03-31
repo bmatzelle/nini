@@ -81,7 +81,7 @@ namespace Nini.Config
         object IList.this[int index]
         {
             get { return configList[index]; }
-            set {  }
+            set { throw new NotImplementedException ("Not implemented, use Add methods instead"); }
         }
         
         /// <include file='ConfigCollection.xml' path='//Property[@name="ItemName"]/docs/*' />
