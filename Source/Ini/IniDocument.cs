@@ -334,13 +334,21 @@ namespace Nini.Ini
                 for (var i = 0; i < baseSection.ItemCount; i++)
                 {
                     var item = baseSection.GetItem(i);
-                    newSection.Set(item.Name, item.Value, item.Comment);
+
+                    if (item.Value != null)
+                    {
+                        newSection.Set(item.Name, item.Value, item.Comment);
+                    }
                 }
 
                 for (var i = 0; i < section.ItemCount; i++)
                 {
                     var item = section.GetItem(i);
-                    newSection.Set(item.Name, item.Value, item.Comment);
+
+                    if (item.Value != null)
+                    {
+                        newSection.Set(item.Name, item.Value, item.Comment);
+                    }
                 }
 
                 sections.Add(newSection);
