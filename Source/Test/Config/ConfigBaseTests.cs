@@ -110,8 +110,11 @@ namespace Nini.Test.Config
             IniConfigSource source = new IniConfigSource 
                                     (new StringReader (writer.ToString ()));
             IConfig config = source.Configs["Test"];
-            
-            Assert.AreEqual (494.59, config.GetFloat ("value 1"));
+
+            // Compensate for floating point storage.
+            var comparison = Math.Abs(494.59 - config.GetFloat("value 1"));
+            Assert.Less(comparison, 0.0001);
+
             Assert.AreEqual ((float)5656.2853, 
                             config.GetFloat ("Not Here", (float)5656.2853));
         }
