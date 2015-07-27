@@ -247,6 +247,41 @@ namespace Nini.Test.Ini
         }
 
         [Test]
+        public void ExtendedSections ()
+        {
+            StringWriter writer = new StringWriter();
+            writer.WriteLine("[ExtendedSection : BaseSection]");
+            writer.WriteLine("keyB = overwrittenB");
+            writer.WriteLine("keyC = valueC");
+            writer.WriteLine("[BaseSection]");
+            writer.WriteLine("keyA = valueA");
+            writer.WriteLine("keyB = valueB");
+
+            IniDocument doc = new IniDocument(new StringReader(writer.ToString()), true);
+
+            Assert.IsNotNull(doc.Sections["BaseSection"], "BaseSection is null");
+            Assert.IsNotNull(doc.Sections["ExtendedSection"], "ExtendedSection is null");
+            Assert.IsNull(doc.Sections["ExtendedSection : BaseSection"], "ExtendedSection:BaseSection is not null");
+            Assert.AreEqual(2, doc.Sections.Count);
+
+            Assert.AreEqual("valueA", doc.Sections["BaseSection"].GetValue("keyA"));
+            Assert.AreEqual("valueB", doc.Sections["BaseSection"].GetValue("keyB"));
+
+            Assert.AreEqual("valueC", doc.Sections["ExtendedSection"].GetValue("keyC"));
+            Assert.AreEqual("overwrittenB", doc.Sections["ExtendedSection"].GetValue("keyB"));
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException), ExpectedMessage = "Section ExtendedSection is trying to extend section BaseSectionInvalid but it does not exist", MatchType = MessageMatch.Contains)]
+        public void ExtendedSectionsValidNames()
+        {
+            StringWriter writer = new StringWriter();
+            writer.WriteLine("[ExtendedSection : BaseSectionInvalid]");
+
+            IniDocument doc = new IniDocument(new StringReader(writer.ToString()), true);
+        }
+
+        [Test]
         public void DuplicateKeys ()
         {
             StringWriter writer = new StringWriter ();
