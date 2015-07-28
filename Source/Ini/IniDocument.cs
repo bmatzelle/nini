@@ -39,6 +39,7 @@ namespace Nini.Ini
         IniSectionCollection sections = new IniSectionCollection ();
         ArrayList initialComment = new ArrayList ();
         IniFileType fileType = IniFileType.Standard;
+        bool extended = false;
         #endregion
         
         #region Public properties
@@ -52,52 +53,108 @@ namespace Nini.Ini
 
         #region Constructors
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
-        public IniDocument (string filePath)
+        public IniDocument(string filePath)
         {
             fileType = IniFileType.Standard;
-            Load (filePath);
+            Load(filePath);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorPath"]/docs/*' />
+        public IniDocument(string filePath, bool supportExtended)
+        {
+            fileType = IniFileType.Standard;
+            extended = supportExtended;
+            Load(filePath);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorPathType"]/docs/*' />
-        public IniDocument (string filePath, IniFileType type)
+        public IniDocument(string filePath, IniFileType type)
         {
             fileType = type;
-            Load (filePath);
+            Load(filePath);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorPathType"]/docs/*' />
+        public IniDocument(string filePath, IniFileType type, bool supportExtended)
+        {
+            fileType = type;
+            extended = supportExtended;
+            Load(filePath);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
-        public IniDocument (TextReader reader)
+        public IniDocument(TextReader reader)
         {
             fileType = IniFileType.Standard;
-            Load (reader);
+            Load(reader);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReader"]/docs/*' />
+        public IniDocument(TextReader reader, bool supportExtended)
+        {
+            fileType = IniFileType.Standard;
+            extended = supportExtended;
+            Load(reader);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReaderType"]/docs/*' />
-        public IniDocument (TextReader reader, IniFileType type)
+        public IniDocument(TextReader reader, IniFileType type)
         {
             fileType = type;
-            Load (reader);
+            Load(reader);
         }
-        
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorTextReaderType"]/docs/*' />
+        public IniDocument(TextReader reader, IniFileType type, bool supportExtended)
+        {
+            fileType = type;
+            extended = supportExtended;
+            Load(reader);
+        }
+
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStream"]/docs/*' />
-        public IniDocument (Stream stream)
+        public IniDocument(Stream stream)
         {
             fileType = IniFileType.Standard;
-            Load (stream);
+            Load(stream);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStream"]/docs/*' />
+        public IniDocument(Stream stream, bool supportExtended)
+        {
+            fileType = IniFileType.Standard;
+            extended = supportExtended;
+            Load(stream);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStreamType"]/docs/*' />
-        public IniDocument (Stream stream, IniFileType type)
+        public IniDocument(Stream stream, IniFileType type)
         {
             fileType = type;
-            Load (stream);
+            Load(stream);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorStreamType"]/docs/*' />
+        public IniDocument(Stream stream, IniFileType type, bool supportExtended)
+        {
+            fileType = type;
+            extended = supportExtended;
+            Load(stream);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorIniReader"]/docs/*' />
-        public IniDocument (IniReader reader)
+        public IniDocument(IniReader reader)
         {
             fileType = IniFileType.Standard;
-            Load (reader);
+            Load(reader);
+        }
+
+        /// <include file='IniDocument.xml' path='//Constructor[@name="ConstructorIniReader"]/docs/*' />
+        public IniDocument(IniReader reader, bool supportExtended)
+        {
+            fileType = IniFileType.Standard;
+            extended = supportExtended;
+            Load(reader);
         }
 
         /// <include file='IniDocument.xml' path='//Constructor[@name="Constructor"]/docs/*' />
@@ -231,6 +288,71 @@ namespace Nini.Ini
             } finally {
                 // Always close the file
                 reader.Close ();
+            }
+
+            MergeSections();
+        }
+
+        /// <summary>
+        /// Supports section merging where a colon is in the key, e.g. ExtendedSection : BaseSection
+        /// </summary>
+        private void MergeSections()
+        {
+            if(!extended)
+            {
+                return;
+            }
+
+            foreach (DictionaryEntry entry in sections)
+            {
+                IniSection section = (IniSection)entry.Value;
+
+                if (!section.Name.Contains(":"))
+                {
+                    continue;
+                }
+
+                var parts = section.Name.Split(new char[] { ':' });
+                var newName = parts[0].TrimEnd();
+                var extendedSectionName = parts[1].TrimStart();
+
+                if (sections[newName] != null)
+                {
+                    sections.Remove(newName);
+                }
+
+                if (sections[extendedSectionName] == null)
+                {
+                    throw new ArgumentException(String.Format("Section {0} is trying to extend section {1} but it does not exist.", newName, extendedSectionName));
+                }
+
+                IniSection baseSection = sections[extendedSectionName];
+                var baseKeys = baseSection.GetKeys();
+
+                var newSection = new IniSection(newName, section.Comment);
+
+                for (var i = 0; i < baseSection.ItemCount; i++)
+                {
+                    var item = baseSection.GetItem(i);
+
+                    if (item.Value != null)
+                    {
+                        newSection.Set(item.Name, item.Value, item.Comment);
+                    }
+                }
+
+                for (var i = 0; i < section.ItemCount; i++)
+                {
+                    var item = section.GetItem(i);
+
+                    if (item.Value != null)
+                    {
+                        newSection.Set(item.Name, item.Value, item.Comment);
+                    }
+                }
+
+                sections.Add(newSection);
+                sections.Remove(section.Name);
             }
         }
 
