@@ -52,7 +52,7 @@ using System.Runtime.CompilerServices;
 // Permview attributes
 #if (NET_COMPACT_1_0)
 #else
-[assembly:IsolatedStorageFilePermission(SecurityAction.RequestMinimum)]
-[assembly:SecurityPermission(SecurityAction.RequestRefuse)]
-[assembly:FileIOPermission(SecurityAction.RequestMinimum)]
+//[assembly:IsolatedStorageFilePermission(SecurityAction.RequestMinimum)]
+//[assembly:SecurityPermission(SecurityAction.RequestRefuse)]
+//[assembly:FileIOPermission(SecurityAction.RequestMinimum)]
 #endif

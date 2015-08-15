@@ -140,8 +140,9 @@ namespace Nini.Config
         /// </summary>
         private Hashtable InsensitiveHashtable ()
         {
-            return new Hashtable (CaseInsensitiveHashCodeProvider.Default, 
-                                  CaseInsensitiveComparer.Default);
+            return new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+            //return new Hashtable (CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+
         }
         #endregion
     }

@@ -201,8 +201,8 @@ namespace Nini.Config
             this.Merge (this); // required for SaveAll
             for (int i = 0; i < sections.Length; i++)
             {
-                LoadCollection (sections[i], (NameValueCollection)ConfigurationSettings
-                                .GetConfig (sections[i]));
+                LoadCollection(sections[i], (NameValueCollection)ConfigurationManager.GetSection(sections[i]));
+                //LoadCollection (sections[i], (NameValueCollection)ConfigurationSettings.GetConfig (sections[i]));
             }
 #endif
         }
