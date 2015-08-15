@@ -1,8 +1,16 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nini", "Nini.csproj", "{9B920C90-08EF-4123-A6B7-5F25CF0F94EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiniTest", "Test\NiniTest.csproj", "{BF80879B-3F0D-44A8-87FF-00143FDD3D16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicApp", "..\Examples\CsExamples\BasicApp\BasicApp.csproj", "{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiniEdit", "..\Examples\NiniEdit\Source\NiniEdit.csproj", "{1CE7A5AC-ED79-4F01-AE8E-6E832B9B329B}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "BasicAppVB", "..\Examples\VbExamples\BasicApp\BasicAppVB.vbproj", "{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +26,18 @@ Global
 		{BF80879B-3F0D-44A8-87FF-00143FDD3D16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF80879B-3F0D-44A8-87FF-00143FDD3D16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF80879B-3F0D-44A8-87FF-00143FDD3D16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CE7A5AC-ED79-4F01-AE8E-6E832B9B329B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CE7A5AC-ED79-4F01-AE8E-6E832B9B329B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CE7A5AC-ED79-4F01-AE8E-6E832B9B329B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CE7A5AC-ED79-4F01-AE8E-6E832B9B329B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60A5AF14-26E5-4E55-BF8F-DB1DFA276353}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

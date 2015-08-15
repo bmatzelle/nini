@@ -1,21 +1,21 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicApp", "BasicApp\BasicApp.csproj", "{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Release = Release
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug.ActiveCfg = Debug|.NET
-		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug.Build.0 = Debug|.NET
-		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release.ActiveCfg = Release|.NET
-		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release.Build.0 = Release|.NET
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76BBE40-B00B-455E-A2A3-C5DAA47006AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
