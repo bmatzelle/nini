@@ -43,6 +43,8 @@ namespace Nini.Util
             {
                 parts[i-1] = matches[i].Value.Trim ();
             }
+
+            Extract(parts);
         }
         
         /// <include file='ArgvParser.xml' path='//Constructor[@name="ConstructorArray"]/docs/*' />
