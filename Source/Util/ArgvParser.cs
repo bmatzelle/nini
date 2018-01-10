@@ -24,6 +24,7 @@ namespace Nini.Util
         #region Private variables
         StringDictionary parameters;
         List<string> positional;
+        List<string> parameterlessArgs;
         #endregion
         
         #region Constructors
@@ -50,8 +51,9 @@ namespace Nini.Util
         }
         
         /// <include file='ArgvParser.xml' path='//Constructor[@name="ConstructorArray"]/docs/*' />
-        public ArgvParser (string[] args)
+        public ArgvParser (string[] args, List<string> paramlessArgs)
         {
+            parameterlessArgs = paramlessArgs;
             Extract (args);
         }
         #endregion
@@ -112,6 +114,12 @@ namespace Nini.Util
                     parameter = part.Groups["name"].Value;
                     parameters.Add (parameter, 
                                     part.Groups["value"].Value.Trim (trimChars));
+                    if (parameterlessArgs != null && parameterlessArgs.Contains(parameter))
+                    {
+                        // Make it true and don't look for an argument
+                        parameters[parameter] = "True";
+                        parameter = null;
+                    }
                 }
             }
         }
