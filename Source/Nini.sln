@@ -2,8 +2,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nini", "Nini.csproj", "{9B920C90-08EF-4123-A6B7-5F25CF0F94EC}"
 EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiniTest", "Test\NiniTest.csproj", "{BF80879B-3F0D-44A8-87FF-00143FDD3D16}"
-#EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiniTest", "Test\NiniTest.csproj", "{BF80879B-3F0D-44A8-87FF-00143FDD3D16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
