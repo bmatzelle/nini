@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using Nini.Util;
 
 namespace Nini.Config
@@ -22,13 +23,14 @@ namespace Nini.Config
         #region Private variables
         ArgvParser parser = null;
         string[] arguments = null;
+        List<string> parameterlessArgs = new List<string>();
         #endregion
 
         #region Constructors
         /// <include file='ArgvConfigSource.xml' path='//Constructor[@name="Constructor"]/docs/*' />
         public ArgvConfigSource (string[] arguments)
         {
-            parser = new ArgvParser (arguments);
+            parser = new ArgvParser (arguments, parameterlessArgs);
             this.arguments = arguments;
         }
         #endregion
@@ -57,13 +59,24 @@ namespace Nini.Config
         
         /// <include file='ArgvConfigSource.xml' path='//Method[@name="AddSwitchShort"]/docs/*' />
         public void AddSwitch (string configName, string longName, 
-                                string shortName)
+                                string shortName, bool parameterless = false)
         {
             IConfig config = GetConfig (configName);
             
             if (shortName != null && 
                 (shortName.Length < 1 || shortName.Length > 2)) {
                 throw new ArgumentException ("Short name may only be 1 or 2 characters");
+            }
+
+            if (parameterless)
+            {
+                parameterlessArgs.Add(longName);
+                if (shortName != null)
+                    parameterlessArgs.Add(shortName);
+
+                // Re-parse because there is a new parameterless argument. This will change
+                // the meaning of non-option args
+                parser = new ArgvParser (arguments, parameterlessArgs);
             }
 
             // Look for the long name first
@@ -81,6 +94,16 @@ namespace Nini.Config
             Array.Copy (this.arguments, 0, result, 0, this.arguments.Length);
 
             return result;
+        }
+
+        public int GetPositionalArgumentCount()
+        {
+            return parser.Count();
+        }
+
+        public string GetPositionalArgument(int index)
+        {
+            return parser[index];
         }
         #endregion
 
