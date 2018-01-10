@@ -85,6 +85,7 @@ namespace Nini.Util
                     // Found a value (for the last parameter found (space separator))
                     if (parameter != null) {
                         parameters[parameter] = arg.Trim (trimChars);
+                        parameter = null;
                     }
                 } else {
                     // Matched a name, optionally with inline value
