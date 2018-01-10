@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
@@ -22,6 +23,7 @@ namespace Nini.Util
     {
         #region Private variables
         StringDictionary parameters;
+        List<string> positional;
         #endregion
         
         #region Constructors
@@ -62,6 +64,21 @@ namespace Nini.Util
                 return parameters[param];
             }
         }
+
+        public string this [int number]
+        {
+            get  {
+                if (number < 0 || number >= positional.Count)
+                    return String.Empty;
+
+                return positional[number];
+            }
+        }
+
+        public int Count()
+        {
+            return positional.Count;
+        }
         #endregion
 
         #region Private methods
@@ -69,6 +86,7 @@ namespace Nini.Util
         private void Extract(string[] args)
         {
             parameters = new StringDictionary();
+            positional = new List<string>();
             Regex splitter = new Regex (@"^([/-]|--){1}(?<name>\w+)([:=])?(?<value>.+)?$",
                                         RegexOptions.Compiled);
             char[] trimChars = {'"','\''};
@@ -86,6 +104,8 @@ namespace Nini.Util
                     if (parameter != null) {
                         parameters[parameter] = arg.Trim (trimChars);
                         parameter = null;
+                    } else {
+                        positional.Add(arg.Trim(trimChars));
                     }
                 } else {
                     // Matched a name, optionally with inline value

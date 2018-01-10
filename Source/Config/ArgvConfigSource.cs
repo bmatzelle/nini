@@ -82,6 +82,16 @@ namespace Nini.Config
 
             return result;
         }
+
+        public int GetPositionalArgumentCount()
+        {
+            return parser.Count();
+        }
+
+        public string GetPositionalArgument(int index)
+        {
+            return parser[index];
+        }
         #endregion
 
         #region Private methods
